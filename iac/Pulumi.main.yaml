@@ -1,0 +1,14 @@
+config:
+  aws:region: eu-west-1
+  functions:
+    scrapper:
+      image:
+        dockerfile: container_imgs/scrapper/Dockerfile
+        context: container_imgs/scrapper/
+      build_version: 0.0.1 # scrapper version
+      cron_expression: "cron(0 1 * * ? *)"
+      env_vars:
+      - name: QUINIELA_URL
+        value: https://juegos.loteriasyapuestas.es/jugar/la-quiniela/apuesta/?access=headercms&lang=es
+      - name: FOOTBALL_API
+        value: api-football-v1.p.rapidapi.com
