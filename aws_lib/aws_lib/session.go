@@ -2,19 +2,29 @@ package aws_lib
 
 import (
 	"log"
+	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
-var sess *session.Session
+var (
+	sess *session.Session
+	once sync.Once
+)
 
-func init() {
-	var err error
-	sess, err = session.NewSessionWithOptions(session.Options{
-		Config: aws.Config{Region: aws.String("eu-west-1")},
+func GetSession(region string) *session.Session {
+	once.Do(func() {
+		var err error
+		sess, err = session.NewSessionWithOptions(session.Options{
+			SharedConfigState: session.SharedConfigEnable,
+			Config: aws.Config{
+				Region: aws.String(region),
+			},
+		})
+		if err != nil {
+			log.Fatalf("Failed to create AWS session: %v", err)
+		}
 	})
-	if err != nil {
-		log.Fatal(err)
-	}
+	return sess
 }

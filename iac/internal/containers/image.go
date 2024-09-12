@@ -37,7 +37,7 @@ func (img *Image) PushImage(version string) pulumi.StringInput {
 	}).(pulumi.StringInput)
 
 	push := img.repository.RepositoryUrl.ApplyT(func(repositoryUrl string) bool {
-		ecr := aws_lib.NewECR()
+		ecr := aws_lib.NewECR(input.GetRegion())
 		push := !ecr.IsImageInECR(repositoryUrl, version)
 		return push
 	}).(pulumi.BoolInput)

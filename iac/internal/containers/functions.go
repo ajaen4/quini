@@ -133,15 +133,6 @@ func (function *function) createFunction(role *iam.Role) {
 			Environment: &lambda.FunctionEnvironmentArgs{
 				Variables: function.parseEnvs(),
 			},
-			VpcConfig: &lambda.FunctionVpcConfigArgs{
-				SubnetIds: pulumi.ToStringArray([]string{
-					"subnet-0c9b8ec96e8062d5e",
-					"subnet-06705f7071627b8d8",
-				}),
-				SecurityGroupIds: pulumi.ToStringArray([]string{
-					"sg-06a3a96570494b00f",
-				}),
-			},
 		},
 		pulumi.DependsOn([]pulumi.Resource{image.ImgResource}),
 	)
