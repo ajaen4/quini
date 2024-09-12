@@ -11,8 +11,8 @@ type SSM struct {
 	client *ssm.SSM
 }
 
-func NewSSM() *SSM {
-	ssmClient := ssm.New(sess)
+func NewSSM(region string) *SSM {
+	ssmClient := ssm.New(GetSession(region))
 	return &SSM{
 		client: ssmClient,
 	}

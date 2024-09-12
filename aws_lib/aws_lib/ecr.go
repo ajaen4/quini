@@ -12,8 +12,8 @@ type ECR struct {
 	client *ecr.ECR
 }
 
-func NewECR() *ECR {
-	ecrClient := ecr.New(sess)
+func NewECR(region string) *ECR {
+	ecrClient := ecr.New(GetSession(region))
 	return &ECR{
 		client: ecrClient,
 	}
