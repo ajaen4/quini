@@ -15,7 +15,7 @@ def mark_matchday_finished(matchday: int):
             WHERE matchday = %s
             """
         ),
-        (matchday,)
+        (matchday,),
     )
 
     affected_rows = cur.rowcount
@@ -24,7 +24,9 @@ def mark_matchday_finished(matchday: int):
     cur.close()
 
     if affected_rows > 0:
-        logger.info(f"Successfully updated matchday {matchday} status to FINISHED")
+        logger.info(
+            f"Successfully updated matchday {matchday} status to FINISHED"
+        )
     else:
         raise Exception(f"No matchday found with number {matchday}")
 

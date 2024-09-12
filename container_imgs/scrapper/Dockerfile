@@ -1,9 +1,11 @@
-FROM public.ecr.aws/lambda/python:3.12
+FROM python:3.12-slim
 
-COPY requirements.txt ${LAMBDA_TASK_ROOT}
+WORKDIR /app
+
+COPY requirements.txt /app
 
 RUN pip install -r requirements.txt
 
-COPY . ${LAMBDA_TASK_ROOT}
+COPY . /app
 
-CMD [ "app.handler" ]
+ENTRYPOINT ["python", "app.py"]

@@ -1,11 +1,13 @@
 config:
-  aws:region: eu-west-1
-  functions:
+  aws:region: eu-south-2
+  tasks:
     scrapper:
       image:
         dockerfile: container_imgs/scrapper/Dockerfile
         context: container_imgs/scrapper/
       build_version: 0.0.1 # scrapper version
+      cpu: 256
+      memory: 512
       cron_expression: "cron(0 1 * * ? *)"
       env_vars:
       - name: QUINIELA_URL

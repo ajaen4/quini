@@ -11,7 +11,7 @@ func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		cfg := input.Load(ctx)
 
-		containers.NewFunctions(cfg)
+		containers.NewTasks(cfg)
 
 		return nil
 	})

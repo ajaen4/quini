@@ -24,8 +24,15 @@ import f_scrapper.cfg as cfg
 
 
 def run_scrapper():
-    response = requests.get(cfg.QUINIELA_URL)
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+    }
+
+    response = requests.get(cfg.QUINIELA_URL, headers=headers)
     response.raise_for_status()
+    logger.info(response.text)
 
     soup = BeautifulSoup(response.text, "html.parser")
     matchday = scrape_matchday(soup)

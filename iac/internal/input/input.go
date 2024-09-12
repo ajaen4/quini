@@ -1,13 +1,15 @@
 package input
 
 import (
+	"fmt"
+
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 )
 
 type Input struct {
-	Ctx          *pulumi.Context
-	FunctionsCfg map[string]*FunctionCfg
+	Ctx      *pulumi.Context
+	TasksCfg map[string]*TaskCfg
 }
 
 type AWSCfg struct {
@@ -19,9 +21,10 @@ var awsCfg AWSCfg
 func Load(ctx *pulumi.Context) *Input {
 	cfg := config.New(ctx, "")
 
-	var funcsCfg map[string]*FunctionCfg
-	if err := cfg.TryObject("functions", &funcsCfg); err != nil {
-		funcsCfg = map[string]*FunctionCfg{}
+	var tasksCfg map[string]*TaskCfg
+	if err := cfg.TryObject("tasks", &tasksCfg); err != nil {
+		fmt.Print(err)
+		tasksCfg = map[string]*TaskCfg{}
 	}
 
 	aws := config.New(ctx, "aws")
@@ -30,8 +33,8 @@ func Load(ctx *pulumi.Context) *Input {
 	}
 
 	return &Input{
-		Ctx:          ctx,
-		FunctionsCfg: funcsCfg,
+		Ctx:      ctx,
+		TasksCfg: tasksCfg,
 	}
 }
 
