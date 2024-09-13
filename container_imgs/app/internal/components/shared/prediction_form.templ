@@ -1,0 +1,25 @@
+package shared
+
+import "fmt"
+
+templ PredictionForm() {
+	<form class="bg-white p-6 rounded-lg shadow-md">
+		<h2 class="text-xl font-semibold mb-4">Introduce tus predicciones</h2>
+		<div class="grid grid-cols-3 gap-4 mb-4">
+			for i := 1; i <= 15; i++ {
+				<div class="flex items-center">
+					<label for={ fmt.Sprintf("match%d", i) } class="mr-2">Partido { string(i) }:</label>
+					<select id={ fmt.Sprintf("match%d", i) } name={ fmt.Sprintf("match%d", i) } class="border rounded px-2 py-1">
+						<option value="">-</option>
+						<option value="1">1</option>
+						<option value="X">X</option>
+						<option value="2">2</option>
+					</select>
+				</div>
+			}
+		</div>
+		<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+			Enviar predicciones
+		</button>
+	</form>
+}

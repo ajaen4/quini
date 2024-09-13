@@ -11,7 +11,7 @@ session = boto3.Session()
 ssm_client = SSM(session)
 
 secrets = json.loads(
-    ssm_client.get_parameter("/quiniela/secrets", decrypt=True)
+    ssm_client.get_parameter("/bavariada/secrets", decrypt=True)
 )
 
 DB_HOST = secrets["DB_HOST"]

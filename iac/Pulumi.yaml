@@ -1,5 +1,5 @@
-name: quiniela
+name: bavariada
 runtime: go
 description: API to be able to consume tags on cities
 globalTags:
-  project_name: "quiniela"
+  project_name: "bavariada"

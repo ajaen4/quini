@@ -1,9 +1,9 @@
 package containers
 
 import (
+	"bavariada-iac/internal/input"
 	"fmt"
 	"log"
-	"quiniela-iac/internal/input"
 
 	"github.com/pulumi/pulumi-aws/sdk/v6/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi-aws/sdk/v6/go/aws/iam"
