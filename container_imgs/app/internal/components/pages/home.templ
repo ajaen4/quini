@@ -11,35 +11,29 @@ templ Home() {
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Resultados</h2>
 				@shared.Graph([]shared.Result{
-					{Matchday: "1", Alice: "20", Bob: "15", Charlie: "25", David: "18"},
-					{Matchday: "2", Alice: "35", Bob: "30", Charlie: "40", David: "33"},
-					{Matchday: "3", Alice: "50", Bob: "45", Charlie: "55", David: "48"},
-					{Matchday: "4", Alice: "65", Bob: "60", Charlie: "70", David: "63"},
-					{Matchday: "5", Alice: "80", Bob: "75", Charlie: "85", David: "78"},
+					{Matchday: "1", Dordio: "20", Barja: "15", Alber: "25", Silvan: "18", Jaen: "18"},
+					{Matchday: "2", Dordio: "35", Barja: "30", Alber: "40", Silvan: "33", Jaen: "18"},
+					{Matchday: "3", Dordio: "50", Barja: "45", Alber: "55", Silvan: "48", Jaen: "18"},
+					{Matchday: "4", Dordio: "65", Barja: "60", Alber: "70", Silvan: "63", Jaen: "18"},
+					{Matchday: "5", Dordio: "80", Barja: "75", Alber: "85", Silvan: "78", Jaen: "18"},
 				})
+			</section>
+			<section>
+				<h2 class="text-2xl font-semibold mb-4">Puntos totales</h2>
+				@shared.ResultsTable([]shared.Result{
+					{Matchday: "1", Dordio: "5", Barja: "3", Alber: "7", Silvan: "4", Jaen: "3"},
+				}, true)
 			</section>
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Puntos por jornada</h2>
 				@shared.ResultsTable([]shared.Result{
-					{Matchday: "1", Alice: "5", Bob: "3", Charlie: "7", David: "4"},
-					{Matchday: "2", Alice: "3", Bob: "4", Charlie: "5", David: "3"},
-					{Matchday: "3", Alice: "4", Bob: "4", Charlie: "4", David: "4"},
-					{Matchday: "4", Alice: "3", Bob: "3", Charlie: "5", David: "3"},
-					{Matchday: "5", Alice: "4", Bob: "5", Charlie: "3", David: "5"},
+					{Matchday: "1", Dordio: "5", Barja: "3", Alber: "7", Silvan: "4", Jaen: "1"},
+					{Matchday: "2", Dordio: "3", Barja: "4", Alber: "5", Silvan: "3", Jaen: "1"},
+					{Matchday: "3", Dordio: "4", Barja: "4", Alber: "4", Silvan: "4", Jaen: "1"},
+					{Matchday: "4", Dordio: "3", Barja: "3", Alber: "5", Silvan: "3", Jaen: "1"},
+					{Matchday: "5", Dordio: "4", Barja: "5", Alber: "3", Silvan: "5", Jaen: "1"},
 				}, false)
 			</section>
-			
-			<section>
-				<h2 class="text-2xl font-semibold mb-4">Puntos totales</h2>
-				@shared.ResultsTable([]shared.Result{
-					{Matchday: "1", Alice: "5", Bob: "3", Charlie: "7", David: "4"},
-					{Matchday: "2", Alice: "8", Bob: "7", Charlie: "12", David: "7"},
-					{Matchday: "3", Alice: "12", Bob: "11", Charlie: "16", David: "11"},
-					{Matchday: "4", Alice: "15", Bob: "14", Charlie: "21", David: "14"},
-					{Matchday: "5", Alice: "19", Bob: "19", Charlie: "24", David: "19"},
-				}, true)
-			</section>
-			
 			<section>
 				@shared.PredictionForm()
 			</section>
