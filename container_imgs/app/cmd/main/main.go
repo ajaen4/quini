@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	_ "app/internal/env"
 	"app/internal/server"
 )
 
