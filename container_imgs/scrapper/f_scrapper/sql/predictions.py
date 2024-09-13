@@ -7,7 +7,7 @@ def get_predictions(matchday: int) -> list[str]:
     cur.execute(
         sql.SQL(
             """
-            SELECT * FROM quiniela.predictions WHERE matchday = %s
+            SELECT * FROM bavariada.predictions WHERE matchday = %s
             """
         ),
         (matchday,),

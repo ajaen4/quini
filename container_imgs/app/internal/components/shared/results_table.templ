@@ -1,0 +1,36 @@
+package shared
+
+type Result struct {
+	Matchday string
+	Alice    string
+	Bob      string
+	Charlie  string
+	David    string
+}
+
+templ ResultsTable(results []Result, isTotal bool) {
+	<div class="overflow-x-auto">
+		<table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+			<thead class="bg-gray-200">
+				<tr>
+					<th class="py-2 px-4 text-left">Jornada</th>
+					<th class="py-2 px-4 text-left">Alice</th>
+					<th class="py-2 px-4 text-left">Bob</th>
+					<th class="py-2 px-4 text-left">Charlie</th>
+					<th class="py-2 px-4 text-left">David</th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, result := range results {
+					<tr class="border-b hover:bg-gray-50">
+						<td class="py-2 px-4">{ result.Matchday }</td>
+						<td class="py-2 px-4">{ result.Alice }</td>
+						<td class="py-2 px-4">{ result.Bob }</td>
+						<td class="py-2 px-4">{ result.Charlie }</td>
+						<td class="py-2 px-4">{ result.David }</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}

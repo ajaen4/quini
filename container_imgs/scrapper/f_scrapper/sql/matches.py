@@ -10,7 +10,7 @@ def mark_matchday_finished(matchday: int):
     cur.execute(
         sql.SQL(
             """
-            UPDATE quiniela.matchdays
+            UPDATE bavariada.matchdays
             SET status = 'FINISHED'
             WHERE matchday = %s
             """
@@ -35,7 +35,7 @@ def upload_matches(matches: list, matchday: int):
     cur.execute(
         sql.SQL(
             """
-            INSERT INTO quiniela.matchdays (matchday)
+            INSERT INTO bavariada.matchdays (matchday)
             VALUES (%s)
             """
         ),
@@ -46,7 +46,7 @@ def upload_matches(matches: list, matchday: int):
         cur.execute(
             sql.SQL(
                 """
-            INSERT INTO quiniela.matches (id, league_id, matchday, match_num, home_team_id, away_team_id)
+            INSERT INTO bavariada.matches (id, league_id, matchday, match_num, home_team_id, away_team_id)
             VALUES (%s, %s, %s, %s, %s, %s)
             """
             ),
@@ -71,7 +71,7 @@ def upload_matches(matches: list, matchday: int):
 def matchday_exists(matchday: str) -> bool:
     cur = conn.cursor()
     cur.execute(
-        "SELECT matchday FROM quiniela.matchdays WHERE matchday = %s",
+        "SELECT matchday FROM bavariada.matchdays WHERE matchday = %s",
         (matchday,),
     )
     exists = cur.fetchone() is not None
@@ -82,7 +82,7 @@ def matchday_exists(matchday: str) -> bool:
 def get_matchdays_in_progress() -> list[int]:
     cur = conn.cursor()
     cur.execute(
-        "SELECT * FROM quiniela.matchdays WHERE status = 'IN_PROGRESS'"
+        "SELECT * FROM bavariada.matchdays WHERE status = 'IN_PROGRESS'"
     )
 
     columns = [desc[0] for desc in cur.description]
@@ -103,7 +103,7 @@ def get_matches(matchday: int) -> list[dict]:
         sql.SQL(
             """
             SELECT *
-            FROM quiniela.matches m
+            FROM bavariada.matches m
             WHERE m.matchday = %s
             ORDER BY m.match_num
             """

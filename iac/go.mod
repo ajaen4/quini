@@ -1,4 +1,4 @@
-module quiniela-iac
+module bavariada-iac
 
 go 1.22.1
 

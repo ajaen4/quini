@@ -1,8 +1,8 @@
 package main
 
 import (
-	"quiniela-iac/internal/containers"
-	"quiniela-iac/internal/input"
+	"bavariada-iac/internal/containers"
+	"bavariada-iac/internal/input"
 
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )

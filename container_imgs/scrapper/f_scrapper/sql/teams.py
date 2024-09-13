@@ -3,7 +3,7 @@ from f_scrapper.cfg import conn
 
 def get_teams_mapping() -> list[dict]:
     cur = conn.cursor()
-    cur.execute("SELECT * FROM quiniela.teams")
+    cur.execute("SELECT * FROM bavariada.teams")
 
     columns = [desc[0] for desc in cur.description]
 

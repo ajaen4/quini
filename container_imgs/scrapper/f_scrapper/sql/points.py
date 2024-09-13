@@ -11,7 +11,7 @@ def upload_points(users_points: list[dict]):
         cur.execute(
             sql.SQL(
                 """
-                INSERT INTO quiniela.points (user_id, matchday, points)
+                INSERT INTO bavariada.points (user_id, matchday, points)
                 VALUES (%s, %s, %s)
                 ON CONFLICT (user_id, matchday)
                 DO UPDATE SET
