@@ -5,10 +5,10 @@ config:
       image:
         dockerfile: container_imgs/data_uploader/Dockerfile
         context: container_imgs/data_uploader/
-      build_version: 0.0.2 # data_uploader version
+      build_version: 0.0.3 # data_uploader version
       cron_expression: "cron(0 23 * * ? *)"
       env_vars:
       - name: QUINIELA_URL
-        value: https://juegos.loteriasyapuestas.es/jugar/la-quiniela/apuesta/?access=headercms&lang=es
+        value: https://www.loteriasyapuestas.es/servicios/buscadorSorteos
       - name: FOOTBALL_API
         value: api-football-v1.p.rapidapi.com
