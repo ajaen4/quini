@@ -3,7 +3,6 @@ package server
 import (
 	"app/internal"
 	"app/internal/api_errors"
-	"app/internal/components/pages"
 	"log"
 	"net/http"
 
@@ -21,12 +20,9 @@ func (api *Api) RegisterRoutes() *chi.Mux {
 	r.Handle("/static/*", http.FileServer(http.FS(internal.StaticFiles)))
 
 	r.HandleFunc("/", NewHandler(root))
+	r.HandleFunc("/graphs/contents", NewHandler(graphContents))
 
 	return r
-}
-
-func root(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, pages.Home())
 }
 
 type CustomHandler func(w http.ResponseWriter, request *http.Request) error

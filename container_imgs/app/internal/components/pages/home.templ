@@ -1,7 +1,9 @@
 package pages
 
 import (
-	"app/internal/components/shared"
+	"app/internal/components/shared/tables"
+	"app/internal/components/shared/forms"
+	"app/internal/components/shared/graphs"
 	"app/internal/components/layout"
 )
 
@@ -10,23 +12,17 @@ templ Home() {
 		<div class="space-y-8">
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Resultados</h2>
-				@shared.Graph([]shared.Result{
-					{Matchday: "1", Dordio: "20", Barja: "15", Alber: "25", Silvan: "18", Jaen: "18"},
-					{Matchday: "2", Dordio: "35", Barja: "30", Alber: "40", Silvan: "33", Jaen: "18"},
-					{Matchday: "3", Dordio: "50", Barja: "45", Alber: "55", Silvan: "48", Jaen: "18"},
-					{Matchday: "4", Dordio: "65", Barja: "60", Alber: "70", Silvan: "63", Jaen: "18"},
-					{Matchday: "5", Dordio: "80", Barja: "75", Alber: "85", Silvan: "78", Jaen: "18"},
-				})
+				@graphs.GraphContainer()
 			</section>
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Puntos totales</h2>
-				@shared.ResultsTable([]shared.Result{
+				@tables.ResultsTable([]tables.Result{
 					{Matchday: "1", Dordio: "5", Barja: "3", Alber: "7", Silvan: "4", Jaen: "3"},
 				}, true)
 			</section>
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Puntos por jornada</h2>
-				@shared.ResultsTable([]shared.Result{
+				@tables.ResultsTable([]tables.Result{
 					{Matchday: "1", Dordio: "5", Barja: "3", Alber: "7", Silvan: "4", Jaen: "1"},
 					{Matchday: "2", Dordio: "3", Barja: "4", Alber: "5", Silvan: "3", Jaen: "1"},
 					{Matchday: "3", Dordio: "4", Barja: "4", Alber: "4", Silvan: "4", Jaen: "1"},
@@ -35,7 +31,7 @@ templ Home() {
 				}, false)
 			</section>
 			<section>
-				@shared.PredictionForm()
+				@forms.PredictionForm()
 			</section>
 		</div>
 	}
