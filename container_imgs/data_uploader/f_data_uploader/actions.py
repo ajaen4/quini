@@ -10,7 +10,6 @@ from f_data_uploader.sql import (
     insert_teams,
     get_matchdays_in_progress,
     get_predictions,
-    get_matches,
     upload_points,
     mark_matchday_finished,
 )
@@ -35,9 +34,9 @@ def run_data_uploader():
 
     quinielas = response.json()
 
-    # logger.info("Uploading matches...")
-    # upload_matches(quinielas)
-    # logger.info("Finished uploading matches")
+    logger.info("Uploading matches...")
+    upload_matches(quinielas)
+    logger.info("Finished uploading matches")
 
     logger.info("Calculating points...")
     calculate_points(quinielas)
