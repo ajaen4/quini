@@ -1,12 +1,12 @@
 config:
   aws:region: eu-south-2
   functions:
-    scrapper:
+    data_uploader:
       image:
-        dockerfile: container_imgs/scrapper/Dockerfile
-        context: container_imgs/scrapper/
-      build_version: 0.0.2 # scrapper version
-      cron_expression: "cron(0 11 * * ? *)"
+        dockerfile: container_imgs/data_uploader/Dockerfile
+        context: container_imgs/data_uploader/
+      build_version: 0.0.2 # data_uploader version
+      cron_expression: "cron(0 23 * * ? *)"
       env_vars:
       - name: QUINIELA_URL
         value: https://juegos.loteriasyapuestas.es/jugar/la-quiniela/apuesta/?access=headercms&lang=es

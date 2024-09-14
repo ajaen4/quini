@@ -1,0 +1,95 @@
+package graphs
+
+templ GraphContainer() {
+    <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+        <div class="flex justify-between mb-5">
+            <div class="grid gap-4 grid-cols-2">
+                <div>
+                    <h5 class="inline-flex items-center text-gray-500 dark:text-gray-400 leading-none font-normal mb-2">Jornadas jugadas</h5>
+                    <p id="matchday-count" class="text-gray-900 dark:text-white text-2xl leading-none font-bold">Loading...</p>
+                </div>
+            </div>
+        </div>
+        <div id="chart-content">
+            <div id="line-chart"></div>
+        </div>
+    </div>
+    @GraphScript()
+}
+
+templ GraphScript() {
+    <script>
+        document.addEventListener(
+            'DOMContentLoaded',
+            function() {
+            fetch('/graphs/contents')
+            .then(response => response.json())
+            .then(chartData => {
+                document.getElementById('matchday-count').textContent = chartData.categories.length;
+                
+                const options = {
+                    chart: {
+                        height: "100%",
+                        maxWidth: "100%",
+                        type: "line",
+                        fontFamily: "Inter, sans-serif",
+                        dropShadow: {
+                            enabled: false,
+                        },
+                        toolbar: {
+                            show: false,
+                        },
+                    },
+                    tooltip: {
+                        enabled: true,
+                        x: {
+                            show: false,
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    stroke: {
+                        width: 6,
+                        curve: 'smooth'
+                    },
+                    grid: {
+                        show: true,
+                        strokeDashArray: 4,
+                        padding: {
+                            left: 2,
+                            right: 2,
+                            top: -26
+                        },
+                    },
+                    series: chartData.series,
+                    legend: {
+                        show: false
+                    },
+                    xaxis: {
+                        categories: chartData.categories,
+                        labels: {
+                            show: true,
+                            style: {
+                                fontFamily: "Inter, sans-serif",
+                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                            }
+                        },
+                        axisBorder: {
+                            show: false,
+                        },
+                        axisTicks: {
+                            show: false,
+                        },
+                    },
+                    yaxis: {
+                        show: false,
+                    },
+                };
+
+                new ApexCharts(document.getElementById("line-chart"), options).render();
+            })
+            .catch(error => console.error('Error fetching chart data:', error));
+        });
+    </script>
+}
