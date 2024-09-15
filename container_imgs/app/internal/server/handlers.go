@@ -2,6 +2,7 @@ package server
 
 import (
 	"app/internal/components/pages"
+	"app/internal/components/shared/tables"
 	"app/internal/db"
 	"encoding/json"
 	"net/http"
@@ -14,9 +15,9 @@ type ChartData struct {
 }
 
 type Series struct {
-	Name  string `json:"name"`
-	Data  []int  `json:"data"`
-	Color string `json:"color"`
+	UserName         string `json:"user_name"`
+	CumulativePoints []int  `json:"cumulative_points"`
+	Color            string `json:"color"`
 }
 
 func graphContents(w http.ResponseWriter, r *http.Request) error {
@@ -25,17 +26,23 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	categories := make([]string, len(userPoints[0].PointsArray))
+	categories := make([]string, len(userPoints[0].CumulativePoints))
 	for i := range categories {
 		categories[i] = strconv.Itoa(i + 1)
 	}
 	series := []Series{}
-	colors := []string{"#1A56DB", "#7E3AF2", "#047857", "#DC2626"}
-	for i, userPoint := range userPoints {
+	usersColor := map[string]string{
+		"Jaen":   "#1A56DB",
+		"Silvan": "#7E3AF2",
+		"Barja":  "#047857",
+		"Dordio": "#DC2626",
+		"Alber":  "#F97316",
+	}
+	for _, userPoint := range userPoints {
 		series = append(series, Series{
-			Name:  userPoint.UserId,
-			Data:  userPoint.PointsArray,
-			Color: colors[i],
+			UserName:         userPoint.UserName,
+			CumulativePoints: userPoint.CumulativePoints,
+			Color:            usersColor[userPoint.UserName],
 		})
 	}
 
@@ -45,6 +52,24 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 		Series:     series,
 	})
 	return nil
+}
+
+func totalPoints(w http.ResponseWriter, r *http.Request) error {
+	userPoints, err := db.GetTotalPoints()
+	if err != nil {
+		return err
+	}
+
+	return Render(w, r, tables.TotalPoints(userPoints))
+}
+
+func pointsPerMatchday(w http.ResponseWriter, r *http.Request) error {
+	userPoints, err := db.GetPointsPerMatchday()
+	if err != nil {
+		return err
+	}
+
+	return Render(w, r, tables.PointsPerMatchday(userPoints))
 }
 
 func root(w http.ResponseWriter, r *http.Request) error {

@@ -111,28 +111,38 @@ def evaluate_user_points(
     users_predictions: list[dict],
     matches: dict[str],
 ) -> list[dict]:
-    user_points = list()
+    users_cols = dict()
+    predictions_user_id = dict()
+    for user_predictions in users_predictions:
+        user_id = user_predictions["user_id"]
+        if user_id not in predictions_user_id.keys():
+            predictions_user_id[user_id] = dict()
+
+        match_num = user_predictions["match_num"]
+        predictions_user_id[user_id][match_num] = user_predictions[
+            "predictions"
+        ]
+
     for match_num, match in enumerate(matches):
         if match["signo"] is None:
             continue
-        for user_predictions in users_predictions:
-            if user_predictions["match_num"] != match_num - 1:
-                continue
 
-            scores = [0, 0]
-            for colI, col in enumerate(
-                user_predictions["predictions"].split("-")
-            ):
+        for user_id, predictions in predictions_user_id.items():
+            if user_id not in users_cols.keys():
+                users_cols[user_id] = [0, 0]
+            for colI, col in enumerate(predictions[match_num].split("-")):
                 if match["signo"] == col:
-                    scores[colI] += 1
+                    users_cols[user_id][colI] += 1
 
-            user_points.append(
-                {
-                    "user_id": user_predictions["user_id"],
-                    "matchday": user_predictions["matchday"],
-                    "season": user_predictions["season"],
-                    "points": max(scores[0], scores[1]),
-                }
-            )
+    user_points = list()
+    for user_id, user_cols in users_cols.items():
+        user_points.append(
+            {
+                "user_id": user_id,
+                "matchday": user_predictions["matchday"],
+                "season": user_predictions["season"],
+                "points": max(user_cols[0], user_cols[1]),
+            }
+        )
 
     return user_points

@@ -1,8 +1,6 @@
 package pages
 
 import (
-	"app/internal/components/shared/tables"
-	"app/internal/components/shared/forms"
 	"app/internal/components/shared/graphs"
 	"app/internal/components/layout"
 )
@@ -16,22 +14,15 @@ templ Home() {
 			</section>
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Puntos totales</h2>
-				@tables.ResultsTable([]tables.Result{
-					{Matchday: "1", Dordio: "5", Barja: "3", Alber: "7", Silvan: "4", Jaen: "3"},
-				}, true)
+				<div hx-get="/components/tables/total-points" hx-trigger="load">
+					<p>Cargando puntos totales...</p>
+				</div>
 			</section>
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Puntos por jornada</h2>
-				@tables.ResultsTable([]tables.Result{
-					{Matchday: "1", Dordio: "5", Barja: "3", Alber: "7", Silvan: "4", Jaen: "1"},
-					{Matchday: "2", Dordio: "3", Barja: "4", Alber: "5", Silvan: "3", Jaen: "1"},
-					{Matchday: "3", Dordio: "4", Barja: "4", Alber: "4", Silvan: "4", Jaen: "1"},
-					{Matchday: "4", Dordio: "3", Barja: "3", Alber: "5", Silvan: "3", Jaen: "1"},
-					{Matchday: "5", Dordio: "4", Barja: "5", Alber: "3", Silvan: "5", Jaen: "1"},
-				}, false)
-			</section>
-			<section>
-				@forms.PredictionForm()
+				<div hx-get="/components/tables/points-per-matchday" hx-trigger="load">
+					<p>Cargando puntos por jornada...</p>
+				</div>
 			</section>
 		</div>
 	}

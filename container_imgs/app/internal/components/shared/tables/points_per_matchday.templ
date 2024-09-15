@@ -1,0 +1,64 @@
+package tables
+
+import (
+	"app/internal/db"
+	"strconv"
+)
+
+templ PointsPerMatchday(userPoints []db.UserMatchdayPoints) {
+	<div class="overflow-x-auto">
+		<table class="min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden">
+			<thead class="bg-gray-700">
+				<tr>
+					<th class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Jornada</th>
+					for _, user := range getUserNames(userPoints) {
+						<th class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{user}</th>
+					}
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-700">
+				for _, matchday := range getMatchdays(userPoints) {
+					<tr class="hover:bg-gray-700 transition-colors duration-200">
+						<td class="py-3 px-4 whitespace-nowrap">{strconv.Itoa(matchday)}</td>
+						for _, user := range getUserNames(userPoints) {
+							<td class="py-3 px-4 whitespace-nowrap">{strconv.Itoa(getPointsForUserAndMatchday(userPoints, user, matchday))}</td>
+						}
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+func getUserNames(userPoints []db.UserMatchdayPoints) []string {
+	userNamesMap := make(map[string]bool)
+	var userNames []string
+	for _, point := range userPoints {
+		if !userNamesMap[point.UserName] {
+			userNamesMap[point.UserName] = true
+			userNames = append(userNames, point.UserName)
+		}
+	}
+	return userNames
+}
+
+func getMatchdays(userPoints []db.UserMatchdayPoints) []int {
+	matchdaysMap := make(map[int]bool)
+	var matchdays []int
+	for _, point := range userPoints {
+		if !matchdaysMap[point.MatchDay] {
+			matchdaysMap[point.MatchDay] = true
+			matchdays = append(matchdays, point.MatchDay)
+		}
+	}
+	return matchdays
+}
+
+func getPointsForUserAndMatchday(userPoints []db.UserMatchdayPoints, userName string, matchday int) int {
+	for _, point := range userPoints {
+		if point.UserName == userName && point.MatchDay == matchday {
+			return point.Points
+		}
+	}
+	return 0
+}

@@ -20,7 +20,10 @@ func (api *Api) RegisterRoutes() *chi.Mux {
 	r.Handle("/static/*", http.FileServer(http.FS(internal.StaticFiles)))
 
 	r.HandleFunc("/", NewHandler(root))
-	r.HandleFunc("/graphs/contents", NewHandler(graphContents))
+	r.HandleFunc("/points/cumulative", NewHandler(graphContents))
+
+	r.HandleFunc("/components/tables/total-points", NewHandler(totalPoints))
+	r.HandleFunc("/components/tables/points-per-matchday", NewHandler(pointsPerMatchday))
 
 	return r
 }
