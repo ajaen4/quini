@@ -9,6 +9,7 @@ build-local:
 	@go build -tags local -o ./bin/main cmd/main/main.go
 
 build:
+	@npm run watch
 	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/main cmd/main/main.go
 
 templ:
