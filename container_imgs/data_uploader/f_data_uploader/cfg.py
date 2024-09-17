@@ -30,5 +30,4 @@ DB_PARAMS = {
 conn: connection = psycopg2.connect(**DB_PARAMS)
 
 QUINIELA_URL = os.environ["QUINIELA_URL"]
-FOOTBALL_API = os.environ["FOOTBALL_API"]
 RAPID_API_KEY = secrets["RAPID_API_KEY"]

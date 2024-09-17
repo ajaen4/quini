@@ -2,10 +2,14 @@ FROM golang:1.22 AS builder
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY container_imgs/app/go.mod container_imgs/app/go.sum ./
+COPY /aws_lib /aws_lib
+
+ENV GOFLAGS="-tags=container"
 RUN go mod download
 
-COPY . .
+COPY container_imgs/app/ .
+RUN ls -R
 RUN make build
 
 FROM alpine:latest
