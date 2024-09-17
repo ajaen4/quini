@@ -198,5 +198,4 @@ bin
 .env
 
 *templ.go
-static/
 node_modules/
