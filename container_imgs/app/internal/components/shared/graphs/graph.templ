@@ -54,22 +54,28 @@ templ GraphScript() {
                             enabled: false,
                         },
                         stroke: {
-                            width: 6,
-                            curve: 'smooth'
+                            width: 3,
+                            curve: 'straight'
                         },
                         grid: {
                             show: true,
                             strokeDashArray: 4,
                             padding: {
-                                left: 2,
-                                right: 2,
-                                top: -26
+                                left: 10,
+                                right: 10,
+                                top: -20,
+                                bottom: 20,
                             },
                         },
                         series: series,
                         colors: series.map(s => s.color),
                         legend: {
-                            show: false
+                            show: true,
+                            position: 'bottom',
+                            horizontalAlign: 'center',
+                            floating: true,
+                            offsetY: 10,
+                            offsetX: -5
                         },
                         xaxis: {
                             categories: chartData.categories,
@@ -88,7 +94,14 @@ templ GraphScript() {
                             },
                         },
                         yaxis: {
-                            show: false,
+                            show: true,
+                            labels: {
+                                show: true,
+                                style: {
+                                    fontFamily: "Inter, sans-serif",
+                                    cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                                }
+                            },
                         },
                     };
 
