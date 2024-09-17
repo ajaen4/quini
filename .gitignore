@@ -197,5 +197,4 @@ bin
 .venv
 .env
 
-*templ.go
 node_modules/
