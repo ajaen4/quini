@@ -5,7 +5,7 @@ config:
       image:
         dockerfile: container_imgs/data_uploader/Dockerfile
         context: container_imgs/data_uploader/
-      build_version: 0.0.4 # data_uploader version
+      build_version: 0.0.5 # data_uploader version
       cron_expression: "cron(0 23 * * ? *)"
       env_vars:
       - name: QUINIELA_URL
