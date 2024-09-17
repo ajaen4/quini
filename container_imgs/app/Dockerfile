@@ -9,7 +9,6 @@ ENV GOFLAGS="-tags=container"
 RUN go mod download
 
 COPY container_imgs/app/ .
-RUN ls -R
 RUN make build
 
 FROM alpine:latest

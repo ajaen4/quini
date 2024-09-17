@@ -131,7 +131,7 @@ def evaluate_user_points(
             if user_id not in users_cols.keys():
                 users_cols[user_id] = [0, 0]
             for colI, col in enumerate(predictions[match_num].split("-")):
-                if match["signo"] == col:
+                if match["signo"].strip() == col:
                     users_cols[user_id][colI] += 1
 
     user_points = list()
