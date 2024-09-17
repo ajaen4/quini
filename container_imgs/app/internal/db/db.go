@@ -57,13 +57,16 @@ func New() Service {
 	} else {
 		sslmode = "require"
 		sm := aws_lib.NewSSM("")
-		param = sm.GetParam("bavariada/secrets", true)
+		param = sm.GetParam("/bavariada/secrets", true)
+		log.Printf("Parameter: %s", param)
 		db_name = param["DB_NAME"]
 		password = param["DB_PASSWORD"]
 		username = param["DB_USERNAME"]
 		port = param["DB_PORT"]
 		host = param["DB_HOST"]
 	}
+
+	log.Println(db_name, password, username, port, host)
 
 	connStr := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=%s",

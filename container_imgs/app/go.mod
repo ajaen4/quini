@@ -4,6 +4,8 @@ go 1.22.1
 
 require aws_lib v0.0.0
 
+//go:build !container
+// +build !container
 replace aws_lib => ../../aws_lib
 
 require (
