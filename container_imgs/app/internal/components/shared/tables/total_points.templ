@@ -3,9 +3,10 @@ package tables
 import (
     "app/internal/db"
     "strconv"
+    "fmt"
 )
 
-templ TotalPoints(totalPoints []db.UserTotalPoints) {
+templ TotalResults(totalResults []db.UserTotalResults) {
     <div class="flex justify-center">
         <div class="overflow-x-auto inline-block">
             <table class="bg-gray-800 shadow-md rounded-lg overflow-hidden">
@@ -13,13 +14,15 @@ templ TotalPoints(totalPoints []db.UserTotalPoints) {
                     <tr>
                         <th class="py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User</th>
                         <th class="py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Total Points</th>
+                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Total Debt</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-700">
-                    for _, userTPoints := range totalPoints {
+                    for _, userTResults := range totalResults {
                         <tr class="hover:bg-gray-700 transition-colors duration-200">
-                            <td class="py-3 px-6 whitespace-nowrap">{userTPoints.UserName}</td>
-                            <td class="py-3 px-6 whitespace-nowrap text-right">{strconv.Itoa(userTPoints.TotalPoints)}</td>
+                            <td class="py-3 px-6 whitespace-nowrap">{userTResults.UserName}</td>
+                            <td class="py-3 px-6 whitespace-nowrap text-right">{strconv.Itoa(userTResults.TotalPoints)}</td>
+                            <td class="py-3 px-6 whitespace-nowrap text-right">{fmt.Sprintf("%.2f", userTResults.TotalDebt)}</td>
                         </tr>
                     }
                 </tbody>

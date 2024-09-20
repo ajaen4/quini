@@ -46,3 +46,6 @@ reset-migrations: setup
 
 migrations-status: setup
 	@goose -dir $(MIGRATION_DIR) $(DB_DRIVER) "$(DB_STRING)" status
+
+undo-migration: setup
+	@goose -dir $(MIGRATION_DIR) $(DB_DRIVER) "$(DB_STRING)" down

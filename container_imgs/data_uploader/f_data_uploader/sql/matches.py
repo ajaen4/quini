@@ -4,7 +4,7 @@ from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
 
 
-def mark_matchday_finished(matchday: int):
+def mark_matchday_finished(matchday: dict):
     cur = conn.cursor()
 
     cur.execute(
@@ -12,10 +12,14 @@ def mark_matchday_finished(matchday: int):
             """
             UPDATE bavariada.matchdays
             SET status = 'FINISHED'
-            WHERE matchday = %s
+            WHERE season = %s
+            AND matchday = %s
             """
         ),
-        (matchday,),
+        (
+            matchday["season"],
+            matchday["matchday"],
+        ),
     )
 
     affected_rows = cur.rowcount
@@ -86,8 +90,10 @@ def insert_matches(matches: list[tuple]):
 def matchday_exists(matchday: str) -> bool:
     cur = conn.cursor()
     cur.execute(
-        "SELECT matchday FROM bavariada.matchdays WHERE matchday = %s",
-        (matchday,),
+        sql.SQL(
+            "SELECT matchday FROM bavariada.matchdays WHERE matchday = %s",
+            (matchday,),
+        )
     )
     exists = cur.fetchone() is not None
     cur.close()
@@ -109,7 +115,7 @@ def get_matchdays_in_progress() -> list[int]:
 
     cur.close()
 
-    return [matchday["matchday"] for matchday in matchdays]
+    return matchdays
 
 
 def get_matches(matchday: int) -> list[dict]:

@@ -10,10 +10,11 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"app/internal/db"
+	"fmt"
 	"strconv"
 )
 
-func TotalPoints(totalPoints []db.UserTotalPoints) templ.Component {
+func TotalResults(totalResults []db.UserTotalResults) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -31,19 +32,19 @@ func TotalPoints(totalPoints []db.UserTotalPoints) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-center\"><div class=\"overflow-x-auto inline-block\"><table class=\"bg-gray-800 shadow-md rounded-lg overflow-hidden\"><thead class=\"bg-gray-700\"><tr><th class=\"py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">User</th><th class=\"py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">Total Points</th></tr></thead> <tbody class=\"divide-y divide-gray-700\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-center\"><div class=\"overflow-x-auto inline-block\"><table class=\"bg-gray-800 shadow-md rounded-lg overflow-hidden\"><thead class=\"bg-gray-700\"><tr><th class=\"py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">User</th><th class=\"py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">Total Points</th><th class=\"py-3 px-6 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">Total Debt</th></tr></thead> <tbody class=\"divide-y divide-gray-700\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, userTPoints := range totalPoints {
+		for _, userTResults := range totalResults {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"hover:bg-gray-700 transition-colors duration-200\"><td class=\"py-3 px-6 whitespace-nowrap\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(userTPoints.UserName)
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(userTResults.UserName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/total_points.templ`, Line: 21, Col: 89}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/total_points.templ`, Line: 23, Col: 90}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -54,11 +55,24 @@ func TotalPoints(totalPoints []db.UserTotalPoints) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(userTPoints.TotalPoints))
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(userTResults.TotalPoints))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/total_points.templ`, Line: 22, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/total_points.templ`, Line: 24, Col: 118}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"py-3 px-6 whitespace-nowrap text-right\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.2f", userTResults.TotalDebt))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/total_points.templ`, Line: 25, Col: 123}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
