@@ -55,21 +55,21 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 }
 
 func totalPoints(w http.ResponseWriter, r *http.Request) error {
-	userPoints, err := db.GetTotalPoints()
+	userResults, err := db.GetTotalResults()
 	if err != nil {
 		return err
 	}
 
-	return Render(w, r, tables.TotalPoints(userPoints))
+	return Render(w, r, tables.TotalResults(userResults))
 }
 
 func pointsPerMatchday(w http.ResponseWriter, r *http.Request) error {
-	userPoints, err := db.GetPointsPerMatchday()
+	resultsPerMatchday, err := db.GetResultsPerMatchday()
 	if err != nil {
 		return err
 	}
 
-	return Render(w, r, tables.PointsPerMatchday(userPoints))
+	return Render(w, r, tables.PointsPerMatchday(resultsPerMatchday))
 }
 
 func root(w http.ResponseWriter, r *http.Request) error {

@@ -1,18 +1,21 @@
 from f_data_uploader.cfg import conn
+from psycopg2 import sql
 
 
-def get_teams_mapping() -> list[dict]:
+def get_home_chmps(team_ids: list[str]) -> list[tuple]:
     cur = conn.cursor()
-    cur.execute("SELECT * FROM bavariada.teams")
+    cur.execute(
+        sql.SQL(
+            """
+            SELECT home_championship
+            FROM bavariada.teams
+            WHERE id IN %s
+            """
+        ),
+        (tuple(team_ids),),
+    )
 
-    columns = [desc[0] for desc in cur.description]
-
-    rows = cur.fetchall()
-
-    team_mappings = [
-        {columns[i]: value for i, value in enumerate(row)} for row in rows
-    ]
-
+    home_chmps = [row[0] for row in cur.fetchall()]
     cur.close()
 
-    return team_mappings
+    return home_chmps

@@ -2,15 +2,21 @@ from f_data_uploader.cfg import conn
 from psycopg2 import sql
 
 
-def get_predictions(matchday: int) -> list[str]:
+def get_predictions(matchday: dict) -> list[str]:
     cur = conn.cursor()
     cur.execute(
         sql.SQL(
             """
-            SELECT * FROM bavariada.predictions WHERE matchday = %s
+            SELECT *
+            FROM bavariada.predictions
+            WHERE season = %s
+            AND matchday = %s
             """
         ),
-        (matchday,),
+        (
+            matchday["season"],
+            matchday["matchday"],
+        ),
     )
 
     columns = [desc[0] for desc in cur.description]

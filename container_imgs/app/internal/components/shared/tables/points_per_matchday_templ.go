@@ -13,7 +13,7 @@ import (
 	"strconv"
 )
 
-func PointsPerMatchday(userPoints []db.UserMatchdayPoints) templ.Component {
+func PointsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -35,7 +35,7 @@ func PointsPerMatchday(userPoints []db.UserMatchdayPoints) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, user := range getUserNames(userPoints) {
+		for _, user := range getUserNames(userResults) {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<th class=\"py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -58,7 +58,7 @@ func PointsPerMatchday(userPoints []db.UserMatchdayPoints) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, matchday := range getMatchdays(userPoints) {
+		for _, matchday := range getMatchdays(userResults) {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"hover:bg-gray-700 transition-colors duration-200\"><td class=\"py-3 px-4 whitespace-nowrap\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -76,15 +76,15 @@ func PointsPerMatchday(userPoints []db.UserMatchdayPoints) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for _, user := range getUserNames(userPoints) {
+			for _, user := range getUserNames(userResults) {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td class=\"py-3 px-4 whitespace-nowrap\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(getPointsForUserAndMatchday(userPoints, user, matchday)))
+				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(getPointsForUserAndMatchday(userResults, user, matchday)))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/points_per_matchday.templ`, Line: 24, Col: 117}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/points_per_matchday.templ`, Line: 24, Col: 118}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -108,10 +108,10 @@ func PointsPerMatchday(userPoints []db.UserMatchdayPoints) templ.Component {
 	})
 }
 
-func getUserNames(userPoints []db.UserMatchdayPoints) []string {
+func getUserNames(userResults []db.UserMatchdayResults) []string {
 	userNamesMap := make(map[string]bool)
 	var userNames []string
-	for _, point := range userPoints {
+	for _, point := range userResults {
 		if !userNamesMap[point.UserName] {
 			userNamesMap[point.UserName] = true
 			userNames = append(userNames, point.UserName)
@@ -120,10 +120,10 @@ func getUserNames(userPoints []db.UserMatchdayPoints) []string {
 	return userNames
 }
 
-func getMatchdays(userPoints []db.UserMatchdayPoints) []int {
+func getMatchdays(userResults []db.UserMatchdayResults) []int {
 	matchdaysMap := make(map[int]bool)
 	var matchdays []int
-	for _, point := range userPoints {
+	for _, point := range userResults {
 		if !matchdaysMap[point.MatchDay] {
 			matchdaysMap[point.MatchDay] = true
 			matchdays = append(matchdays, point.MatchDay)
@@ -132,8 +132,8 @@ func getMatchdays(userPoints []db.UserMatchdayPoints) []int {
 	return matchdays
 }
 
-func getPointsForUserAndMatchday(userPoints []db.UserMatchdayPoints, userName string, matchday int) int {
-	for _, point := range userPoints {
+func getPointsForUserAndMatchday(userResults []db.UserMatchdayResults, userName string, matchday int) int {
+	for _, point := range userResults {
 		if point.UserName == userName && point.MatchDay == matchday {
 			return point.Points
 		}

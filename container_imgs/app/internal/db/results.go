@@ -46,17 +46,19 @@ func GetUserPoints() ([]UserCumPoints, error) {
 	return userPoints, nil
 }
 
-type UserTotalPoints struct {
-	UserName    string `json:"user_name"`
-	TotalPoints int    `json:"total_points"`
+type UserTotalResults struct {
+	UserName    string  `json:"user_name"`
+	TotalPoints int     `json:"total_points"`
+	TotalDebt   float32 `json:"total_debt"`
 }
 
-func GetTotalPoints() ([]UserTotalPoints, error) {
+func GetTotalResults() ([]UserTotalResults, error) {
 	db := New()
 	rows, err := db.Query(
 		`SELECT
 			users.raw_user_meta_data->>'display_name' AS user_name,
-			SUM(points.points) as total_points
+			SUM(points.points) as total_points,
+			SUM(points.debt_euros) as debt_euros
 		FROM 
 			bavariada.points as points
 		INNER JOIN
@@ -68,34 +70,36 @@ func GetTotalPoints() ([]UserTotalPoints, error) {
 			total_points DESC;`,
 	)
 	if err != nil {
-		return []UserTotalPoints{}, err
+		return []UserTotalResults{}, err
 	}
 
-	userPoints := []UserTotalPoints{}
+	userResults := []UserTotalResults{}
 	for rows.Next() {
-		userPoint := UserTotalPoints{}
-		err = rows.Scan(&userPoint.UserName, &userPoint.TotalPoints)
+		userPoint := UserTotalResults{}
+		err = rows.Scan(&userPoint.UserName, &userPoint.TotalPoints, &userPoint.TotalDebt)
 		if err != nil {
-			return []UserTotalPoints{}, err
+			return []UserTotalResults{}, err
 		}
-		userPoints = append(userPoints, userPoint)
+		userResults = append(userResults, userPoint)
 	}
-	return userPoints, nil
+	return userResults, nil
 }
 
-type UserMatchdayPoints struct {
-	UserName string `json:"user_name"`
-	MatchDay int    `json:"matchday"`
-	Points   int    `json:"points"`
+type UserMatchdayResults struct {
+	UserName  string  `json:"user_name"`
+	MatchDay  int     `json:"matchday"`
+	Points    int     `json:"points"`
+	DebtEuros float32 `json:"debt_euros"`
 }
 
-func GetPointsPerMatchday() ([]UserMatchdayPoints, error) {
+func GetResultsPerMatchday() ([]UserMatchdayResults, error) {
 	db := New()
 	rows, err := db.Query(
 		`SELECT
 			users.raw_user_meta_data->>'display_name' AS user_name,
 			points.matchday,
-			points.points
+			points.points,
+			points.debt_euros
 		FROM 
 			bavariada.points as points
 		INNER JOIN
@@ -104,17 +108,17 @@ func GetPointsPerMatchday() ([]UserMatchdayPoints, error) {
 			points.matchday DESC, points.points DESC;`,
 	)
 	if err != nil {
-		return []UserMatchdayPoints{}, err
+		return []UserMatchdayResults{}, err
 	}
 
-	userPoints := []UserMatchdayPoints{}
+	userResults := []UserMatchdayResults{}
 	for rows.Next() {
-		userPoint := UserMatchdayPoints{}
-		err = rows.Scan(&userPoint.UserName, &userPoint.MatchDay, &userPoint.Points)
+		userResult := UserMatchdayResults{}
+		err = rows.Scan(&userResult.UserName, &userResult.MatchDay, &userResult.Points, &userResult.DebtEuros)
 		if err != nil {
-			return []UserMatchdayPoints{}, err
+			return []UserMatchdayResults{}, err
 		}
-		userPoints = append(userPoints, userPoint)
+		userResults = append(userResults, userResult)
 	}
-	return userPoints, nil
+	return userResults, nil
 }
