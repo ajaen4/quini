@@ -54,7 +54,7 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func totalPoints(w http.ResponseWriter, r *http.Request) error {
+func totalResults(w http.ResponseWriter, r *http.Request) error {
 	userResults, err := db.GetTotalResults()
 	if err != nil {
 		return err
@@ -63,13 +63,27 @@ func totalPoints(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, tables.TotalResults(userResults))
 }
 
-func pointsPerMatchday(w http.ResponseWriter, r *http.Request) error {
+func totalDebt(w http.ResponseWriter, r *http.Request) error {
+	userResults, err := db.GetTotalResults()
+	if err != nil {
+		return err
+	}
+
+	var totalDebt float32 = 0.0
+	for _, result := range userResults {
+		totalDebt += result.TotalDebt
+	}
+
+	return Render(w, r, tables.TotalDebt(totalDebt))
+}
+
+func resultsPerMatchday(w http.ResponseWriter, r *http.Request) error {
 	resultsPerMatchday, err := db.GetResultsPerMatchday()
 	if err != nil {
 		return err
 	}
 
-	return Render(w, r, tables.PointsPerMatchday(resultsPerMatchday))
+	return Render(w, r, tables.ResultsPerMatchday(resultsPerMatchday))
 }
 
 func root(w http.ResponseWriter, r *http.Request) error {

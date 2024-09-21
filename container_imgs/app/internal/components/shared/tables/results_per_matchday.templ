@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-templ PointsPerMatchday(userResults []db.UserMatchdayResults) {
+templ ResultsPerMatchday(userResults []db.UserMatchdayResults) {
 	<div class="overflow-x-auto">
 		<table class="min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden">
 			<thead class="bg-gray-700">
@@ -21,7 +21,7 @@ templ PointsPerMatchday(userResults []db.UserMatchdayResults) {
 					<tr class="hover:bg-gray-700 transition-colors duration-200">
 						<td class="py-3 px-4 whitespace-nowrap">{strconv.Itoa(matchday)}</td>
 						for _, user := range getUserNames(userResults) {
-							<td class="py-3 px-4 whitespace-nowrap">{strconv.Itoa(getPointsForUserAndMatchday(userResults, user, matchday))}</td>
+							<td class={"py-3 px-4 whitespace-nowrap", getClassDebt(userResults, user, matchday)}>{getPointsForUserAndMatchday(userResults, user, matchday)}</td>
 						}
 					</tr>
 				}
@@ -54,11 +54,20 @@ func getMatchdays(userResults []db.UserMatchdayResults) []int {
 	return matchdays
 }
 
-func getPointsForUserAndMatchday(userResults []db.UserMatchdayResults, userName string, matchday int) int {
+func getPointsForUserAndMatchday(userResults []db.UserMatchdayResults, userName string, matchday int) string {
 	for _, point := range userResults {
 		if point.UserName == userName && point.MatchDay == matchday {
-			return point.Points
+			return strconv.Itoa(point.Points)
 		}
 	}
-	return 0
+	return "0"
+}
+
+func getClassDebt(userResults []db.UserMatchdayResults, userName string, matchday int) string {
+	for _, result := range userResults {
+		if result.UserName == userName && result.MatchDay == matchday && result.DebtEuros > 0 {
+			return "text-red-600"
+		}
+	}
+	return ""
 }

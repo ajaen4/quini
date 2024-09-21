@@ -13,7 +13,7 @@ import (
 	"strconv"
 )
 
-func PointsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
+func ResultsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -43,7 +43,7 @@ func PointsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(user)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/points_per_matchday.templ`, Line: 15, Col: 102}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 15, Col: 102}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -66,7 +66,7 @@ func PointsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(matchday))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/points_per_matchday.templ`, Line: 22, Col: 69}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 22, Col: 69}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -77,16 +77,34 @@ func PointsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, user := range getUserNames(userResults) {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td class=\"py-3 px-4 whitespace-nowrap\">")
+				var templ_7745c5c3_Var4 = []any{"py-3 px-4 whitespace-nowrap", getClassDebt(userResults, user, matchday)}
+				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(getPointsForUserAndMatchday(userResults, user, matchday)))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td class=\"")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/points_per_matchday.templ`, Line: 24, Col: 118}
+					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+				var templ_7745c5c3_Var5 string
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var4).String())
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 1, Col: 0}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var6 string
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(getPointsForUserAndMatchday(userResults, user, matchday))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 24, Col: 149}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -132,13 +150,22 @@ func getMatchdays(userResults []db.UserMatchdayResults) []int {
 	return matchdays
 }
 
-func getPointsForUserAndMatchday(userResults []db.UserMatchdayResults, userName string, matchday int) int {
+func getPointsForUserAndMatchday(userResults []db.UserMatchdayResults, userName string, matchday int) string {
 	for _, point := range userResults {
 		if point.UserName == userName && point.MatchDay == matchday {
-			return point.Points
+			return strconv.Itoa(point.Points)
 		}
 	}
-	return 0
+	return "0"
+}
+
+func getClassDebt(userResults []db.UserMatchdayResults, userName string, matchday int) string {
+	for _, result := range userResults {
+		if result.UserName == userName && result.MatchDay == matchday && result.DebtEuros > 0 {
+			return "text-red-600"
+		}
+	}
+	return ""
 }
 
 var _ = templruntime.GeneratedTemplate
