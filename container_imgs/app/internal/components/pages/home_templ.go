@@ -51,7 +51,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</section><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos totales</h2><div hx-get=\"/components/tables/total-points\" hx-trigger=\"load\"><p>Cargando puntos totales...</p></div></section><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos por jornada</h2><div hx-get=\"/components/tables/points-per-matchday\" hx-trigger=\"load\"><p>Cargando puntos por jornada...</p></div></section></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</section><section><h2 class=\"text-2xl font-semibold mb-4\">Bote</h2><div hx-get=\"/components/tables/total-debt\" hx-trigger=\"load\"><p>Cargando bote...</p></div></section><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos totales</h2><div hx-get=\"/components/tables/total-points\" hx-trigger=\"load\"><p>Cargando puntos totales...</p></div></section><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos por jornada</h2><div hx-get=\"/components/tables/points-per-matchday\" hx-trigger=\"load\"><p>Cargando puntos por jornada...</p></div></section></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
