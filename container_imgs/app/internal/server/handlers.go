@@ -64,14 +64,9 @@ func totalResults(w http.ResponseWriter, r *http.Request) error {
 }
 
 func totalDebt(w http.ResponseWriter, r *http.Request) error {
-	userResults, err := db.GetTotalResults()
+	totalDebt, err := db.GetTotalDebt()
 	if err != nil {
 		return err
-	}
-
-	var totalDebt float32 = 0.0
-	for _, result := range userResults {
-		totalDebt += result.TotalDebt
 	}
 
 	return Render(w, r, tables.TotalDebt(totalDebt))

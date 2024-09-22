@@ -39,7 +39,7 @@ def evaluate_results(
                 continue
 
             for colI, col in enumerate(predictions[match_num].split("-")):
-                if correct_pred == col:
+                if correct_pred.lower() == col.lower():
                     users_cols[user_id][colI] += 1
 
     user_results = list()
@@ -88,26 +88,46 @@ def evaluate_debt(user_results: list[dict]) -> list[dict]:
             continue
 
         min_points = sorted_group[0]["points"]
-        rest = [
-            item["points"]
-            for item in sorted_group
-            if item["points"] > min_points
-        ]
+        second_min_points = next(
+            (
+                item["points"]
+                for item in sorted_group
+                if item["points"] > min_points
+            ),
+            None,
+        )
 
-        if len(rest) == 0:
-            tie_count = sum(
+        if second_min_points is None:
+            tie_debt = 5.0 / len(sorted_group)
+            for item in sorted_group:
+                item["debt_euros"] = tie_debt
+        else:
+            min_count = sum(
                 1 for item in sorted_group if item["points"] == min_points
             )
-            tie_debt = 5.0 / tie_count
-            for item in sorted_group:
-                item["debt_euros"] = (
-                    tie_debt if item["points"] == min_points else 0.0
-                )
-        else:
-            sorted_group[0]["debt_euros"] = 3.0
-            sorted_group[1]["debt_euros"] = 2.0
-            for item in sorted_group[2:]:
-                item["debt_euros"] = 0.0
+            second_min_count = sum(
+                1
+                for item in sorted_group
+                if item["points"] == second_min_points
+            )
+
+            if min_count == 1:
+                sorted_group[0]["debt_euros"] = 3.0
+                second_min_debt = 2.0 / second_min_count
+                for item in sorted_group[1:]:
+                    if item["points"] == second_min_points:
+                        item["debt_euros"] = second_min_debt
+                    else:
+                        item["debt_euros"] = 0.0
+            else:
+                min_debt = 3.0 / min_count
+                for item in sorted_group:
+                    if item["points"] == min_points:
+                        item["debt_euros"] = min_debt
+                    elif item["points"] == second_min_points:
+                        item["debt_euros"] = 2.0 / second_min_count
+                    else:
+                        item["debt_euros"] = 0.0
 
         result.extend(sorted_group)
 

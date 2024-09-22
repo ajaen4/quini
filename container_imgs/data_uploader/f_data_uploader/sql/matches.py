@@ -35,19 +35,18 @@ def mark_matchday_finished(matchday: dict):
         raise Exception(f"No matchday found with number {matchday}")
 
 
-def insert_matchdays(matchdays: list[tuple]):
+def insert_matchday(matchday: dict):
     cur = conn.cursor()
 
-    query = sql.SQL(
-        """
+    cur.execute(
+        sql.SQL(
+            """
         INSERT INTO bavariada.matchdays (season, matchday, status)
-        VALUES (%s, %s, %s)
-        ON CONFLICT (season, matchday)  DO UPDATE SET
-            status = EXCLUDED.status
-    """
+        VALUES (%s, %s, 'NOT_STARTED')
+        """
+        ),
+        (matchday["temporada"], matchday["jornada"]),
     )
-
-    cur.executemany(query, matchdays)
     conn.commit()
 
     cur.close()
@@ -70,30 +69,80 @@ def insert_teams(teams: list[tuple]):
     cur.close()
 
 
-def insert_matches(matches: list[tuple]):
+def insert_matches(matches: dict):
     cur = conn.cursor()
 
-    query = sql.SQL(
+    cur.execute(
         """
-        INSERT INTO bavariada.matches (season, matchday, match_num, home_team_id, away_team_id)
-        VALUES (%s, %s, %s, %s, %s)
-        ON CONFLICT (season, matchday, match_num) DO NOTHING
-    """
+        CREATE TEMPORARY TABLE temp_matches (
+            season VARCHAR(9),
+            matchday INTEGER,
+            match_num INTEGER,
+            home_name VARCHAR(50),
+            away_name VARCHAR(50)
+        );
+        """
     )
+    conn.commit()
 
-    cur.executemany(query, matches)
+    matches_team_names = list()
+    for match_num, match in enumerate(matches["partidos"]):
+        matches_team_names.append(
+            (
+                matches["temporada"],
+                matches["jornada"],
+                match_num,
+                match["local"],
+                match["visitante"],
+            )
+        )
+
+    cur.executemany(
+        sql.SQL(
+            """
+            INSERT INTO temp_matches (season, matchday, match_num, home_name, away_name)
+            VALUES (%s, %s, %s, %s, %s);
+            """
+        ),
+        matches_team_names,
+    )
+    conn.commit()
+
+    cur.execute(
+        sql.SQL(
+            """
+            INSERT INTO bavariada.matches (season, matchday, match_num, home_team_id, away_team_id)
+            SELECT
+                tm.season,
+                tm.matchday,
+                tm.match_num,
+                home_team.id AS home_team_id,
+                away_team.id AS away_team_id
+            FROM temp_matches tm
+            JOIN bavariada.teams home_team ON tm.home_name = home_team.name
+            JOIN bavariada.teams away_team ON tm.away_name = away_team.name
+            """
+        )
+    )
     conn.commit()
 
     cur.close()
 
 
-def matchday_exists(matchday: str) -> bool:
+def matchday_exists(matchday: dict) -> bool:
     cur = conn.cursor()
     cur.execute(
         sql.SQL(
-            "SELECT matchday FROM bavariada.matchdays WHERE matchday = %s",
-            (matchday,),
-        )
+            """
+            SELECT matchday FROM bavariada.matchdays
+            WHERE matchday = %s
+            AND season = %s
+            """,
+        ),
+        (
+            matchday["jornada"],
+            matchday["temporada"],
+        ),
     )
     exists = cur.fetchone() is not None
     cur.close()
