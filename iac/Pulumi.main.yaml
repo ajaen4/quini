@@ -9,6 +9,6 @@ config:
       cron_expression: "cron(0 23 * * ? *)"
       env_vars:
       - name: QUINIELA_URL
-        value: https://www.loteriasyapuestas.es/servicios/buscadorSorteos
-      - name: FOOTBALL_API
-        value: api-football-v1.p.rapidapi.com
+        value: https://www.loteriasyapuestas.es/servicios
+      - name: LOTERO_URL
+        value: https://web.tulotero.es/tuloteroweb/rest/users/boletos/me

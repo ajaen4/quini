@@ -1,5 +1,9 @@
 package db
 
+import (
+	"fmt"
+)
+
 type UserCumPoints struct {
 	UserName         string `json:"user_name"`
 	CumulativePoints []int  `json:"cumulative_points"`
@@ -121,4 +125,29 @@ func GetResultsPerMatchday() ([]UserMatchdayResults, error) {
 		userResults = append(userResults, userResult)
 	}
 	return userResults, nil
+}
+
+func GetTotalDebt() (float32, error) {
+	db := New()
+	rows, err := db.Query(
+		`SELECT
+			SUM(points.debt_euros) as debt_euros
+		FROM 
+			bavariada.points as points;`,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	if !rows.Next() {
+		return 0, fmt.Errorf("no rows returned from total debt query")
+	}
+
+	var totalDebt float32
+	err = rows.Scan(&totalDebt)
+	if err != nil {
+		return 0, err
+	}
+
+	return totalDebt, nil
 }

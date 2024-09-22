@@ -25,7 +25,6 @@ def recalculate_matchday(matchday: dict):
         "fechaFinInclusiva": tomorrow,
     }
 
-    logger.info("Fetching data on quiniela API...")
     response = requests.get(cfg.QUINIELA_URL, params=params)
     response.raise_for_status()
     logger.info("Finished fetching data on quiniela API")
@@ -37,8 +36,6 @@ def recalculate_matchday(matchday: dict):
     ][0]
 
     users_predictions = get_predictions(matchday)
-    if len(users_predictions) == 0:
-        return
 
     user_results = evaluate_results(
         matchday, users_predictions, quiniela["partidos"]
@@ -52,4 +49,4 @@ def recalculate_matchday(matchday: dict):
 load_dotenv(".env")
 
 if __name__ == "__main__":
-    recalculate_matchday({"season": "2024-2025", "matchday": 7})
+    recalculate_matchday({"season": "2024-2025", "matchday": 9})

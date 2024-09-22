@@ -1,21 +1,33 @@
 from f_data_uploader.cfg import conn
 from psycopg2 import sql
+from itertools import chain
+
+from f_data_uploader.logger import logger
 
 
-def get_home_chmps(team_ids: list[str]) -> list[tuple]:
+def is_spanish_league(team_names: list[str]) -> bool:
     cur = conn.cursor()
     cur.execute(
         sql.SQL(
             """
-            SELECT home_championship
+            SELECT name
             FROM bavariada.teams
-            WHERE id IN %s
+            WHERE name IN %s
             """
         ),
-        (tuple(team_ids),),
+        (tuple(team_names),),
     )
 
-    home_chmps = [row[0] for row in cur.fetchall()]
+    teams_in_db = list(chain(*cur.fetchall()))
     cur.close()
 
-    return home_chmps
+    if len(teams_in_db) != len(team_names):
+        teams_not_in_db = [
+            team_name
+            for team_name in team_names
+            if team_name not in teams_in_db
+        ]
+        logger.info(f"Teams not in db {teams_not_in_db}")
+        return False
+
+    return True

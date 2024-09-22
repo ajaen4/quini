@@ -30,4 +30,5 @@ DB_PARAMS = {
 conn: connection = psycopg2.connect(**DB_PARAMS)
 
 QUINIELA_URL = os.environ["QUINIELA_URL"]
-RAPID_API_KEY = secrets["RAPID_API_KEY"]
+LOTERO_URL = os.environ["LOTERO_URL"]
+LOTERO_TOKEN = secrets["LOTERO_TOKEN"]
