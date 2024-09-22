@@ -149,7 +149,7 @@ def matchday_exists(matchday: dict) -> bool:
     return exists
 
 
-def get_matchdays_in_progress() -> list[int]:
+def get_matchdays_in_progress() -> list[dict]:
     cur = conn.cursor()
     cur.execute(
         "SELECT * FROM bavariada.matchdays WHERE status = 'IN_PROGRESS'"
