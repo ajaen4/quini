@@ -136,5 +136,6 @@ def upload_results():
         )
         insert_results(user_results)
 
-        if "combinacion" in quiniela:
+        if quiniela["combinacion"]:
             mark_matchday_finished(matchday)
+            logger.info(f"Marked matchday {matchday["matchday"]} as finished")
