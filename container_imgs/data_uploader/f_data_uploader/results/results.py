@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from f_data_uploader.sql.users import get_users
+from f_data_uploader.sql import get_users
 
 
 def evaluate_results(
@@ -79,56 +79,54 @@ def evaluate_debt(user_results: list[dict]) -> list[dict]:
     for group in grouped_results.values():
         sorted_group = sorted(group, key=lambda x: x["points"])
 
+        LAST_DEBT = 3.0
+        SECOND_LAST_DEBT = 2.0
         if len(sorted_group) == 1:
-            sorted_group[0]["debt_euros"] = 3.0
-            continue
-        elif len(sorted_group) == 2:
-            sorted_group[0]["debt_euros"] = 3.0
-            sorted_group[1]["debt_euros"] = 2.0
+            sorted_group[0]["debt_euros"] = LAST_DEBT
             continue
 
         min_points = sorted_group[0]["points"]
-        second_min_points = next(
-            (
-                item["points"]
-                for item in sorted_group
-                if item["points"] > min_points
-            ),
-            None,
-        )
+        min_points_users = [
+            item for item in sorted_group if item["points"] == min_points
+        ]
 
-        if second_min_points is None:
-            tie_debt = 5.0 / len(sorted_group)
-            for item in sorted_group:
-                item["debt_euros"] = tie_debt
+        # If tied for last place divide the whole debt
+        if len(min_points_users) > 1:
+            tie_debt = (LAST_DEBT + SECOND_LAST_DEBT) / len(min_points_users)
+            for user in min_points_users:
+                user["debt_euros"] = tie_debt
+
+            fill_debt_0(sorted_group)
+            result.extend(sorted_group)
+            continue
+
+        # If no tie for last place give last place debt
+        sorted_group[0]["debt_euros"] = LAST_DEBT
+        second_min_points = sorted_group[1]["points"]
+        second_min_points_users = [
+            item
+            for item in sorted_group
+            if item["points"] == second_min_points
+        ]
+
+        # If tie for second last place, divide the second last debt
+        # between users tied
+        if len(second_min_points_users) > 1:
+            tie_debt = SECOND_LAST_DEBT / len(second_min_points_users)
+            for user in second_min_points_users:
+                user["debt_euros"] = tie_debt
+        # If no tie, give second last its debt
         else:
-            min_count = sum(
-                1 for item in sorted_group if item["points"] == min_points
-            )
-            second_min_count = sum(
-                1
-                for item in sorted_group
-                if item["points"] == second_min_points
-            )
+            sorted_group[1]["debt_euros"] = SECOND_LAST_DEBT
 
-            if min_count == 1:
-                sorted_group[0]["debt_euros"] = 3.0
-                second_min_debt = 2.0 / second_min_count
-                for item in sorted_group[1:]:
-                    if item["points"] == second_min_points:
-                        item["debt_euros"] = second_min_debt
-                    else:
-                        item["debt_euros"] = 0.0
-            else:
-                min_debt = 3.0 / min_count
-                for item in sorted_group:
-                    if item["points"] == min_points:
-                        item["debt_euros"] = min_debt
-                    elif item["points"] == second_min_points:
-                        item["debt_euros"] = 2.0 / second_min_count
-                    else:
-                        item["debt_euros"] = 0.0
-
+        fill_debt_0(sorted_group)
         result.extend(sorted_group)
 
     return result
+
+
+def fill_debt_0(sorted_group: list[dict]) -> list[dict]:
+    for user in sorted_group:
+        if "debt_euros" not in user:
+            user["debt_euros"] = 0.0
+    return sorted_group

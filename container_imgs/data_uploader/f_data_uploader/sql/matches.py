@@ -4,19 +4,20 @@ from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
 
 
-def mark_matchday_finished(matchday: dict):
+def update_matchday_status(matchday: dict, status: str):
     cur = conn.cursor()
 
     cur.execute(
         sql.SQL(
             """
             UPDATE bavariada.matchdays
-            SET status = 'FINISHED'
+            SET status = %s
             WHERE season = %s
             AND matchday = %s
             """
         ),
         (
+            status,
             matchday["season"],
             matchday["matchday"],
         ),
@@ -47,23 +48,6 @@ def insert_matchday(matchday: dict):
         ),
         (matchday["temporada"], matchday["jornada"]),
     )
-    conn.commit()
-
-    cur.close()
-
-
-def insert_teams(teams: list[tuple]):
-    cur = conn.cursor()
-
-    query = sql.SQL(
-        """
-        INSERT INTO bavariada.teams (id, name)
-        VALUES (%s, %s)
-        ON CONFLICT (id) DO NOTHING
-    """
-    )
-
-    cur.executemany(query, teams)
     conn.commit()
 
     cur.close()
@@ -149,10 +133,11 @@ def matchday_exists(matchday: dict) -> bool:
     return exists
 
 
-def get_matchdays_in_progress() -> list[dict]:
+def get_matchdays(status: str) -> list[dict]:
     cur = conn.cursor()
     cur.execute(
-        "SELECT * FROM bavariada.matchdays WHERE status = 'IN_PROGRESS'"
+        sql.SQL("SELECT * FROM bavariada.matchdays WHERE status = %s"),
+        (status,),
     )
 
     columns = [desc[0] for desc in cur.description]

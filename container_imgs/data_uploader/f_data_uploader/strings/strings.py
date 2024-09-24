@@ -3,7 +3,7 @@ import re
 
 
 def clean_text(text: str) -> str:
-    text = unidecode.unidecode(text)
+    text = unidecode.unidecode(text.lower())
 
     cleaned_text = re.sub(r"[^a-zA-Z\s.]", "", text)
     cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
