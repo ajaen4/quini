@@ -8,16 +8,14 @@ from datetime import (
 from f_data_uploader.sql import (
     get_predictions,
     insert_results,
-    mark_matchday_finished,
+    update_matchday_status,
 )
 from f_data_uploader.results.results import evaluate_results
 from f_data_uploader.logger import logger
 import f_data_uploader.cfg as cfg
 
 
-def recalculate_matchday(matchday: dict):
-    logger.info("Running data uploader...")
-
+def reevaluate_results(matchday: dict):
     tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y%m%d")
     params = {
         "game_id": "LAQU",
@@ -25,15 +23,21 @@ def recalculate_matchday(matchday: dict):
         "fechaFinInclusiva": tomorrow,
     }
 
-    response = requests.get(cfg.QUINIELA_URL, params=params)
+    response = requests.get(
+        f"{cfg.QUINIELA_URL}/buscadorSorteos", params=params
+    )
     response.raise_for_status()
-    logger.info("Finished fetching data on quiniela API")
+    quinielas = response.json()
 
     quiniela = [
         quiniela
-        for quiniela in response.json()
+        for quiniela in quinielas
         if int(quiniela["jornada"]) == matchday["matchday"]
     ][0]
+
+    if len(quiniela) == 0:
+        logger.info("No results published yet, skipping results evaluation")
+        return
 
     users_predictions = get_predictions(matchday)
 
@@ -42,11 +46,14 @@ def recalculate_matchday(matchday: dict):
     )
     insert_results(user_results)
 
-    if "combinacion" in quiniela:
-        mark_matchday_finished(matchday)
+    if quiniela["combinacion"]:
+        update_matchday_status(matchday, "FINISHED")
+        logger.info(f"Updated matchday {matchday["matchday"]} as finished")
+    else:
+        update_matchday_status(matchday, "IN_PROGRESS")
 
 
 load_dotenv(".env")
 
 if __name__ == "__main__":
-    recalculate_matchday({"season": "2024-2025", "matchday": 9})
+    reevaluate_results({"season": "2024-2025", "matchday": 9})
