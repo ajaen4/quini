@@ -33,26 +33,26 @@ func Layout(title string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/layout/layout.templ`, Line: 9, Col: 17}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/layout/layout.templ`, Line: 9, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link href=\"https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script><link href=\"/static/css/tailwind.css\" rel=\"stylesheet\"><script src=\"https://unpkg.com/htmx.org@2.0.2\" integrity=\"sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ\" crossorigin=\"anonymous\"></script><script>\n\t\t\t\ttailwind.config = {\n\t\t\t\t\tdarkMode: 'class',\n\t\t\t\t\ttheme: {\n\t\t\t\t\t\textend: {\n\t\t\t\t\t\t\tcolors: {\n\t\t\t\t\t\t\t\tprimary: {\"50\":\"#eff6ff\",\"100\":\"#dbeafe\",\"200\":\"#bfdbfe\",\"300\":\"#93c5fd\",\"400\":\"#60a5fa\",\"500\":\"#3b82f6\",\"600\":\"#2563eb\",\"700\":\"#1d4ed8\",\"800\":\"#1e40af\",\"900\":\"#1e3a8a\",\"950\":\"#172554\"}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t</script></head><body class=\"bg-gray-900 text-gray-100 min-h-screen flex flex-col\"><script src=\"https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js\"></script><header class=\"bg-gray-800 text-white py-4\"><div class=\"container mx-auto px-4\"><h1 class=\"text-2xl font-bold\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link href=\"https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script><link href=\"/static/css/tailwind.css\" rel=\"stylesheet\"><script src=\"https://unpkg.com/htmx.org@2.0.2\" integrity=\"sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ\" crossorigin=\"anonymous\"></script><script>\n                tailwind.config = {\n                    darkMode: 'class',\n                    theme: {\n                        extend: {\n                            colors: {\n                                primary: {\"50\":\"#eff6ff\",\"100\":\"#dbeafe\",\"200\":\"#bfdbfe\",\"300\":\"#93c5fd\",\"400\":\"#60a5fa\",\"500\":\"#3b82f6\",\"600\":\"#2563eb\",\"700\":\"#1d4ed8\",\"800\":\"#1e40af\",\"900\":\"#1e3a8a\",\"950\":\"#172554\"}\n                            }\n                        }\n                    }\n                }\n            </script></head><body class=\"bg-gray-900 text-gray-100 min-h-screen flex flex-col\"><header class=\"bg-gray-800 text-white py-4\"><div class=\"container mx-auto px-4 flex justify-between items-center\"><h1 class=\"text-2xl font-bold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/layout/layout.templ`, Line: 32, Col: 43}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/layout/layout.templ`, Line: 31, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1></div></header><main class=\"container mx-auto px-4 py-8 flex-grow\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div hx-get=\"/components/badges/total-debt\" hx-trigger=\"load\"><p>...</p></div></div></header><main class=\"container mx-auto px-4 py-8 flex-grow\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
