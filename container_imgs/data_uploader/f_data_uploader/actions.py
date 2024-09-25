@@ -132,13 +132,15 @@ def upload_predictions():
         line_1 = combinaciones[0]["linea"].split(",")
         line_2 = combinaciones[1]["linea"].split(",")
         for match_num in range(14):
+            line_1_pred = line_1[match_num].replace("-E", "")
+            line_2_pred = line_2[match_num].replace("-E", "")
             predictions_db.append(
                 {
                     "user_id": user_id,
                     "season": "2024-2025",
                     "matchday": matchday,
                     "match_num": match_num,
-                    "prediction": f"{line_1[match_num]}-{line_2[match_num]}",
+                    "prediction": f"{line_1_pred}-{line_2_pred}",
                 }
             )
 
@@ -179,18 +181,19 @@ def upload_results():
 
     logger.info(f"Found matchdays in progress: {matchdays}")
     for matchday in matchdays:
-        quiniela = [
+        matchday_quinielas = [
             quiniela
             for quiniela in quinielas
             if int(quiniela["jornada"]) == matchday["matchday"]
         ]
 
-        if len(quiniela) == 0:
+        if len(matchday_quinielas) == 0:
             logger.info(
                 "No results published yet, skipping results evaluation"
             )
             return
 
+        quiniela = matchday_quinielas[0]
         users_predictions = get_predictions(matchday)
 
         user_results = evaluate_results(
