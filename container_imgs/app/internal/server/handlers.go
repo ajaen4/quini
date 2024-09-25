@@ -2,6 +2,7 @@ package server
 
 import (
 	"app/internal/components/pages"
+	"app/internal/components/shared/badges"
 	"app/internal/components/shared/tables"
 	"app/internal/db"
 	"encoding/json"
@@ -69,7 +70,7 @@ func totalDebt(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, tables.TotalDebt(totalDebt))
+	return Render(w, r, badges.TotalDebt(totalDebt))
 }
 
 func resultsPerMatchday(w http.ResponseWriter, r *http.Request) error {
