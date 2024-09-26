@@ -9,36 +9,21 @@ def evaluate_results(
     matches: dict[str],
 ) -> list[dict]:
     users_cols = dict()
-    predictions_user_id = dict()
-    for user_predictions in users_predictions:
-        user_id = user_predictions["user_id"]
-        if user_id not in predictions_user_id.keys():
-            predictions_user_id[user_id] = dict()
-
-        match_num = user_predictions["match_num"]
-        predictions_user_id[user_id][match_num] = user_predictions[
-            "predictions"
-        ]
 
     for match_num, match in enumerate(matches):
         if match["signo"] is None:
             continue
 
-        for user_id, predictions in predictions_user_id.items():
+        for user_predictions in users_predictions:
+            user_id = user_predictions["user_id"]
+            num_cols = len(user_predictions["match_predictions"][0])
             if user_id not in users_cols.keys():
-                users_cols[user_id] = [0, 0]
+                users_cols[user_id] = [0] * num_cols
 
             correct_pred = match["signo"].strip()
+            pred = user_predictions["match_predictions"][match_num]
 
-            # Pleno al 15
-            if match_num == 14 and predictions[match_num] == correct_pred:
-                users_cols[user_id] = [
-                    users_cols[user_id][0] + 1,
-                    users_cols[user_id][1] + 1,
-                ]
-                continue
-
-            for colI, col in enumerate(predictions[match_num].split("-")):
+            for colI, col in enumerate(pred):
                 if correct_pred.lower() == col.lower():
                     users_cols[user_id][colI] += 1
 

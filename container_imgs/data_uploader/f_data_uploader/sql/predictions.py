@@ -10,10 +10,30 @@ def get_predictions(matchday: dict) -> list[str]:
     cur.execute(
         sql.SQL(
             """
-            SELECT *
-            FROM bavariada.predictions
-            WHERE season = %s
-            AND matchday = %s
+            SELECT
+                user_id,
+                season,
+                matchday,
+                array_agg(
+                    grouped_predictions
+                    ORDER BY match_num
+                ) AS match_predictions
+            FROM (
+                SELECT
+                    user_id,
+                    season,
+                    matchday,
+                    match_num,
+                    array_agg(prediction ORDER BY col_num) AS grouped_predictions
+                FROM
+                    bavariada.predictions
+                WHERE season = %s
+                AND matchday = %s
+                GROUP BY
+                    user_id, season, matchday, match_num
+            ) subquery
+            GROUP BY
+                user_id, season, matchday;
             """
         ),
         (
@@ -39,11 +59,11 @@ def insert_predictions(users_predictions: list[dict]):
 
     query = sql.SQL(
         """
-        INSERT INTO bavariada.predictions (user_id, season, matchday, match_num, predictions)
+        INSERT INTO bavariada.predictions (user_id, season, matchday, col_num, match_num, prediction)
         VALUES %s
-        ON CONFLICT (user_id, season, matchday, match_num)
+        ON CONFLICT (user_id, season, matchday, col_num, match_num)
         DO UPDATE SET
-            predictions = EXCLUDED.predictions
+            prediction = EXCLUDED.prediction
         """
     )
     values = [
@@ -51,6 +71,7 @@ def insert_predictions(users_predictions: list[dict]):
             user_result["user_id"],
             user_result["season"],
             user_result["matchday"],
+            user_result["col_num"],
             user_result["match_num"],
             user_result["prediction"],
         )
