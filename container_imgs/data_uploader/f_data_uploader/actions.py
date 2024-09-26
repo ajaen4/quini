@@ -129,33 +129,34 @@ def upload_predictions():
             user_id = "3722aea7-3c82-416e-8996-90e6b3334cd2"
 
         combinaciones = prediction["apuesta"]["combinaciones"]
-        line_1 = combinaciones[0]["linea"].split(",")
-        line_2 = combinaciones[1]["linea"].split(",")
-        for match_num in range(14):
-            line_1_pred = line_1[match_num].replace("-E", "")
-            line_2_pred = line_2[match_num].replace("-E", "")
+        match_15 = (
+            combinaciones.pop()["linea"].split(":")[1].strip().replace(",", "-")
+        )
+        for col_num, combinacion in enumerate(combinaciones):
+            line = combinacion["linea"].split(",")
+            for match_num in range(14):
+                line_fmt = line[match_num].replace("-E", "")
+                predictions_db.append(
+                    {
+                        "user_id": user_id,
+                        "season": "2024-2025",
+                        "matchday": matchday,
+                        "col_num": col_num,
+                        "match_num": match_num,
+                        "prediction": line_fmt,
+                    }
+                )
+
             predictions_db.append(
                 {
                     "user_id": user_id,
                     "season": "2024-2025",
                     "matchday": matchday,
-                    "match_num": match_num,
-                    "prediction": f"{line_1_pred}-{line_2_pred}",
+                    "col_num": col_num,
+                    "match_num": 14,
+                    "prediction": match_15,
                 }
             )
-
-        match_15 = (
-            combinaciones[2]["linea"].split(":")[1].strip().replace(",", "-")
-        )
-        predictions_db.append(
-            {
-                "user_id": user_id,
-                "season": "2024-2025",
-                "matchday": matchday,
-                "match_num": 14,
-                "prediction": match_15,
-            }
-        )
 
     insert_predictions(predictions_db)
 
