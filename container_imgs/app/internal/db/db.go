@@ -17,6 +17,7 @@ type Service interface {
 	Health() map[string]string
 	Close() error
 	Query(query string, args ...interface{}) (pgx.Rows, error)
+	QueryRow(query string, args ...interface{}) pgx.Row
 }
 
 type db struct {
@@ -132,4 +133,8 @@ func (db *db) Close() error {
 
 func (db *db) Query(query string, args ...interface{}) (pgx.Rows, error) {
 	return db.pool.Query(context.Background(), query, args...)
+}
+
+func (db *db) QueryRow(query string, args ...interface{}) pgx.Row {
+	return db.pool.QueryRow(context.Background(), query, args...)
 }
