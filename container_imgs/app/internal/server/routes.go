@@ -24,6 +24,7 @@ func (api *Api) RegisterRoutes() *chi.Mux {
 
 	r.HandleFunc("/components/tables/total-points", NewHandler(totalResults))
 	r.HandleFunc("/components/badges/total-debt", NewHandler(totalDebt))
+	r.HandleFunc("/components/badges/total-price", NewHandler(totalPrice))
 	r.HandleFunc("/components/tables/points-per-matchday", NewHandler(resultsPerMatchday))
 	r.Handle("/components/tables/matchday-predictions", NewHandler(matchdayPredictions))
 

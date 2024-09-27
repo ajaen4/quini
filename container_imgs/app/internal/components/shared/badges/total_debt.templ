@@ -4,9 +4,9 @@ import (
     "fmt"
 )
 
-templ TotalDebt(totalDebt float32) {
+templ TotalMetric(name string, number float32) {
     <div class="inline-flex items-center bg-gray-700 rounded-full px-3 py-1 text-sm font-medium text-white">
-        <span class="mr-2">Bote:</span>
-        <span class="font-bold">{fmt.Sprintf("%.2f", totalDebt)}</span>
+        <span class="mr-2">{ name + ":" }</span>
+        <span class="font-bold">{ fmt.Sprintf("%.2f", number) }</span>
     </div>
 }

@@ -15,8 +15,9 @@ from f_data_uploader.sql import (
     update_matchday_status,
     has_one_spanish_match,
     matchday_exists,
-    get_users_id,
+    get_user_id,
     insert_predictions,
+    insert_prices,
 )
 from f_data_uploader.results import evaluate_results
 from f_data_uploader.logger import logger
@@ -49,6 +50,10 @@ def run_data_uploader():
     logger.info("Calculating points...")
     upload_results()
     logger.info("Finished calculating points")
+
+    logger.info("Calculating prices earned...")
+    upload_prices()
+    logger.info("Finished calculating prices earned")
 
     logger.info("Finished running data uploader")
 
@@ -124,13 +129,16 @@ def upload_predictions():
             lotero_user_id = str(prediction["compartidoPor"]["clienteId"])
 
         if lotero_user_id:
-            user_id = get_users_id(lotero_user_id)
+            user_id = get_user_id(lotero_user_id)
         else:
             user_id = "3722aea7-3c82-416e-8996-90e6b3334cd2"
 
         combinaciones = prediction["apuesta"]["combinaciones"]
         match_15 = (
-            combinaciones.pop()["linea"].split(":")[1].strip().replace(",", "-")
+            combinaciones.pop()["linea"]
+            .split(":")[1]
+            .strip()
+            .replace(",", "-")
         )
         for col_num, combinacion in enumerate(combinaciones):
             line = combinacion["linea"].split(",")
@@ -225,3 +233,48 @@ def upload_teams(matches: list[dict]):
         teams.append(away_team)
 
     insert_teams(teams)
+
+
+def upload_prices():
+    params = {
+        "firstResult": "0",
+    }
+    headers = {"Authorization": f"Basic {cfg.LOTERO_TOKEN}"}
+    response = requests.get(
+        f"{cfg.LOTERO_URL}/group",
+        params=params,
+        headers=headers,
+    )
+    response.raise_for_status()
+    results = response.json()["boletos"]
+
+    matchdays = [
+        matchday["matchday"] for matchday in get_matchdays("FINISHED")
+    ]
+    prices = list()
+    for result in results:
+        matchday = int(result["sorteo"]["numJornada"])
+        if matchday not in matchdays or "premio" not in result:
+            continue
+
+        lotero_user_id = None
+        if "compartidoPor" in result:
+            lotero_user_id = str(result["compartidoPor"]["clienteId"])
+
+        if lotero_user_id == "6476125":
+            continue
+        elif lotero_user_id:
+            user_id = get_user_id(lotero_user_id)
+        else:
+            user_id = "3722aea7-3c82-416e-8996-90e6b3334cd2"
+
+        prices.append(
+            {
+                "user_id": user_id,
+                "season": "2024-2025",
+                "matchday": matchday,
+                "price_euros": result["premio"],
+            }
+        )
+
+    insert_prices(prices)

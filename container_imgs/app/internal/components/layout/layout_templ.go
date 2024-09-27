@@ -52,7 +52,7 @@ func Layout(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div hx-get=\"/components/badges/total-debt\" hx-trigger=\"load\"><p>...</p></div></div></header><main class=\"container mx-auto px-4 py-8 flex-grow\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div class=\"flex space-x-4\"><div hx-get=\"/components/badges/total-debt\" hx-trigger=\"load\"><p>...</p></div><div hx-get=\"/components/badges/total-price\" hx-trigger=\"load\"><p>...</p></div></div></div></header><main class=\"container mx-auto px-4 py-8 flex-grow\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

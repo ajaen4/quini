@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-ALTER TABLE bavariada.points
+ALTER TABLE bavariada.results
 ADD COLUMN debt_euros FLOAT;
 
 ALTER TABLE bavariada.teams
@@ -9,7 +9,7 @@ ADD COLUMN home_championship VARCHAR(50);
 
 -- +goose Down
 -- +goose StatementBegin
-ALTER TABLE bavariada.points
+ALTER TABLE bavariada.results
 DROP COLUMN debt_euros;
 
 ALTER TABLE bavariada.teams
