@@ -180,7 +180,7 @@ def upload_results():
         logger.info("No matchdays in progress")
         return
 
-    logger.info(f"Found matchdays in progress: {matchdays}")
+    logger.info(f"Found matchdays to calculate results: {matchdays}")
     for matchday in matchdays:
         matchday_quinielas = [
             quiniela
