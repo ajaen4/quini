@@ -3,9 +3,9 @@ package server
 import (
 	"app/internal/components/pages"
 	"app/internal/components/shared/badges"
+	"app/internal/components/shared/messages"
 	"app/internal/components/shared/tables"
 	"app/internal/db"
-	"encoding/json"
 	"net/http"
 	"strconv"
 )
@@ -47,8 +47,7 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 		})
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(ChartData{
+	respondWithJSON(w, http.StatusOK, ChartData{
 		Categories: categories,
 		Series:     series,
 	})
@@ -80,6 +79,28 @@ func resultsPerMatchday(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return Render(w, r, tables.ResultsPerMatchday(resultsPerMatchday))
+}
+
+func matchdayPredictions(w http.ResponseWriter, r *http.Request) error {
+	maxMatchday, err := db.GetMatchdayInProg()
+	if err != nil {
+		return err
+	}
+	if maxMatchday == 0 {
+		return Render(w, r, messages.Message("Ninguna jornada en progreso"))
+	}
+
+	matchdayPredictions, err := db.GetUserPredictions(maxMatchday)
+	if err != nil {
+		return err
+	}
+
+	matches, err := db.GetMatches(maxMatchday)
+	if err != nil {
+		return err
+	}
+
+	return Render(w, r, tables.MatchdayPredictions(matches, matchdayPredictions))
 }
 
 func root(w http.ResponseWriter, r *http.Request) error {

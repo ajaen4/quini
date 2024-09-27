@@ -1,0 +1,63 @@
+package tables
+
+import (
+	"app/internal/db"
+	"fmt"
+)
+
+templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) {
+    <div class="overflow-x-auto w-full p-4">
+        <div class="inline-block min-w-full rounded-lg overflow-hidden shadow-lg">
+            <table class="min-w-full bg-gray-800 text-sm border-collapse">
+                <thead class="bg-gray-700">
+                    <tr>
+                        <th class="sticky left-0 z-10 bg-gray-700 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg">Partidos</th>
+                        for i, pred := range predictions {
+                            if i == len(predictions) - 1 {
+                                <th class="py-3 px-1 border-b-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
+                                    {pred.UserName}
+                                </th>
+                            } else {
+                                <th class="py-3 px-1 border-b-2 border-r-2 border-gray-600 text-center" colspan="2">
+                                    {pred.UserName}
+                                </th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    for i, match := range matches {
+                        <tr class={templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-700"}>
+                            <td class="sticky left-0 z-10 py-2 px-2 border-b border-r-2 border-gray-600">
+                                {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
+                            </td>
+                            for j, pred := range predictions {
+                                if i < len(pred.Predictions) {
+                                    <td class="py-2 px-2 border-b border-gray-600 text-center">
+                                        {pred.Predictions[i][0]}
+                                    </td>
+                                    if j == len(predictions) - 1 {
+                                        <td class="py-2 px-2 border-b border-gray-600 text-center">
+                                            {pred.Predictions[i][1]}
+                                        </td>
+                                    } else {
+                                        <td class="py-2 px-2 border-b border-r-2 border-gray-600 text-center">
+                                            {pred.Predictions[i][1]}
+                                        </td>
+                                    }
+                                } else {
+                                    <td class="py-2 px-2 border-b border-gray-600 text-center"></td>
+                                    if j == len(predictions) - 1 {
+                                        <td class="py-2 px-2 border-b border-gray-600 text-center"></td>
+                                    } else {
+                                        <td class="py-2 px-2 border-b border-r-2 border-gray-600 text-center"></td>
+                                    }
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
