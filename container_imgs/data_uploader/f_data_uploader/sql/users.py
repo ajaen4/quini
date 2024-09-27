@@ -24,7 +24,7 @@ def get_users() -> list[str]:
     return users
 
 
-def get_users_id(lotero_user_id: str) -> str:
+def get_user_id(lotero_user_id: str) -> str:
     cur = conn.cursor()
     cur.execute(
         sql.SQL(

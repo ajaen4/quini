@@ -81,10 +81,18 @@ def insert_predictions(users_predictions: list[dict]):
     execute_values(cur, query, values)
     conn.commit()
 
-    for user_result in users_predictions:
+    uploaded_infos = {
+        (
+            user_predictions["user_id"],
+            user_predictions["season"],
+            user_predictions["matchday"],
+        )
+        for user_predictions in users_predictions
+    }
+    for uploaded_info in uploaded_infos:
         logger.info(
-            f"Successfully upserted predictions for user {user_result['user_id']}"
-            f" in season {user_result['season']} matchday {user_result['matchday']}"
+            f"Successfully upserted predictions for user {uploaded_info[0]}"
+            f" in season {uploaded_info[1]} matchday {uploaded_info[2]}"
         )
 
     cur.close()

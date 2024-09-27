@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE bavariada.points (
+CREATE TABLE bavariada.results (
     user_id UUID NOT NULL,
     season CHAR(9) NOT NULL,
     matchday INT NOT NULL,
@@ -14,5 +14,5 @@ CREATE TABLE bavariada.points (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE bavariada.points;
+DROP TABLE bavariada.results;
 -- +goose StatementEnd

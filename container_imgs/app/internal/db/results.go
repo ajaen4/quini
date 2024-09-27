@@ -18,7 +18,7 @@ func GetUserPoints() ([]UserCumPoints, error) {
 				ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
 			) AS cumulative_points
 		FROM
-			bavariada.points
+			bavariada.results
 		)
 		SELECT
 			users.raw_user_meta_data->>'display_name' AS user_name,
@@ -57,14 +57,14 @@ func GetTotalResults() ([]UserTotalResults, error) {
 	rows, err := db.Query(
 		`SELECT
 			users.raw_user_meta_data->>'display_name' AS user_name,
-			SUM(points.points) as total_points,
-			SUM(points.debt_euros) as debt_euros
+			SUM(results.points) as total_points,
+			SUM(results.debt_euros) as debt_euros
 		FROM 
-			bavariada.points as points
+			bavariada.results as results
 		INNER JOIN
-			auth.users users ON points.user_id = users.id
+			auth.users users ON results.user_id = users.id
 		GROUP BY 
-			points.user_id,
+			results.user_id,
 			users.raw_user_meta_data->>'display_name'
 		ORDER BY 
 			total_points DESC;`,
@@ -97,15 +97,15 @@ func GetResultsPerMatchday() ([]UserMatchdayResults, error) {
 	rows, err := db.Query(
 		`SELECT
 			users.raw_user_meta_data->>'display_name' AS user_name,
-			points.matchday,
-			points.points,
-			points.debt_euros
+			results.matchday,
+			results.points,
+			results.debt_euros
 		FROM 
-			bavariada.points as points
+			bavariada.results as results
 		INNER JOIN
-			auth.users users ON points.user_id = users.id
+			auth.users users ON results.user_id = users.id
 		ORDER BY 
-			points.matchday DESC, points.points DESC;`,
+			results.matchday DESC, results.points DESC;`,
 	)
 	if err != nil {
 		return []UserMatchdayResults{}, err
@@ -129,9 +129,9 @@ func GetTotalDebt() (float32, error) {
 	var totalDebt float32
 	err := db.QueryRow(
 		`SELECT
-			SUM(points.debt_euros) as debt_euros
+			SUM(results.debt_euros) as debt_euros
 		FROM 
-			bavariada.points as points;`,
+			bavariada.results as results;`,
 	).Scan(&totalDebt)
 
 	if err != nil {
@@ -139,4 +139,22 @@ func GetTotalDebt() (float32, error) {
 	}
 
 	return totalDebt, nil
+}
+
+func GetTotalPrice() (float32, error) {
+	db := New()
+
+	var totalPrice float32
+	err := db.QueryRow(
+		`SELECT
+			SUM(results.price_euros) as price_euros
+		FROM 
+			bavariada.results as results;`,
+	).Scan(&totalPrice)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return totalPrice, nil
 }

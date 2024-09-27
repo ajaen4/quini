@@ -69,7 +69,16 @@ func totalDebt(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, badges.TotalDebt(totalDebt))
+	return Render(w, r, badges.TotalMetric("Bote", totalDebt))
+}
+
+func totalPrice(w http.ResponseWriter, r *http.Request) error {
+	totalPrice, err := db.GetTotalPrice()
+	if err != nil {
+		return err
+	}
+
+	return Render(w, r, badges.TotalMetric("Premios", totalPrice))
 }
 
 func resultsPerMatchday(w http.ResponseWriter, r *http.Request) error {
