@@ -49,6 +49,7 @@ func GetUserPoints() ([]UserCumPoints, error) {
 type UserTotalResults struct {
 	UserName    string  `json:"user_name"`
 	TotalPoints int     `json:"total_points"`
+	TotalPrice  float32 `json:"total_price"`
 	TotalDebt   float32 `json:"total_debt"`
 }
 
@@ -58,6 +59,7 @@ func GetTotalResults() ([]UserTotalResults, error) {
 		`SELECT
 			users.raw_user_meta_data->>'display_name' AS user_name,
 			SUM(results.points) as total_points,
+			SUM(results.price_euros) as price_euros,
 			SUM(results.debt_euros) as debt_euros
 		FROM 
 			bavariada.results as results
@@ -76,7 +78,7 @@ func GetTotalResults() ([]UserTotalResults, error) {
 	userResults := []UserTotalResults{}
 	for rows.Next() {
 		userPoint := UserTotalResults{}
-		err = rows.Scan(&userPoint.UserName, &userPoint.TotalPoints, &userPoint.TotalDebt)
+		err = rows.Scan(&userPoint.UserName, &userPoint.TotalPoints, &userPoint.TotalPrice, &userPoint.TotalDebt)
 		if err != nil {
 			return []UserTotalResults{}, err
 		}
