@@ -31,19 +31,19 @@ func ResultsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto\"><table class=\"min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden\"><thead class=\"bg-gray-700\"><tr><th class=\"py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">Jornada</th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto\"><table class=\"min-w-full bg-gray-800 shadow-md rounded-lg overflow-hidden\"><thead class=\"bg-gray-700\"><tr><th class=\"py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider text-center\">Jornada</th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, user := range getUserNames(userResults) {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<th class=\"py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<th class=\"py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider text-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(user)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 15, Col: 102}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 15, Col: 114}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -59,14 +59,14 @@ func ResultsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, matchday := range getMatchdays(userResults) {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"hover:bg-gray-700 transition-colors duration-200\"><td class=\"py-3 px-4 whitespace-nowrap\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"hover:bg-gray-700 transition-colors duration-200\"><td class=\"py-3 px-4 whitespace-nowrap text-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(matchday))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 22, Col: 69}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 22, Col: 81}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -77,7 +77,7 @@ func ResultsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, user := range getUserNames(userResults) {
-				var templ_7745c5c3_Var4 = []any{"py-3 px-4 whitespace-nowrap", getClassDebt(userResults, user, matchday)}
+				var templ_7745c5c3_Var4 = []any{"py-3 px-4 whitespace-nowrap text-center", getClassDebt(userResults, user, matchday)}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -102,7 +102,7 @@ func ResultsPerMatchday(userResults []db.UserMatchdayResults) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(getPointsForUserAndMatchday(userResults, user, matchday))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 24, Col: 149}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/results_per_matchday.templ`, Line: 24, Col: 161}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
