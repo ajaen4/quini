@@ -10,9 +10,9 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
     <div class="overflow-x-auto w-full">
         <div class="inline-block min-w-full rounded-lg overflow-hidden shadow-lg">
             <table class="min-w-full bg-gray-800 text-sm border-collapse">
-                <thead class="bg-gray-700">
+                <thead class="bg-gray-800">
                     <tr>
-                        <th class="sticky left-0 z-10 bg-gray-700 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg">Partidos</th>
+                        <th class="sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg">Partidos</th>
                         for i, pred := range predictions {
                             if i == len(predictions) - 1 {
                                 <th class="py-3 px-1 border-b-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
@@ -28,7 +28,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                 </thead>
                 <tbody>
                     for i, match := range matches {
-                        <tr class={templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-700"}>
+                        <tr class={templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-800"}>
                             <td class="sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600">
                                 {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
                             </td>
@@ -38,8 +38,8 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                         // Last row for each user
                                         <td class={
                                             "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                            templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
-                                            templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
+                                            templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
+                                            templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
                                         } colspan="2">
                                             {pred.Predictions[i][0]}
                                         </td>
@@ -47,24 +47,24 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                         // Regular rows
                                         <td class={
                                             "py-2 px-2 border-b border-gray-600 text-center",
-                                            templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
-                                            templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
+                                            templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
+                                            templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
                                         }>
                                             {pred.Predictions[i][0]}
                                         </td>
                                         if j == len(predictions) - 1 {
                                             <td class={
                                                 "py-2 px-2 border-b border-gray-600 text-center",
-                                                templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
-                                                templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
+                                                templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
+                                                templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
                                             }>
                                                 {pred.Predictions[i][1]}
                                             </td>
                                         } else {
                                             <td class={
                                                 "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                                templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
-                                                templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
+                                                templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
+                                                templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
                                             }>
                                                 {pred.Predictions[i][1]}
                                             </td>
