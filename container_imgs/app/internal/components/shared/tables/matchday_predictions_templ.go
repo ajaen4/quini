@@ -32,7 +32,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\"><div class=\"inline-block min-w-full rounded-lg overflow-hidden shadow-lg\"><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-700\"><tr><th class=\"sticky left-0 z-10 bg-gray-700 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\"><div class=\"inline-block min-w-full rounded-lg overflow-hidden shadow-lg\"><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -80,7 +80,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			return templ_7745c5c3_Err
 		}
 		for i, match := range matches {
-			var templ_7745c5c3_Var4 = []any{templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-700"}
+			var templ_7745c5c3_Var4 = []any{templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-800"}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -124,8 +124,8 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 						}
 						var templ_7745c5c3_Var7 = []any{
 							"py-2 px-2 border-b border-r border-gray-600 text-center",
-							templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
-							templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
+							templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
+							templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
 						}
 						templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var7...)
 						if templ_7745c5c3_Err != nil {
@@ -168,8 +168,8 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 						}
 						var templ_7745c5c3_Var10 = []any{
 							"py-2 px-2 border-b border-gray-600 text-center",
-							templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
-							templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
+							templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
+							templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
 						}
 						templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var10...)
 						if templ_7745c5c3_Err != nil {
@@ -208,8 +208,8 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 						if j == len(predictions)-1 {
 							var templ_7745c5c3_Var13 = []any{
 								"py-2 px-2 border-b border-gray-600 text-center",
-								templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
-								templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
+								templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
+								templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
 							}
 							templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var13...)
 							if templ_7745c5c3_Err != nil {
@@ -248,8 +248,8 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 						} else {
 							var templ_7745c5c3_Var16 = []any{
 								"py-2 px-2 border-b border-r border-gray-600 text-center",
-								templ.KV("bg-green-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
-								templ.KV("bg-red-500", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
+								templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
+								templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
 							}
 							templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var16...)
 							if templ_7745c5c3_Err != nil {
