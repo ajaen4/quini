@@ -4,7 +4,7 @@ from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
 
 
-def update_matchday_status(matchday: dict, status: str):
+def update_matchday_status(match_results: list[dict]):
     cur = conn.cursor()
 
     cur.execute(

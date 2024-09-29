@@ -18,6 +18,7 @@ from f_data_uploader.sql import (
     get_user_id,
     insert_predictions,
     insert_prices,
+    update_predictions,
 )
 from f_data_uploader.results import evaluate_results
 from f_data_uploader.logger import logger
@@ -45,6 +46,10 @@ def run_data_uploader():
 
     logger.info("Uploading predictions...")
     upload_predictions()
+    logger.info("Finished uploading predictions")
+
+    logger.info("Uploading predictions...")
+    upload_is_correct()
     logger.info("Finished uploading predictions")
 
     logger.info("Calculating points...")
@@ -167,6 +172,55 @@ def upload_predictions():
             )
 
     insert_predictions(predictions_db)
+
+
+def upload_is_correct():
+    tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y%m%d")
+    params = {
+        "game_id": "LAQU",
+        "fechaInicioInclusiva": "20240901",
+        "fechaFinInclusiva": tomorrow,
+    }
+
+    response = requests.get(
+        f"{cfg.QUINIELA_URL}/buscadorSorteos", params=params
+    )
+    response.raise_for_status()
+    quinielas = response.json()
+
+    matchdays = [*get_matchdays("IN_PROGRESS"), *get_matchdays("NOT_STARTED")]
+    if not matchdays:
+        logger.info("No matchdays in progress")
+        return
+
+    logger.info(f"Found matchdays to calculate results: {matchdays}")
+    for matchday in matchdays:
+        matchday_quinielas = [
+            quiniela
+            for quiniela in quinielas
+            if int(quiniela["jornada"]) == matchday["matchday"]
+        ]
+
+        if len(matchday_quinielas) == 0:
+            logger.info(
+                "No results published yet, skipping is_correct upload"
+            )
+            return
+
+        quiniela = matchday_quinielas[0]
+        match_results = list()
+        for match_num, match in enumerate(quiniela["partidos"]):
+            if match["signo"] is None:
+                continue
+
+            match_results.append({
+                "season": "2024-2025",
+                "matchday": matchday["matchday"],
+                "match_num": match_num,
+                "result": match["signo"]
+            })
+
+        update_predictions(match_results)
 
 
 def upload_results():

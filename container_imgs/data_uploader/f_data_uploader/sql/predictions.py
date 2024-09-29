@@ -1,5 +1,5 @@
 from psycopg2 import sql
-from psycopg2.extras import execute_values
+from psycopg2.extras import execute_values, execute_batch
 
 from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
@@ -94,5 +94,31 @@ def insert_predictions(users_predictions: list[dict]):
             f"Successfully upserted predictions for user {uploaded_info[0]}"
             f" in season {uploaded_info[1]} matchday {uploaded_info[2]}"
         )
+
+    cur.close()
+
+
+def update_predictions(matches: list[dict]):
+    cur = conn.cursor()
+
+    query = sql.SQL(
+        """
+        UPDATE bavariada.predictions
+        SET is_correct = (prediction = %s)
+        WHERE season = %s AND matchday = %s AND match_num = %s
+        """
+    )
+    values = [
+        (
+            match["result"],
+            match["season"],
+            match["matchday"],
+            match["match_num"],
+        )
+        for match in matches
+    ]
+
+    execute_batch(cur, query, values)
+    conn.commit()
 
     cur.close()
