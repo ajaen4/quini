@@ -26,7 +26,7 @@ func Layout(title string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"es\" class=\"dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -39,7 +39,7 @@ func Layout(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link href=\"https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css\" rel=\"stylesheet\"><script src=\"https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/apexcharts\"></script><link href=\"/static/css/tailwind.css\" rel=\"stylesheet\"><script src=\"https://unpkg.com/htmx.org@2.0.2\" integrity=\"sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ\" crossorigin=\"anonymous\"></script><script>\n                tailwind.config = {\n                    darkMode: 'class',\n                    theme: {\n                        extend: {\n                            colors: {\n                                primary: {\"50\":\"#eff6ff\",\"100\":\"#dbeafe\",\"200\":\"#bfdbfe\",\"300\":\"#93c5fd\",\"400\":\"#60a5fa\",\"500\":\"#3b82f6\",\"600\":\"#2563eb\",\"700\":\"#1d4ed8\",\"800\":\"#1e40af\",\"900\":\"#1e3a8a\",\"950\":\"#172554\"}\n                            }\n                        }\n                    }\n                }\n            </script></head><body class=\"bg-gray-900 text-gray-100 min-h-screen flex flex-col\"><header class=\"bg-gray-800 text-white py-4\"><div class=\"container mx-auto px-4 flex justify-between items-center\"><h1 class=\"text-2xl font-bold\">")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -52,7 +52,7 @@ func Layout(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div class=\"flex space-x-4\"><div hx-get=\"/components/badges/total-debt\" hx-trigger=\"load\"><p>...</p></div><div hx-get=\"/components/badges/total-price\" hx-trigger=\"load\"><p>...</p></div></div></div></header><main class=\"container mx-auto px-4 py-8 flex-grow\">")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -60,7 +60,7 @@ func Layout(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main><footer class=\"bg-gray-800 py-4 mt-8\"><div class=\"container mx-auto px-4 text-center text-gray-400\">&copy; 2024 Bavariada. Todos los derechos reservados.</div></footer></body></html>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

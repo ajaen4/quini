@@ -1,0 +1,27 @@
+<div class=\"overflow-x-auto w-full\"><div class=\"inline-block min-w-full rounded-lg overflow-hidden shadow-lg\"><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th>
+<th class=\"py-3 px-1 border-b-2 border-gray-600 text-center rounded-tr-lg\" colspan=\"2\">
+</th>
+<th class=\"py-3 px-1 border-b-2 border-r-2 border-gray-600 text-center\" colspan=\"2\">
+</th>
+</tr></thead> <tbody>
+<tr class=\"
+\"><td class=\"sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600\">
+</td>
+ 
+<td class=\"
+\" colspan=\"2\">
+</td>
+ 
+<td class=\"
+\">
+</td>
+<td class=\"
+\">
+</td>
+<td class=\"
+\">
+</td>
+<td class=\"py-2 px-2 border-b border-gray-600 text-center\" colspan=\"2\"></td>
+<td class=\"py-2 px-2 border-b border-r-2 border-gray-600 text-center\" colspan=\"2\"></td>
+</tr>
+</tbody></table></div></div>

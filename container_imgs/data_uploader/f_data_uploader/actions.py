@@ -29,24 +29,24 @@ import f_data_uploader.cfg as cfg
 def run_data_uploader():
     logger.info("Running data uploader...")
 
-    logger.info("Getting next matchday...")
-    next_matchday = get_next_matchday()
-    logger.info("Finished getting next matchday")
+    # logger.info("Getting next matchday...")
+    # next_matchday = get_next_matchday()
+    # logger.info("Finished getting next matchday")
 
-    logger.info("Uploading teams...")
-    upload_teams(next_matchday["partidos"])
-    logger.info("Finished uploading teams")
+    # logger.info("Uploading teams...")
+    # upload_teams(next_matchday["partidos"])
+    # logger.info("Finished uploading teams")
 
-    if not matchday_exists(next_matchday):
-        logger.info("Uploading matchdays...")
-        upload_matchdays(next_matchday)
-        logger.info("Finished uploading matchdays")
-    else:
-        logger.info("Matchday already exists, skipping upload")
+    # if not matchday_exists(next_matchday):
+    #     logger.info("Uploading matchdays...")
+    #     upload_matchdays(next_matchday)
+    #     logger.info("Finished uploading matchdays")
+    # else:
+    #     logger.info("Matchday already exists, skipping upload")
 
-    logger.info("Uploading predictions...")
-    upload_predictions()
-    logger.info("Finished uploading predictions")
+    # logger.info("Uploading predictions...")
+    # upload_predictions()
+    # logger.info("Finished uploading predictions")
 
     logger.info("Uploading predictions...")
     upload_is_correct()
@@ -217,7 +217,7 @@ def upload_is_correct():
                 "season": "2024-2025",
                 "matchday": matchday["matchday"],
                 "match_num": match_num,
-                "result": match["signo"]
+                "result": match["signo"].strip()
             })
 
         update_predictions(match_results)
