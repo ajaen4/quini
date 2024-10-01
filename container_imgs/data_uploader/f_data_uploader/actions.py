@@ -217,7 +217,7 @@ def upload_is_correct():
                 "season": "2024-2025",
                 "matchday": matchday["matchday"],
                 "match_num": match_num,
-                "result": match["signo"]
+                "result": match["signo"].strip()
             })
 
         update_predictions(match_results)
