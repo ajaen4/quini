@@ -20,11 +20,7 @@ notify-templ-proxy:
 
 run:
 	@make templ & sleep 2
-	@make tailwind &
 	@air 
-
-tailwind:
-	@npm run watch
 
 open-db-conn: setup
 	@PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USERNAME) -d $(DB_NAME)

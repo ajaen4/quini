@@ -3,6 +3,7 @@ package tables
 import (
 	"app/internal/db"
 	"fmt"
+    "strconv"
     "github.com/jackc/pgx/pgtype"
 )
 
@@ -13,16 +14,30 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                 <thead class="bg-gray-800">
                     <tr>
                         <th class="sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg">Partidos</th>
-                        for i, pred := range predictions {
-                            if i == len(predictions) - 1 {
-                                <th class="py-3 px-1 border-b-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
-                                    {pred.UserName}
-                                </th>
-                            } else {
-                                <th class="py-3 px-1 border-b-2 border-r-2 border-gray-600 text-center" colspan="2">
-                                    {pred.UserName}
-                                </th>
-                            }
+                        for _, pred := range predictions {
+                            <th class="py-3 px-1 border-b-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
+                                {pred.UserName}
+                            </th>
+                        }
+                    </tr>
+                    <tr>
+                        <th class="border-b border-r border-gray-600"></th>
+                        for _, pred := range predictions {
+                            <th class={
+                                "py-2 px-1 border-b-2 border-r-2 border-gray-600 text-center font-bold",
+                                templ.KV("bg-amber-500", sumCorrect(pred.IsCorrect, 0) > sumCorrect(pred.IsCorrect, 1)),
+                                templ.KV("bg-amber-700", sumCorrect(pred.IsCorrect, 0) <= sumCorrect(pred.IsCorrect, 1)),
+                            }>
+                                {strconv.Itoa(sumCorrect(pred.IsCorrect, 0))}
+                            </th>
+                            <th class={
+                                "py-2 px-1 border-b-2 border-r-2 border-gray-600 text-center font-bold",
+                                templ.KV("bg-amber-700", sumCorrect(pred.IsCorrect, 0) > sumCorrect(pred.IsCorrect, 1)),
+                                templ.KV("bg-amber-500", sumCorrect(pred.IsCorrect, 0) <= sumCorrect(pred.IsCorrect, 1)),
+
+                            }>
+                                {strconv.Itoa(sumCorrect(pred.IsCorrect, 1))}
+                            </th>
                         }
                     </tr>
                 </thead>
@@ -37,24 +52,24 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                     // Last row for each user
                                     <td class={
                                         "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                        getColourClass(pred.IsCorrect[i][0])                                    
+                                        getColourClass(pred.IsCorrect[i][0])
                                     } colspan="2">
                                         {pred.Predictions[i][0]}
                                     </td>
                                 } else {
-                                    // Regular rows
-                                    <td class={
-                                        "py-2 px-2 border-b border-gray-600 text-center",
-                                        getColourClass(pred.IsCorrect[i][0])
-                                    }>
-                                        {pred.Predictions[i][0]}
-                                    </td>
-                                    <td class={
-                                            "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                            getColourClass(pred.IsCorrect[i][1])
-                                    }>
-                                        {pred.Predictions[i][1]}
-                                    </td>
+                                // Regular columns
+                                <td class={
+                                    "py-2 px-2 border-b border-gray-600 text-center",
+                                    getColourClass(pred.IsCorrect[i][0])
+                                }>
+                                    {pred.Predictions[i][0]}
+                                </td>
+                                <td class={
+                                    "py-2 px-2 border-b border-r border-gray-600 text-center",
+                                    getColourClass(pred.IsCorrect[i][1])
+                                }>
+                                    {pred.Predictions[i][1]}
+                                </td>
                                 }
                             }
                         </tr>
@@ -75,4 +90,14 @@ func getColourClass(isCorrect pgtype.Bool) string {
     }
 
     return ""
+}
+
+func sumCorrect(isCorrect [][]pgtype.Bool, colNum int) int {
+    total := 0
+    for _, colIsCorrect := range isCorrect {
+        if colIsCorrect[colNum].Status == pgtype.Present && colIsCorrect[colNum].Bool {
+            total++
+        }
+    }
+    return total
 }

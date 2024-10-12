@@ -2,7 +2,9 @@
 export default {
   content: ["./internal/components/**/*.templ"],
   theme: {
-    extend: {},
+    extend: {
+      colors: require("tailwindcss/colors"),
+    },
   },
   plugins: [],
 };
