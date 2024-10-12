@@ -10,7 +10,7 @@ from f_data_uploader.sql import (
     insert_teams,
     insert_matches,
     get_matchdays,
-    get_predictions,
+    get_matchday_points,
     insert_results,
     update_matchday_status,
     has_one_spanish_match,
@@ -257,10 +257,9 @@ def upload_results():
             return
 
         quiniela = matchday_quinielas[0]
-        users_predictions = get_predictions(matchday)
-
+        matchday_points = get_matchday_points(matchday)
         user_results = evaluate_results(
-            matchday, users_predictions, quiniela["partidos"]
+            matchday, matchday_points
         )
         insert_results(user_results)
 

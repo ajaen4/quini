@@ -6,7 +6,7 @@ from datetime import (
 )
 
 from f_data_uploader.sql import (
-    get_predictions,
+    get_matchday_points,
     insert_results,
     update_matchday_status,
 )
@@ -39,10 +39,9 @@ def reevaluate_results(matchday: dict):
         logger.info("No results published yet, skipping results evaluation")
         return
 
-    users_predictions = get_predictions(matchday)
-
+    matchday_points = get_matchday_points(matchday)
     user_results = evaluate_results(
-        matchday, users_predictions, quiniela["partidos"]
+        matchday, matchday_points
     )
     insert_results(user_results)
 
@@ -56,4 +55,4 @@ def reevaluate_results(matchday: dict):
 load_dotenv(".env")
 
 if __name__ == "__main__":
-    reevaluate_results({"season": "2024-2025", "matchday": 9})
+    reevaluate_results({"season": "2024-2025", "matchday": 13})
