@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from psycopg2 import sql
 
 from f_data_uploader.cfg import conn
@@ -53,7 +55,7 @@ def insert_matchday(matchday: dict):
     cur.close()
 
 
-def insert_matches(matches: dict):
+def insert_matches(matchday: dict):
     cur = conn.cursor()
 
     cur.execute(
@@ -63,29 +65,35 @@ def insert_matches(matches: dict):
             matchday INTEGER,
             match_num INTEGER,
             home_name VARCHAR(50),
-            away_name VARCHAR(50)
+            away_name VARCHAR(50),
+            kickoff_datetime TIMESTAMP
         );
         """
     )
     conn.commit()
 
     matches_team_names = list()
-    for match_num, match in enumerate(matches["partidos"]):
+    for match_num, match in enumerate(matchday["partidos"]):
+
+        match_date = datetime.strptime(
+            match["fecha"], "%Y/%m/%d %H:%M:%S"
+        ).strftime("%Y-%m-%d %H:%M:%S")
         matches_team_names.append(
             (
-                matches["temporada"],
-                matches["jornada"],
+                matchday["temporada"],
+                matchday["jornada"],
                 match_num,
                 match["local"],
                 match["visitante"],
+                match_date,
             )
         )
 
     cur.executemany(
         sql.SQL(
             """
-            INSERT INTO temp_matches (season, matchday, match_num, home_name, away_name)
-            VALUES (%s, %s, %s, %s, %s);
+            INSERT INTO temp_matches (season, matchday, match_num, home_name, away_name, kickoff_datetime)
+            VALUES (%s, %s, %s, %s, %s, %s);
             """
         ),
         matches_team_names,
@@ -95,13 +103,14 @@ def insert_matches(matches: dict):
     cur.execute(
         sql.SQL(
             """
-            INSERT INTO bavariada.matches (season, matchday, match_num, home_team_id, away_team_id)
+            INSERT INTO bavariada.matches (season, matchday, match_num, home_team_id, away_team_id, kickoff_datetime)
             SELECT
                 tm.season,
                 tm.matchday,
                 tm.match_num,
                 home_team.id AS home_team_id,
-                away_team.id AS away_team_id
+                away_team.id AS away_team_id,
+                tm.kickoff_datetime
             FROM temp_matches tm
             JOIN bavariada.teams home_team ON tm.home_name = home_team.name
             JOIN bavariada.teams away_team ON tm.away_name = away_team.name
