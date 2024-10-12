@@ -202,9 +202,7 @@ def upload_is_correct():
         ]
 
         if len(matchday_quinielas) == 0:
-            logger.info(
-                "No results published yet, skipping is_correct upload"
-            )
+            logger.info("No results published yet, skipping is_correct upload")
             return
 
         quiniela = matchday_quinielas[0]
@@ -213,12 +211,14 @@ def upload_is_correct():
             if match["signo"] is None:
                 continue
 
-            match_results.append({
-                "season": "2024-2025",
-                "matchday": matchday["matchday"],
-                "match_num": match_num,
-                "result": match["signo"].strip()
-            })
+            match_results.append(
+                {
+                    "season": "2024-2025",
+                    "matchday": matchday["matchday"],
+                    "match_num": match_num,
+                    "result": match["signo"].strip(),
+                }
+            )
 
         update_predictions(match_results)
 
@@ -258,9 +258,7 @@ def upload_results():
 
         quiniela = matchday_quinielas[0]
         matchday_points = get_matchday_points(matchday)
-        user_results = evaluate_results(
-            matchday, matchday_points
-        )
+        user_results = evaluate_results(matchday, matchday_points)
         insert_results(user_results)
 
         if quiniela["combinacion"]:

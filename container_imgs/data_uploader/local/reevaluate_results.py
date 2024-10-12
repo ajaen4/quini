@@ -40,9 +40,7 @@ def reevaluate_results(matchday: dict):
         return
 
     matchday_points = get_matchday_points(matchday)
-    user_results = evaluate_results(
-        matchday, matchday_points
-    )
+    user_results = evaluate_results(matchday, matchday_points)
     insert_results(user_results)
 
     if quiniela["combinacion"]:
