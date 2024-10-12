@@ -1,15 +1,27 @@
 package tables
 
 import (
-	"app/internal/db"
 	"fmt"
     "strconv"
-    "github.com/jackc/pgx/pgtype"
+    "time"
+    "github.com/jackc/pgx/v5/pgtype"
+
+    "app/internal/db"
 )
 
 templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) {
     <div class="overflow-x-auto w-full">
         <div class="inline-block min-w-full rounded-lg overflow-hidden shadow-lg">
+            <style>
+                @keyframes blink {
+                    0% { background-color: #1F2937; }
+                    50% { background-color: #e9d6ff; }
+                    100% { background-color: #1F2937; }
+                }
+                .blink {
+                    animation: blink 7s linear infinite;
+                }
+            </style>
             <table class="min-w-full bg-gray-800 text-sm border-collapse">
                 <thead class="bg-gray-800">
                     <tr>
@@ -44,7 +56,10 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                 <tbody>
                     for i, match := range matches {
                         <tr class={templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-800"}>
-                            <td class="sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600">
+                            <td class={
+                                "sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600",
+                                templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
+                                }>
                                 {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
                             </td>
                             for _, pred := range predictions {
@@ -81,11 +96,11 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
 }
 
 func getColourClass(isCorrect pgtype.Bool) string {
-    if isCorrect.Status == pgtype.Present && isCorrect.Bool{
+    if isCorrect.Valid && isCorrect.Bool{
         return "bg-green-800"
     }
 
-    if isCorrect.Status == pgtype.Present && !isCorrect.Bool{
+    if isCorrect.Valid && !isCorrect.Bool{
         return "bg-red-800"
     }
 
@@ -95,9 +110,29 @@ func getColourClass(isCorrect pgtype.Bool) string {
 func sumCorrect(isCorrect [][]pgtype.Bool, colNum int) int {
     total := 0
     for _, colIsCorrect := range isCorrect {
-        if colIsCorrect[colNum].Status == pgtype.Present && colIsCorrect[colNum].Bool {
+        if colIsCorrect[colNum].Valid && colIsCorrect[colNum].Bool {
             total++
         }
     }
     return total
+}
+
+
+func shouldBlinkMatch(kickoffTime pgtype.Timestamp, predictions []db.UserPredictions, matchIndex int) bool {
+    if !kickoffTime.Valid {
+        return false
+    }
+    
+    now := time.Now()
+    if !now.After(kickoffTime.Time) {
+        return false
+    }
+
+    for _, pred := range predictions {
+        if pred.IsCorrect[matchIndex][0].Valid{
+            return false
+        }
+    }
+
+    return true
 }
