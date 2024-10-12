@@ -1,6 +1,6 @@
 package db
 
-import "github.com/jackc/pgx/pgtype"
+import "github.com/jackc/pgx/v5/pgtype"
 
 func GetMatchdayInProg() (int32, error) {
 	db := New()
@@ -16,5 +16,5 @@ func GetMatchdayInProg() (int32, error) {
 		return 0, err
 	}
 
-	return maxMatchday.Int, nil
+	return maxMatchday.Int32, nil
 }
