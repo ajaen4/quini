@@ -5,35 +5,21 @@ from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
 
 
-def get_predictions(matchday: dict) -> list[str]:
+def get_matchday_points(matchday: dict) -> list[str]:
     cur = conn.cursor()
     cur.execute(
         sql.SQL(
             """
-            SELECT
-                user_id,
-                season,
-                matchday,
-                array_agg(
-                    grouped_predictions
-                    ORDER BY match_num
-                ) AS match_predictions
-            FROM (
-                SELECT
-                    user_id,
-                    season,
-                    matchday,
-                    match_num,
-                    array_agg(prediction ORDER BY col_num) AS grouped_predictions
-                FROM
-                    bavariada.predictions
-                WHERE season = %s
-                AND matchday = %s
-                GROUP BY
-                    user_id, season, matchday, match_num
-            ) subquery
-            GROUP BY
-                user_id, season, matchday;
+            WITH col_points as (
+                select user_id, season, matchday, col_num, count(*) as points
+                from bavariada.predictions
+                where season = %s and matchday = %s and is_correct = true
+                group by user_id, season, matchday, col_num
+            )
+
+            SELECT user_id, season, matchday, max(points) as points
+            FROM col_points
+            GROUP BY user_id, season, matchday;
             """
         ),
         (
@@ -45,13 +31,13 @@ def get_predictions(matchday: dict) -> list[str]:
     columns = [desc[0] for desc in cur.description]
     rows = cur.fetchall()
 
-    predictions = [
+    matchday_points = [
         {columns[i]: value for i, value in enumerate(row)} for row in rows
     ]
 
     cur.close()
 
-    return predictions
+    return matchday_points
 
 
 def insert_predictions(users_predictions: list[dict]):

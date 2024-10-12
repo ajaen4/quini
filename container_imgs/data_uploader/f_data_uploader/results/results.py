@@ -5,44 +5,13 @@ from f_data_uploader.sql import get_users
 
 def evaluate_results(
     matchday: dict,
-    users_predictions: list[dict],
-    matches: dict[str],
+    matchday_points: list[dict],
 ) -> list[dict]:
-    users_cols = dict()
-
-    for match_num, match in enumerate(matches):
-        if match["signo"] is None:
-            continue
-
-        for user_predictions in users_predictions:
-            user_id = user_predictions["user_id"]
-            num_cols = len(user_predictions["match_predictions"][0])
-            if user_id not in users_cols.keys():
-                users_cols[user_id] = [0] * num_cols
-
-            correct_pred = match["signo"].strip()
-            pred = user_predictions["match_predictions"][match_num]
-
-            for colI, col in enumerate(pred):
-                if correct_pred.lower() == col.lower():
-                    users_cols[user_id][colI] += 1
-
-    user_results = list()
-    for user_id, user_cols in users_cols.items():
-        user_results.append(
-            {
-                "user_id": user_id,
-                "matchday": user_predictions["matchday"],
-                "season": user_predictions["season"],
-                "points": max(user_cols[0], user_cols[1]),
-            }
-        )
-
-    user_ids = [user_result["user_id"] for user_result in user_results]
+    user_ids = [user_result["user_id"] for user_result in matchday_points]
     db_users = get_users()
     for db_user in db_users:
         if db_user["id"] not in user_ids:
-            user_results.append(
+            matchday_points.append(
                 {
                     "user_id": db_user["id"],
                     "matchday": matchday["matchday"],
@@ -51,7 +20,7 @@ def evaluate_results(
                 }
             )
 
-    return evaluate_debt(user_results)
+    return evaluate_debt(matchday_points)
 
 
 def evaluate_debt(user_results: list[dict]) -> list[dict]:
