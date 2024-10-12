@@ -32,50 +32,29 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                             <td class="sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600">
                                 {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
                             </td>
-                            for j, pred := range predictions {
-                                if i < len(pred.Predictions) {
-                                    if i == len(matches) - 1 {
-                                        // Last row for each user
-                                        <td class={
-                                            "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                            templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
-                                            templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
-                                        } colspan="2">
-                                            {pred.Predictions[i][0]}
-                                        </td>
-                                    } else {
-                                        // Regular rows
-                                        <td class={
-                                            "py-2 px-2 border-b border-gray-600 text-center",
-                                            templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && pred.IsCorrect[i][0].Bool),
-                                            templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 0 && pred.IsCorrect[i][0].Status == pgtype.Present && !pred.IsCorrect[i][0].Bool),
-                                        }>
-                                            {pred.Predictions[i][0]}
-                                        </td>
-                                        if j == len(predictions) - 1 {
-                                            <td class={
-                                                "py-2 px-2 border-b border-gray-600 text-center",
-                                                templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
-                                                templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
-                                            }>
-                                                {pred.Predictions[i][1]}
-                                            </td>
-                                        } else {
-                                            <td class={
-                                                "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                                templ.KV("bg-green-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && pred.IsCorrect[i][1].Bool),
-                                                templ.KV("bg-red-800", len(pred.IsCorrect) > i && len(pred.IsCorrect[i]) > 1 && pred.IsCorrect[i][1].Status == pgtype.Present && !pred.IsCorrect[i][1].Bool),
-                                            }>
-                                                {pred.Predictions[i][1]}
-                                            </td>
-                                        }
-                                    }
+                            for _, pred := range predictions {
+                                if i == len(matches) - 1 {
+                                    // Last row for each user
+                                    <td class={
+                                        "py-2 px-2 border-b border-r border-gray-600 text-center",
+                                        getColourClass(pred.IsCorrect[i][0])                                    
+                                    } colspan="2">
+                                        {pred.Predictions[i][0]}
+                                    </td>
                                 } else {
-                                    if j == len(predictions) - 1 {
-                                        <td class="py-2 px-2 border-b border-gray-600 text-center" colspan="2"></td>
-                                    } else {
-                                        <td class="py-2 px-2 border-b border-r-2 border-gray-600 text-center" colspan="2"></td>
-                                    }
+                                    // Regular rows
+                                    <td class={
+                                        "py-2 px-2 border-b border-gray-600 text-center",
+                                        getColourClass(pred.IsCorrect[i][0])
+                                    }>
+                                        {pred.Predictions[i][0]}
+                                    </td>
+                                    <td class={
+                                            "py-2 px-2 border-b border-r border-gray-600 text-center",
+                                            getColourClass(pred.IsCorrect[i][1])
+                                    }>
+                                        {pred.Predictions[i][1]}
+                                    </td>
                                 }
                             }
                         </tr>
@@ -84,4 +63,16 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
             </table>
         </div>
     </div>
+}
+
+func getColourClass(isCorrect pgtype.Bool) string {
+    if isCorrect.Status == pgtype.Present && isCorrect.Bool{
+        return "bg-green-800"
+    }
+
+    if isCorrect.Status == pgtype.Present && !isCorrect.Bool{
+        return "bg-red-800"
+    }
+
+    return ""
 }
