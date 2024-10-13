@@ -19,6 +19,7 @@ from f_data_uploader.sql import (
     insert_predictions,
     insert_prices,
     update_predictions,
+    insert_predictions_stats,
 )
 from f_data_uploader.results import evaluate_results
 from f_data_uploader.logger import logger
@@ -60,10 +61,14 @@ def run_data_uploader():
     upload_prices()
     logger.info("Finished calculating prices earned")
 
+    logger.info("Fetching predictions statistics...")
+    upload_predictions_stats(next_matchday)
+    logger.info("Finished fetching predictions statistics")
+
     logger.info("Finished running data uploader")
 
 
-def get_next_matchday():
+def get_next_matchday() -> dict:
     params = {
         "game_id": "LAQU",
         "num": "1",
@@ -329,3 +334,28 @@ def upload_prices():
         )
 
     insert_prices(prices)
+
+
+def upload_predictions_stats(matchday: dict):
+    season = int(matchday["anyo"])
+    season_matchday = {
+        "matchday": matchday["jornada"],
+        "season": f"{season}-{season+1}",
+    }
+
+    params = {
+        "jornada": season_matchday["matchday"],
+        "temporada": season,
+    }
+    response = requests.get(
+        f"{cfg.QUINIELA_URL}/estadisticas",
+        params=params,
+    )
+    response.raise_for_status()
+    statistics = response.json()
+
+    if isinstance(statistics, dict):
+        statistics.pop("fecha_actualizacion")
+        insert_predictions_stats(season_matchday, statistics)
+    else:
+        logger.info("Statistics not available yet")
