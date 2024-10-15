@@ -37,16 +37,13 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                         for _, pred := range predictions {
                             <th class={
                                 "py-2 px-1 border-b-2 border-r-2 border-gray-600 text-center font-bold",
-                                templ.KV("bg-amber-500", sumCorrect(pred.IsCorrect, 0) > sumCorrect(pred.IsCorrect, 1)),
-                                templ.KV("bg-amber-700", sumCorrect(pred.IsCorrect, 0) <= sumCorrect(pred.IsCorrect, 1)),
+                                highlightSumColor(pred, 0, 1)
                             }>
                                 {strconv.Itoa(sumCorrect(pred.IsCorrect, 0))}
                             </th>
                             <th class={
                                 "py-2 px-1 border-b-2 border-r-2 border-gray-600 text-center font-bold",
-                                templ.KV("bg-amber-700", sumCorrect(pred.IsCorrect, 0) > sumCorrect(pred.IsCorrect, 1)),
-                                templ.KV("bg-amber-500", sumCorrect(pred.IsCorrect, 0) <= sumCorrect(pred.IsCorrect, 1)),
-
+                                highlightSumColor(pred, 1, 0),
                             }>
                                 {strconv.Itoa(sumCorrect(pred.IsCorrect, 1))}
                             </th>
@@ -61,13 +58,35 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                 templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                 }>
                                 {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
+                                <br/>
+                                <div class={
+                                    "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
+                                    percentPredColor(match.HomePercent.Int32, match.DrawPercent.Int32, match.AwayPercent.Int32),
+                                }>
+                                    <span class="mr-1">1:</span>
+                                    <span class="font-bold">{ fmt.Sprintf("%d%%", match.HomePercent.Int32) }</span>
+                                </div>
+                                <div class={
+                                    "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
+                                    percentPredColor(match.DrawPercent.Int32, match.HomePercent.Int32, match.AwayPercent.Int32),
+                                }>
+                                    <span class="mr-1">X:</span>
+                                    <span class="font-bold">{ fmt.Sprintf("%d%%", match.DrawPercent.Int32) }</span>
+                                </div>
+                                <div class={
+                                    "inline-flex items-center rounded-full px-1 py-1 text-xs font-medium text-white",
+                                    percentPredColor(match.AwayPercent.Int32, match.DrawPercent.Int32, match.HomePercent.Int32),
+                                }>
+                                    <span class="mr-1">2:</span>
+                                    <span class="font-bold">{ fmt.Sprintf("%d%%", match.AwayPercent.Int32) }</span>
+                                </div>
                             </td>
                             for _, pred := range predictions {
                                 if i == len(matches) - 1 {
                                     // Last row for each user
                                     <td class={
                                         "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                        getColourClass(pred.IsCorrect[i][0])
+                                        isCorrectColor(pred.IsCorrect[i][0])
                                     } colspan="2">
                                         {pred.Predictions[i][0]}
                                     </td>
@@ -75,13 +94,13 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                 // Regular columns
                                 <td class={
                                     "py-2 px-2 border-b border-gray-600 text-center",
-                                    getColourClass(pred.IsCorrect[i][0])
+                                    isCorrectColor(pred.IsCorrect[i][0])
                                 }>
                                     {pred.Predictions[i][0]}
                                 </td>
                                 <td class={
                                     "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                    getColourClass(pred.IsCorrect[i][1])
+                                    isCorrectColor(pred.IsCorrect[i][1])
                                 }>
                                     {pred.Predictions[i][1]}
                                 </td>
@@ -95,7 +114,19 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
     </div>
 }
 
-func getColourClass(isCorrect pgtype.Bool) string {
+func percentPredColor(currPred, pred2, pred3 int32) string {
+    if currPred > pred2 && currPred > pred3 {
+        return "bg-green-500"
+    }
+
+    if currPred > pred2 || currPred > pred3 {
+        return "bg-green-600"
+    }
+
+    return "bg-green-700"
+}
+
+func isCorrectColor(isCorrect pgtype.Bool) string {
     if isCorrect.Valid && isCorrect.Bool{
         return "bg-green-800"
     }
@@ -105,6 +136,13 @@ func getColourClass(isCorrect pgtype.Bool) string {
     }
 
     return ""
+}
+
+func highlightSumColor(pred db.UserPredictions, indexC1, indexC2 int) string{
+    if sumCorrect(pred.IsCorrect, indexC1) > sumCorrect(pred.IsCorrect, indexC2){
+        return "bg-amber-500"
+    }
+    return "bg-amber-700"
 }
 
 func sumCorrect(isCorrect [][]pgtype.Bool, colNum int) int {
