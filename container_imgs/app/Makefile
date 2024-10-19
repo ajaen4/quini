@@ -16,11 +16,11 @@ templ:
 	@TEMPL_EXPERIMENT=rawgo templ generate --watch --proxy=http://localhost:$(APP_PORT) --proxyport=$(TEMPL_PROXY_PORT) --open-browser=false --proxybind="0.0.0.0"
 
 notify-templ-proxy:
-	@templ generate --notify-proxy --proxyport=$(TEMPL_PROXY_PORT) 
+	@templ generate --notify-proxy --proxyport=$(TEMPL_PROXY_PORT)
 
 run:
 	@make templ & sleep 2
-	@air 
+	@air
 
 open-db-conn: setup
 	@PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USERNAME) -d $(DB_NAME)
