@@ -17,9 +17,9 @@ ALTER COLUMN away_team_id TYPE VARCHAR(50);
 
 -- Step 4: Recreate the foreign key constraints
 ALTER TABLE bavariada.matches
-ADD CONSTRAINT matches_home_team_id_fkey 
+ADD CONSTRAINT matches_home_team_id_fkey
     FOREIGN KEY (home_team_id) REFERENCES bavariada.teams(id),
-ADD CONSTRAINT matches_away_team_id_fkey 
+ADD CONSTRAINT matches_away_team_id_fkey
     FOREIGN KEY (away_team_id) REFERENCES bavariada.teams(id);
 -- +goose StatementEnd
 
@@ -41,8 +41,8 @@ ALTER COLUMN id TYPE INT USING id::integer;
 
 -- Step 4: Recreate the foreign key constraints
 ALTER TABLE bavariada.matches
-ADD CONSTRAINT matches_home_team_id_fkey 
+ADD CONSTRAINT matches_home_team_id_fkey
     FOREIGN KEY (home_team_id) REFERENCES bavariada.teams(id),
-ADD CONSTRAINT matches_away_team_id_fkey 
+ADD CONSTRAINT matches_away_team_id_fkey
     FOREIGN KEY (away_team_id) REFERENCES bavariada.teams(id);
 -- +goose StatementEnd

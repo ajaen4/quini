@@ -4,7 +4,7 @@ BEGIN;
 
 -- Create a temporary table to hold the transformed data
 CREATE TEMPORARY TABLE temp_predictions AS
-SELECT 
+SELECT
     p.user_id,
     p.season,
     p.matchday,
@@ -17,9 +17,9 @@ SELECT
 FROM
     bavariada.predictions p
 CROSS JOIN LATERAL (
-    SELECT 
+    SELECT
         row_number() OVER () AS rn,
-        CASE 
+        CASE
             WHEN p.match_num = 14 THEN p.predictions
             ELSE trim(unnest)
         END AS value
@@ -45,8 +45,8 @@ FROM temp_predictions;
 -- Add new primary key and foreign key constraints
 ALTER TABLE bavariada.predictions
 ADD PRIMARY KEY (user_id, season, matchday, match_num, col_num),
-ADD CONSTRAINT predictions_season_matchday_match_num_fkey 
-FOREIGN KEY (season, matchday, match_num) 
+ADD CONSTRAINT predictions_season_matchday_match_num_fkey
+FOREIGN KEY (season, matchday, match_num)
 REFERENCES bavariada.matches (season, matchday, match_num);
 
 -- Drop the temporary table
@@ -60,7 +60,7 @@ BEGIN;
 
 -- Create a temporary table to hold the consolidated data
 CREATE TEMPORARY TABLE temp_predictions AS
-SELECT 
+SELECT
     user_id,
     season,
     matchday,
@@ -69,9 +69,9 @@ SELECT
         WHEN match_num = 14 THEN MAX(prediction)
         ELSE string_agg(prediction, '-' ORDER BY col_num)
     END AS predictions
-FROM 
+FROM
     bavariada.predictions
-GROUP BY 
+GROUP BY
     user_id, season, matchday, match_num;
 
 -- Alter the table back to its original structure
@@ -93,8 +93,8 @@ FROM temp_predictions;
 -- Re-add original constraints
 ALTER TABLE bavariada.predictions
 ADD PRIMARY KEY (user_id, season, matchday, match_num),
-ADD CONSTRAINT predictions_season_matchday_match_num_fkey 
-FOREIGN KEY (season, matchday, match_num) 
+ADD CONSTRAINT predictions_season_matchday_match_num_fkey
+FOREIGN KEY (season, matchday, match_num)
 REFERENCES bavariada.matches (season, matchday, match_num);
 
 -- Drop the temporary table

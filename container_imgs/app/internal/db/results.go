@@ -61,14 +61,14 @@ func GetTotalResults() ([]UserTotalResults, error) {
 			SUM(results.points) as total_points,
 			SUM(results.price_euros) as price_euros,
 			SUM(results.debt_euros) as debt_euros
-		FROM 
+		FROM
 			bavariada.results as results
 		INNER JOIN
 			auth.users users ON results.user_id = users.id
-		GROUP BY 
+		GROUP BY
 			results.user_id,
 			users.raw_user_meta_data->>'display_name'
-		ORDER BY 
+		ORDER BY
 			total_points DESC;`,
 	)
 	if err != nil {
@@ -102,11 +102,11 @@ func GetResultsPerMatchday() ([]UserMatchdayResults, error) {
 			results.matchday,
 			results.points,
 			results.debt_euros
-		FROM 
+		FROM
 			bavariada.results as results
 		INNER JOIN
 			auth.users users ON results.user_id = users.id
-		ORDER BY 
+		ORDER BY
 			results.matchday DESC, results.points DESC;`,
 	)
 	if err != nil {
@@ -132,7 +132,7 @@ func GetTotalDebt() (float32, error) {
 	err := db.QueryRow(
 		`SELECT
 			SUM(results.debt_euros) as debt_euros
-		FROM 
+		FROM
 			bavariada.results as results;`,
 	).Scan(&totalDebt)
 
@@ -150,7 +150,7 @@ func GetTotalPrice() (float32, error) {
 	err := db.QueryRow(
 		`SELECT
 			SUM(results.price_euros) as price_euros
-		FROM 
+		FROM
 			bavariada.results as results;`,
 	).Scan(&totalPrice)
 

@@ -24,7 +24,7 @@ templ GraphScript() {
                 .then(response => response.json())
                 .then(chartData => {
                     document.getElementById('matchday-count').textContent = chartData.categories.length;
-                    
+
                     const series = chartData.series.map(user => ({
                         name: user.user_name,
                         data: user.cumulative_points,
