@@ -35,7 +35,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\" x-data=\"{ showPercentages: true }\"><div class=\"inline-block min-w-full rounded-lg overflow-hidden shadow-lg\"><style>\n                @keyframes blink {\n                    0% { background-color: #1F2937; }\n                    50% { background-color: #e9d6ff; }\n                    100% { background-color: #1F2937; }\n                }\n                .blink {\n                    animation: blink 7s linear infinite;\n                }\n            </style><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\" x-data=\"{ showPercentages: false }\"><div class=\"inline-block min-w-full rounded-lg overflow-hidden shadow-lg\"><style>\n                @keyframes blink {\n                    0% { background-color: #1F2937; }\n                    50% { background-color: #e9d6ff; }\n                    100% { background-color: #1F2937; }\n                }\n                .blink {\n                    animation: blink 7s linear infinite;\n                }\n            </style><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -58,7 +58,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tr><tr><th class=\"border-b border-r border-gray-600\"><button @click=\"showPercentages = !showPercentages\" class=\"my-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600\" x-text=\"showPercentages ? &#39;Ver %&#39; : &#39;Esconder %&#39;\"></button></th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tr><tr><th class=\"border-b border-r border-gray-600\"><button @click=\"showPercentages = !showPercentages\" class=\"my-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600\" x-text=\"showPercentages ? &#39;Esconder %&#39; : &#39;Ver %&#39;\"></button></th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
