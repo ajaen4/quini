@@ -163,7 +163,7 @@ func shouldBlinkMatch(kickoffTime pgtype.Timestamp, predictions []db.UserPredict
         return false
     }
 
-    now := time.Now()
+    now := time.Now().UTC().Add(2 * time.Hour)
     if !now.After(kickoffTime.Time) {
         return false
     }

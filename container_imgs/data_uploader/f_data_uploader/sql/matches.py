@@ -41,14 +41,22 @@ def update_matchday_status(matchday: dict, status: str):
 def insert_matchday(matchday: dict):
     cur = conn.cursor()
 
+    start_datetime = datetime.strptime(
+        matchday["start_datetime"], "%Y/%m/%d %H:%M:%S"
+    ).strftime("%Y-%m-%d %H:%M:%S")
+
     cur.execute(
         sql.SQL(
             """
-        INSERT INTO bavariada.matchdays (season, matchday, status)
-        VALUES (%s, %s, 'NOT_STARTED')
+        INSERT INTO bavariada.matchdays (season, matchday, status, start_datetime)
+        VALUES (%s, %s, 'NOT_STARTED', %s)
         """
         ),
-        (matchday["temporada"], matchday["jornada"]),
+        (
+            matchday["temporada"],
+            matchday["jornada"],
+            start_datetime,
+        ),
     )
     conn.commit()
 

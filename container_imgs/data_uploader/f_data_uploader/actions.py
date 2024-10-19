@@ -94,7 +94,11 @@ def get_next_matchday() -> dict:
     )
     response.raise_for_status()
 
-    return response.json()[0]
+    complete_matchday = response.json()[0]
+    return {
+        **complete_matchday,
+        "start_datetime": next_matchday["cierre"],
+    }
 
 
 def upload_matchdays(matchday: dict):
