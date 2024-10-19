@@ -34,14 +34,19 @@ def run_data_uploader():
     next_matchday = get_next_matchday()
     logger.info("Finished getting next matchday")
 
-    logger.info("Uploading teams...")
-    upload_teams(next_matchday["partidos"])
-    logger.info("Finished uploading teams")
+    if next_matchday is not None and not matchday_exists(next_matchday):
+        logger.info("Uploading teams...")
+        upload_teams(next_matchday["partidos"])
+        logger.info("Finished uploading teams")
 
-    if not matchday_exists(next_matchday):
         logger.info("Uploading matchdays...")
         upload_matchdays(next_matchday)
         logger.info("Finished uploading matchdays")
+
+        logger.info("Fetching predictions statistics...")
+        upload_predictions_stats(next_matchday)
+        logger.info("Finished fetching predictions statistics")
+
     else:
         logger.info("Matchday already exists, skipping upload")
 
@@ -61,10 +66,6 @@ def run_data_uploader():
     upload_prices()
     logger.info("Finished calculating prices earned")
 
-    logger.info("Fetching predictions statistics...")
-    upload_predictions_stats(next_matchday)
-    logger.info("Finished fetching predictions statistics")
-
     logger.info("Finished running data uploader")
 
 
@@ -80,6 +81,9 @@ def get_next_matchday() -> dict:
     )
     response.raise_for_status()
     next_matchday = response.json()[0]
+
+    if next_matchday["cierre"] is None:
+        return None
 
     matchday_date = datetime.strptime(
         next_matchday["fecha"], "%Y-%m-%d %H:%M:%S"
