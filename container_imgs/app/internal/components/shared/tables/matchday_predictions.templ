@@ -58,28 +58,30 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                 templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                 }>
                                 {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
-                                <br/>
-                                <div class={
-                                    "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
-                                    percentPredColor(match.HomePercent.Int32, match.DrawPercent.Int32, match.AwayPercent.Int32),
-                                }>
-                                    <span class="mr-1">1:</span>
-                                    <span class="font-bold">{ fmt.Sprintf("%d%%", match.HomePercent.Int32) }</span>
-                                </div>
-                                <div class={
-                                    "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
-                                    percentPredColor(match.DrawPercent.Int32, match.HomePercent.Int32, match.AwayPercent.Int32),
-                                }>
-                                    <span class="mr-1">X:</span>
-                                    <span class="font-bold">{ fmt.Sprintf("%d%%", match.DrawPercent.Int32) }</span>
-                                </div>
-                                <div class={
-                                    "inline-flex items-center rounded-full px-1 py-1 text-xs font-medium text-white",
-                                    percentPredColor(match.AwayPercent.Int32, match.DrawPercent.Int32, match.HomePercent.Int32),
-                                }>
-                                    <span class="mr-1">2:</span>
-                                    <span class="font-bold">{ fmt.Sprintf("%d%%", match.AwayPercent.Int32) }</span>
-                                </div>
+                                if i != 14 {
+                                    <br/>
+                                    <div class={
+                                        "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
+                                        percentPredColor(match.HomePercent.Int32, match.DrawPercent.Int32, match.AwayPercent.Int32),
+                                    }>
+                                        <span class="mr-1">1:</span>
+                                        <span class="font-bold">{ fmt.Sprintf("%d%%", match.HomePercent.Int32) }</span>
+                                    </div>
+                                    <div class={
+                                        "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
+                                        percentPredColor(match.DrawPercent.Int32, match.HomePercent.Int32, match.AwayPercent.Int32),
+                                    }>
+                                        <span class="mr-1">X:</span>
+                                        <span class="font-bold">{ fmt.Sprintf("%d%%", match.DrawPercent.Int32) }</span>
+                                    </div>
+                                    <div class={
+                                        "inline-flex items-center rounded-full px-1 py-1 text-xs font-medium text-white",
+                                        percentPredColor(match.AwayPercent.Int32, match.DrawPercent.Int32, match.HomePercent.Int32),
+                                    }>
+                                        <span class="mr-1">2:</span>
+                                        <span class="font-bold">{ fmt.Sprintf("%d%%", match.AwayPercent.Int32) }</span>
+                                    </div>
+                                }
                             </td>
                             for _, pred := range predictions {
                                 if i == len(matches) - 1 {
