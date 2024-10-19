@@ -3,5 +3,8 @@ repos:
     rev: v4.0.1
     hooks:
       - id: trailing-whitespace
+        exclude: container_imgs/data_uploader/\.bumpversion\.cfg
       - id: end-of-file-fixer
+        exclude: container_imgs/data_uploader/\.bumpversion\.cfg
       - id: check-yaml
+        exclude: container_imgs/data_uploader/\.bumpversion\.cfg
