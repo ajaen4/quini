@@ -10,7 +10,7 @@ import (
 )
 
 templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) {
-    <div class="overflow-x-auto w-full">
+    <div class="overflow-x-auto w-full" x-data="{ showPercentages: true }">
         <div class="inline-block min-w-full rounded-lg overflow-hidden shadow-lg">
             <style>
                 @keyframes blink {
@@ -33,7 +33,13 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                         }
                     </tr>
                     <tr>
-                        <th class="border-b border-r border-gray-600"></th>
+                        <th class="border-b border-r border-gray-600">
+                            <button
+                                @click="showPercentages = !showPercentages"
+                                class="my-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                x-text="showPercentages ? 'Ver %' : 'Esconder %'"
+                            ></button>
+                        </th>
                         for _, pred := range predictions {
                             <th class={
                                 "py-2 px-1 border-b-2 border-r-2 border-gray-600 text-center font-bold",
@@ -56,30 +62,31 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                             <td class={
                                 "sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600",
                                 templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
-                                }>
+                            }>
                                 {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
                                 if i != 14 {
-                                    <br/>
-                                    <div class={
-                                        "inline-flex items-center rounded-full px-1 py-1 mr-1 my-1 text-xs font-medium text-white",
-                                        percentPredColor(match.HomePercent.Int32, match.DrawPercent.Int32, match.AwayPercent.Int32),
-                                    }>
-                                        <span class="mr-1">1:</span>
-                                        <span class="font-bold">{ fmt.Sprintf("%d%%", match.HomePercent.Int32) }</span>
-                                    </div>
-                                    <div class={
-                                        "inline-flex items-center rounded-full px-1 py-1 mr-1 my-1 text-xs font-medium text-white",
-                                        percentPredColor(match.DrawPercent.Int32, match.HomePercent.Int32, match.AwayPercent.Int32),
-                                    }>
-                                        <span class="mr-1">X:</span>
-                                        <span class="font-bold">{ fmt.Sprintf("%d%%", match.DrawPercent.Int32) }</span>
-                                    </div>
-                                    <div class={
-                                        "inline-flex items-center rounded-full px-1 py-1 my-1 text-xs font-medium text-white",
-                                        percentPredColor(match.AwayPercent.Int32, match.DrawPercent.Int32, match.HomePercent.Int32),
-                                    }>
-                                        <span class="mr-1">2:</span>
-                                        <span class="font-bold">{ fmt.Sprintf("%d%%", match.AwayPercent.Int32) }</span>
+                                    <div x-show="showPercentages" class="py-0">
+                                        <div class={
+                                            "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
+                                            percentPredColor(match.HomePercent.Int32, match.DrawPercent.Int32, match.AwayPercent.Int32),
+                                        }>
+                                            <span class="mr-1">1:</span>
+                                            <span class="font-bold">{ fmt.Sprintf("%d%%", match.HomePercent.Int32) }</span>
+                                        </div>
+                                        <div class={
+                                            "inline-flex items-center rounded-full px-1 py-1 mr-1 my-1 text-xs font-medium text-white",
+                                            percentPredColor(match.DrawPercent.Int32, match.HomePercent.Int32, match.AwayPercent.Int32),
+                                        }>
+                                            <span class="mr-1">X:</span>
+                                            <span class="font-bold">{ fmt.Sprintf("%d%%", match.DrawPercent.Int32) }</span>
+                                        </div>
+                                        <div class={
+                                            "inline-flex items-center rounded-full px-1 py-1 my-1 text-xs font-medium text-white",
+                                            percentPredColor(match.AwayPercent.Int32, match.DrawPercent.Int32, match.HomePercent.Int32),
+                                        }>
+                                            <span class="mr-1">2:</span>
+                                            <span class="font-bold">{ fmt.Sprintf("%d%%", match.AwayPercent.Int32) }</span>
+                                        </div>
                                     </div>
                                 }
                             </td>
