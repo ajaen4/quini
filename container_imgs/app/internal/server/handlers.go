@@ -11,8 +11,9 @@ import (
 )
 
 type ChartData struct {
-	Categories []string `json:"categories"`
-	Series     []Series `json:"series"`
+	Categories     []string `json:"categories"`
+	Series         []Series `json:"series"`
+	TotalMatchdays int32    `json:"total_matchdays"`
 }
 
 type Series struct {
@@ -27,10 +28,6 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	categories := make([]string, len(userPoints[0].CumulativePoints))
-	for i := range categories {
-		categories[i] = strconv.Itoa(i + 1)
-	}
 	series := []Series{}
 	usersColor := map[string]string{
 		"Jaen":   "#1A56DB",
@@ -47,9 +44,24 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 		})
 	}
 
+	categories, err := db.GetLastMatchdays()
+	if err != nil {
+		return err
+	}
+	categoriesStr := []string{}
+	for _, category := range categories {
+		categoriesStr = append(categoriesStr, strconv.Itoa(category))
+	}
+
+	totalMatchdays, err := db.TotalMatchdays()
+	if err != nil {
+		return err
+	}
+
 	respondWithJSON(w, http.StatusOK, ChartData{
-		Categories: categories,
-		Series:     series,
+		Categories:     categoriesStr,
+		Series:         series,
+		TotalMatchdays: totalMatchdays,
 	})
 	return nil
 }

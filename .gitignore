@@ -199,3 +199,4 @@ bin
 
 node_modules/
 container_imgs/app/internal/static/css/tailwind.css
+container_imgs/app/internal/**/*.txt

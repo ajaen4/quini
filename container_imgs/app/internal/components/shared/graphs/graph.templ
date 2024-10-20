@@ -23,7 +23,7 @@ templ GraphScript() {
             fetch('/points/cumulative')
                 .then(response => response.json())
                 .then(chartData => {
-                    document.getElementById('matchday-count').textContent = chartData.categories.length;
+                    document.getElementById('matchday-count').textContent = chartData.total_matchdays;
 
                     const series = chartData.series.map(user => ({
                         name: user.user_name,
