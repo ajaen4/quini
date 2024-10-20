@@ -41,10 +41,6 @@ def update_matchday_status(matchday: dict, status: str):
 def insert_matchday(matchday: dict):
     cur = conn.cursor()
 
-    start_datetime = datetime.strptime(
-        matchday["start_datetime"], "%Y/%m/%d %H:%M:%S"
-    ).strftime("%Y-%m-%d %H:%M:%S")
-
     cur.execute(
         sql.SQL(
             """
@@ -55,7 +51,7 @@ def insert_matchday(matchday: dict):
         (
             matchday["temporada"],
             matchday["jornada"],
-            start_datetime,
+            matchday["start_datetime"],
         ),
     )
     conn.commit()
