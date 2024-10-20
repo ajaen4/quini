@@ -21,6 +21,20 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                 .blink {
                     animation: blink 7s linear infinite;
                 }
+                .elige8-indicator {
+                    position: relative;
+                }
+                .elige8-indicator::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 0 8px 8px 0;
+                    border-color: transparent #3B82F6 transparent transparent;
+                }
             </style>
             <table class="min-w-full bg-gray-800 text-sm border-collapse">
                 <thead class="bg-gray-800">
@@ -102,14 +116,16 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                 } else {
                                 // Regular columns
                                 <td class={
-                                    "py-2 px-2 border-b border-gray-600 text-center",
-                                    isCorrectColor(pred.IsCorrect[i][0])
+                                    "py-2 px-2 border-b text-center border-gray-600",
+                                    isCorrectColor(pred.IsCorrect[i][0]),
+                                    elige8Color(pred.IsElige8[i][0])
                                 }>
                                     {pred.Predictions[i][0]}
                                 </td>
                                 <td class={
-                                    "py-2 px-2 border-b border-r border-gray-600 text-center",
-                                    isCorrectColor(pred.IsCorrect[i][1])
+                                    "py-2 px-2 border-b border-r text-center border-gray-600",
+                                    isCorrectColor(pred.IsCorrect[i][1]),
+                                    elige8Color(pred.IsElige8[i][1])
                                 }>
                                     {pred.Predictions[i][1]}
                                 </td>
@@ -123,16 +139,23 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
     </div>
 }
 
+func elige8Color(isElige8 pgtype.Bool) string {
+    if (isElige8.Valid && isElige8.Bool) {
+        return "elige8-indicator"
+    }
+    return ""
+}
+
 func percentPredColor(currPred, pred2, pred3 int32) string {
     if currPred > pred2 && currPred > pred3 {
-        return "bg-green-500"
+        return "bg-green-700"
     }
 
     if currPred > pred2 || currPred > pred3 {
-        return "bg-green-600"
+        return "bg-orange-700"
     }
 
-    return "bg-green-700"
+    return "bg-red-700"
 }
 
 func isCorrectColor(isCorrect pgtype.Bool) string {

@@ -1,0 +1,40 @@
+<div class=\"overflow-x-auto w-full\" x-data=\"{ showPercentages: false }\"><div class=\"inline-block min-w-full rounded-lg overflow-hidden shadow-lg\"><style>\n                @keyframes blink {\n                    0% { background-color: #1F2937; }\n                    50% { background-color: #e9d6ff; }\n                    100% { background-color: #1F2937; }\n                }\n                .blink {\n                    animation: blink 7s linear infinite;\n                }\n                .elige8-indicator {\n                    position: relative;\n                }\n                .elige8-indicator::after {\n                    content: '';\n                    position: absolute;\n                    top: 0;\n                    right: 0;\n                    width: 0;\n                    height: 0;\n                    border-style: solid;\n                    border-width: 0 8px 8px 0;\n                    border-color: transparent #3B82F6 transparent transparent;\n                }\n            </style><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th>
+<th class=\"py-3 px-1 border-b-2 border-gray-600 text-center rounded-tr-lg\" colspan=\"2\">
+</th>
+</tr><tr><th class=\"border-b border-r border-gray-600\"><button @click=\"showPercentages = !showPercentages\" class=\"my-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600\" x-text=\"showPercentages ? &#39;Esconder %&#39; : &#39;Ver %&#39;\"></button></th>
+<th class=\"
+\">
+</th>
+<th class=\"
+\">
+</th>
+</tr></thead> <tbody>
+<tr class=\"
+\">
+<td class=\"
+\">
+
+<div x-show=\"showPercentages\" class=\"py-0\">
+<div class=\"
+\"><span class=\"mr-1\">1:</span> <span class=\"font-bold\">
+</span></div>
+<div class=\"
+\"><span class=\"mr-1\">X:</span> <span class=\"font-bold\">
+</span></div>
+<div class=\"
+\"><span class=\"mr-1\">2:</span> <span class=\"font-bold\">
+</span></div></div>
+</td>
+
+<td class=\"
+\" colspan=\"2\">
+</td>
+
+<td class=\"
+\">
+</td>
+<td class=\"
+\">
+</td>
+</tr>
+</tbody></table></div></div>

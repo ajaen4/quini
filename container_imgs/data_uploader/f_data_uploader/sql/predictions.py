@@ -45,23 +45,25 @@ def insert_predictions(users_predictions: list[dict]):
 
     query = sql.SQL(
         """
-        INSERT INTO bavariada.predictions (user_id, season, matchday, col_num, match_num, prediction)
+        INSERT INTO bavariada.predictions (user_id, season, matchday, col_num, match_num, prediction, is_elige8)
         VALUES %s
         ON CONFLICT (user_id, season, matchday, col_num, match_num)
         DO UPDATE SET
-            prediction = EXCLUDED.prediction
+            prediction = EXCLUDED.prediction,
+            is_elige8 = EXCLUDED.is_elige8
         """
     )
     values = [
         (
-            user_result["user_id"],
-            user_result["season"],
-            user_result["matchday"],
-            user_result["col_num"],
-            user_result["match_num"],
-            user_result["prediction"],
+            user_predictions["user_id"],
+            user_predictions["season"],
+            user_predictions["matchday"],
+            user_predictions["col_num"],
+            user_predictions["match_num"],
+            user_predictions["prediction"],
+            user_predictions["is_elige8"],
         )
-        for user_result in users_predictions
+        for user_predictions in users_predictions
     ]
 
     execute_values(cur, query, values)
