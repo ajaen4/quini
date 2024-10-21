@@ -159,9 +159,6 @@ def upload_predictions():
             .replace(",", "-")
         )
 
-        line = combinaciones[0]["linea"].split(",")
-        is_elige8s = ["E" in line[match_num] for match_num in range(14)]
-
         for col_num, combinacion in enumerate(combinaciones):
             line = combinacion["linea"].split(",")
 
@@ -175,7 +172,7 @@ def upload_predictions():
                         "col_num": col_num,
                         "match_num": match_num,
                         "prediction": line_fmt,
-                        "is_elige8": is_elige8s[match_num],
+                        "is_elige8": "E" in line[match_num],
                     }
                 )
 
