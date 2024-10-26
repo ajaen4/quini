@@ -19,12 +19,6 @@ func GetUserPoints() ([]UserCumPoints, error) {
 				) AS cumulative_points
 			FROM
 				bavariada.results
-		),
-		last_matchdays AS (
-			SELECT DISTINCT matchday
-			FROM bavariada.results
-			ORDER BY matchday DESC
-			LIMIT 3
 		)
 		SELECT
 			users.raw_user_meta_data->>'display_name' AS user_name,
@@ -33,8 +27,6 @@ func GetUserPoints() ([]UserCumPoints, error) {
 			user_points points
 		INNER JOIN
 			auth.users users ON points.user_id = users.id
-		INNER JOIN
-			last_matchdays ON points.matchday = last_matchdays.matchday
 		GROUP BY
 			points.user_id, users.raw_user_meta_data->>'display_name';`,
 	)
