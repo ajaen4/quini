@@ -15,7 +15,7 @@ func GetMatchdayInProg() (int32, error) {
 		FROM bavariada.matchdays
 		WHERE season = '2024-2025'
 		AND status = 'IN_PROGRESS'
-		OR (status = 'NOT_STARTED' AND start_datetime < (CURRENT_TIMESTAMP + INTERVAL '2 hours'));`,
+		OR (status = 'NOT_STARTED' AND start_datetime < (CURRENT_TIMESTAMP + INTERVAL '14 hours'));`,
 	).Scan(&maxMatchday)
 	if err != nil {
 		return 0, err
