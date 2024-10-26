@@ -44,7 +44,7 @@ func graphContents(w http.ResponseWriter, r *http.Request) error {
 		})
 	}
 
-	categories, err := db.GetLastMatchdays()
+	categories, err := db.GetMatchdays()
 	if err != nil {
 		return err
 	}
