@@ -33,8 +33,7 @@ func GetLastMatchdays() ([]int, error) {
 		WHERE season = '2024-2025'
 		AND (status = 'IN_PROGRESS'
 		OR status = 'FINISHED')
-		ORDER BY matchday DESC
-		LIMIT 3;`,
+		ORDER BY matchday DESC;`,
 	)
 	if err != nil {
 		return []int{}, err
