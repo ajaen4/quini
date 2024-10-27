@@ -3,7 +3,6 @@ from datetime import (
     datetime,
     timedelta,
 )
-from itertools import chain
 
 from f_data_uploader.sql import (
     insert_matchday,
@@ -23,7 +22,7 @@ from f_data_uploader.sql import (
 )
 from f_data_uploader.results import evaluate_results
 from f_data_uploader.logger import logger
-from f_data_uploader.strings import clean_text
+from f_data_uploader.strings import team_name_to_id
 import f_data_uploader.cfg as cfg
 
 
@@ -40,7 +39,7 @@ def run_data_uploader():
         logger.info("Finished uploading teams")
 
         logger.info("Uploading matchdays...")
-        upload_matchdays(next_matchday)
+        upload_matchday(next_matchday)
         logger.info("Finished uploading matchdays")
 
     else:
@@ -106,13 +105,10 @@ def get_next_matchday() -> dict:
     }
 
 
-def upload_matchdays(matchday: dict):
+def upload_matchday(matchday: dict):
     logger.info(f"Next matchday: {matchday["jornada"]}")
 
-    team_names = [
-        [match["local"], match["visitante"]] for match in matchday["partidos"]
-    ]
-    if not has_one_spanish_match(list(chain(*team_names))):
+    if not has_one_spanish_match(matchday["partidos"]):
         logger.info("Matchday is not a spanish quiniela, skipping upload")
         return
 
@@ -290,11 +286,11 @@ def upload_teams(matches: list[dict]):
     teams = list()
     for match in matches:
         home_team = (
-            clean_text(match["local"]).replace(" ", "-").replace(".", ""),
+            team_name_to_id(match["local"]),
             match["local"],
         )
         away_team = (
-            clean_text(match["visitante"]).replace(" ", "-").replace(".", ""),
+            team_name_to_id(match["visitante"]),
             match["visitante"],
         )
 
