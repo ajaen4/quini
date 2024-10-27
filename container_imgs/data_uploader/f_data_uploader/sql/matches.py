@@ -4,6 +4,7 @@ from psycopg2 import sql
 
 from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
+from f_data_uploader.strings import team_name_to_id
 
 
 def update_matchday_status(matchday: dict, status: str):
@@ -189,3 +190,36 @@ def get_matches(matchday: int) -> list[dict]:
     cur.close()
 
     return matches
+
+
+def has_one_spanish_match(matches: list[dict]) -> bool:
+    cur = conn.cursor()
+    team_ids = set()
+    for match in matches:
+        team_ids.add(team_name_to_id(match["local"]))
+        team_ids.add(team_name_to_id(match["visitante"]))
+
+    cur.execute(
+        """
+        SELECT id, home_championship
+        FROM bavariada.teams
+        WHERE id = ANY(%s)
+        """,
+        (list(team_ids),),
+    )
+    team_championships = {str(row[0]): row[1] for row in cur.fetchall()}
+
+    for match in matches:
+        local_championship = team_championships.get(
+            team_name_to_id(match["local"])
+        )
+        away_championship = team_championships.get(
+            team_name_to_id(match["visitante"])
+        )
+
+        if local_championship == "LA_LIGA" and away_championship == "LA_LIGA":
+            logger.info("Found at least one la liga match")
+            return True
+
+    logger.info("Didn't find any la liga match, skipping matchday upload")
+    return False

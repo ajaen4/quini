@@ -1,1 +1,1 @@
-from .strings import clean_text
+from .strings import team_name_to_id

@@ -9,3 +9,7 @@ def clean_text(text: str) -> str:
     cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
 
     return cleaned_text
+
+
+def team_name_to_id(name: str):
+    return clean_text(name).replace(" ", "-").replace(".", "")
