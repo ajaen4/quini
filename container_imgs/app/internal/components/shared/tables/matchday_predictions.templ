@@ -77,7 +77,16 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                 "sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600",
                                 templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                             }>
-                                {fmt.Sprintf("%s vs %s", match.HomeName, match.AwayName)}
+                            <div class="flex justify-center">
+                                <div class="flex items-center">
+                                    <img src={ match.HomeLogo } alt={ match.HomeCode } class="h-6 w-6 object-contain"/>
+                                    <span class="text-sm  mr-1">{ match.HomeCode }</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-sm  ml-1">{ match.AwayCode }</span>
+                                    <img src={ match.AwayLogo } alt={ match.AwayCode } class="h-6 w-6 object-contain"/>
+                                </div>
+                            </div>
                                 if i != 14 {
                                     <div x-show="showPercentages" class="py-0">
                                         <div class={
