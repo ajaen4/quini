@@ -7,8 +7,10 @@ import (
 )
 
 type Match struct {
-	HomeName        string           `json:"home_name"`
-	AwayName        string           `json:"away_name"`
+	HomeCode        string           `json:"home_code"`
+	HomeLogo        string           `json:"home_logo_url"`
+	AwayCode        string           `json:"away_code"`
+	AwayLogo        string           `json:"away_logo_url"`
 	KickoffDatetime pgtype.Timestamp `json:"kickoff_datetime"`
 	HomePercent     pgtype.Int4      `json:"home_percent"`
 	DrawPercent     pgtype.Int4      `json:"draw_percent"`
@@ -21,8 +23,10 @@ func GetMatches(matchday int32) ([]Match, error) {
 	rows, err := db.Query(
 		fmt.Sprintf(
 			`SELECT
-				home.name as home_name,
-				away.name as away_name,
+				home.code as home_code,
+				home.logo_url as home_logo_url,
+				away.code as away_code,
+				away.logo_url as away_logo_url,
 				kickoff_datetime,
 				stats.home_percent,
 				stats.draw_percent,
@@ -47,8 +51,10 @@ func GetMatches(matchday int32) ([]Match, error) {
 	for rows.Next() {
 		match := Match{}
 		err = rows.Scan(
-			&match.HomeName,
-			&match.AwayName,
+			&match.HomeCode,
+			&match.HomeLogo,
+			&match.AwayCode,
+			&match.AwayLogo,
 			&match.KickoffDatetime,
 			&match.HomePercent,
 			&match.DrawPercent,
