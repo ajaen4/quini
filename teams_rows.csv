@@ -1,0 +1,43 @@
+id;name;home_championship;api_id;code;league_id;logo_url
+alaves;Alavés;LA_LIGA;542;ALA;140;https://media.api-sports.io/football/teams/542.png
+albacete;Albacete;LA_LIGA_2;722;ALB;141;https://media.api-sports.io/football/teams/722.png
+almeria;Almería;LA_LIGA_2;723;ALM;141;https://media.api-sports.io/football/teams/723.png
+athletic-club;Athletic Club;LA_LIGA;531;BIL;140;https://media.api-sports.io/football/teams/531.png
+at-madrid;At. Madrid;LA_LIGA;530;MAD;140;https://media.api-sports.io/football/teams/530.png
+barcelona;Barcelona;LA_LIGA;529;BAR;140;https://media.api-sports.io/football/teams/529.png
+betis;Betis;LA_LIGA;543;BET;140;https://media.api-sports.io/football/teams/543.png
+burgos;Burgos;LA_LIGA_2;9580;BUR;141;https://media.api-sports.io/football/teams/9580.png
+cadiz;Cádiz;LA_LIGA_2;724;CAD;141;https://media.api-sports.io/football/teams/724.png
+cartagena;Cartagena;LA_LIGA_2;5262;CAR;141;https://media.api-sports.io/football/teams/5262.png
+castellon;Castellón;LA_LIGA_2;5254;CAS;141;https://media.api-sports.io/football/teams/5254.png
+celta;Celta;LA_LIGA;538;CEL;140;https://media.api-sports.io/football/teams/538.png
+cordoba;Córdoba;LA_LIGA_2;713;COR;141;https://media.api-sports.io/football/teams/713.png
+deportivo;Deportivo;LA_LIGA_2;544;COR;141;https://media.api-sports.io/football/teams/544.png
+eibar;Eibar;LA_LIGA_2;545;EIB;141;https://media.api-sports.io/football/teams/545.png
+elche;Elche;LA_LIGA_2;797;ELC;141;https://media.api-sports.io/football/teams/797.png
+eldense;Eldense;LA_LIGA_2;9692;ELD;141;https://media.api-sports.io/football/teams/9692.png
+espanyol;Espanyol;LA_LIGA;540;ESP;140;https://media.api-sports.io/football/teams/540.png
+getafe;Getafe;LA_LIGA;546;GET;140;https://media.api-sports.io/football/teams/546.png
+girona;Girona;LA_LIGA;547;GIR;140;https://media.api-sports.io/football/teams/547.png
+granada;Granada;LA_LIGA_2;715;GRA;141;https://media.api-sports.io/football/teams/715.png
+huesca;Huesca;LA_LIGA_2;726;HUE;141;https://media.api-sports.io/football/teams/726.png
+las-palmas;Las Palmas;LA_LIGA;534;PAL;140;https://media.api-sports.io/football/teams/534.png
+leganes;Leganés;LA_LIGA;537;LEG;140;https://media.api-sports.io/football/teams/537.png
+levante;Levante;LA_LIGA_2;539;LEV;141;https://media.api-sports.io/football/teams/539.png
+malaga;Málaga;LA_LIGA_2;535;MAL;141;https://media.api-sports.io/football/teams/535.png
+mallorca;Mallorca;LA_LIGA;798;MAL;140;https://media.api-sports.io/football/teams/798.png
+mirandes;Mirandés;LA_LIGA_2;799;MIR;141;https://media.api-sports.io/football/teams/799.png
+osasuna;Osasuna;LA_LIGA;727;OSA;140;https://media.api-sports.io/football/teams/727.png
+racing-de-santander;Racing De Santander;LA_LIGA_2;4665;SAN;141;https://media.api-sports.io/football/teams/4665.png
+racing-ferrol;Racing Ferrol;LA_LIGA_2;9409;FER;141;https://media.api-sports.io/football/teams/9409.png
+rayo-vallecano;Rayo Vallecano;LA_LIGA;728;RAY;140;https://media.api-sports.io/football/teams/728.png
+real-madrid;Real Madrid;LA_LIGA;541;REA;140;https://media.api-sports.io/football/teams/541.png
+real-sociedad;Real Sociedad;LA_LIGA;548;RSO;140;https://media.api-sports.io/football/teams/548.png
+r-oviedo;R. Oviedo;LA_LIGA_2;718;OVI;141;https://media.api-sports.io/football/teams/718.png
+r-zaragoza;R. Zaragoza;LA_LIGA_2;732;ZAR;141;https://media.api-sports.io/football/teams/732.png
+sevilla;Sevilla;LA_LIGA;536;SEV;140;https://media.api-sports.io/football/teams/536.png
+sporting;Sporting;LA_LIGA_2;731;GIJ;141;https://media.api-sports.io/football/teams/731.png
+tenerife;Tenerife;LA_LIGA_2;719;TEN;141;https://media.api-sports.io/football/teams/719.png
+valencia;Valencia;LA_LIGA;532;VAL;140;https://media.api-sports.io/football/teams/532.png
+valladolid;Valladolid;LA_LIGA;720;VAL;140;https://media.api-sports.io/football/teams/720.png
+villarreal;Villarreal;LA_LIGA;533;VIL;140;https://media.api-sports.io/football/teams/533.png

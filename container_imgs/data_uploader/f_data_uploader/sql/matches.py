@@ -201,7 +201,7 @@ def has_one_spanish_match(matches: list[dict]) -> bool:
 
     cur.execute(
         """
-        SELECT id, home_championship
+        SELECT id, league_id
         FROM bavariada.teams
         WHERE id = ANY(%s)
         """,
@@ -209,15 +209,16 @@ def has_one_spanish_match(matches: list[dict]) -> bool:
     )
     team_championships = {str(row[0]): row[1] for row in cur.fetchall()}
 
+    LA_LIGA_ID = 140
     for match in matches:
-        local_championship = team_championships.get(
+        local_league_id = team_championships.get(
             team_name_to_id(match["local"])
         )
-        away_championship = team_championships.get(
+        away_league_id = team_championships.get(
             team_name_to_id(match["visitante"])
         )
 
-        if local_championship == "LA_LIGA" and away_championship == "LA_LIGA":
+        if local_league_id == LA_LIGA_ID and away_league_id == LA_LIGA_ID:
             logger.info("Found at least one la liga match")
             return True
 
