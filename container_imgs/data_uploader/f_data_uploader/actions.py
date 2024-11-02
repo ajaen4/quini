@@ -54,9 +54,9 @@ def run_data_uploader():
     upload_predictions()
     logger.info("Finished uploading predictions")
 
-    logger.info("Uploading predictions...")
+    logger.info("Checking correct predictions...")
     upload_is_correct()
-    logger.info("Finished uploading predictions")
+    logger.info("Finished checking correct predictions")
 
     logger.info("Calculating points...")
     upload_results()
@@ -106,7 +106,7 @@ def get_next_matchday() -> dict:
 
 
 def upload_matchday(matchday: dict):
-    logger.info(f"Next matchday: {matchday["jornada"]}")
+    logger.info(f"Next matchday: {matchday['jornada']}")
 
     if not has_one_spanish_match(matchday["partidos"]):
         logger.info("Matchday is not a spanish quiniela, skipping upload")
@@ -202,12 +202,12 @@ def upload_is_correct():
     response.raise_for_status()
     quinielas = response.json()
 
-    matchdays = [*get_matchdays("IN_PROGRESS"), *get_matchdays("NOT_STARTED")]
+    matchdays = [*get_matchdays("IN_PROGRESS")]
     if not matchdays:
         logger.info("No matchdays in progress")
         return
 
-    logger.info(f"Found matchdays to calculate results: {matchdays}")
+    logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
         matchday_quinielas = [
             quiniela
@@ -256,7 +256,7 @@ def upload_results():
         logger.info("No matchdays in progress")
         return
 
-    logger.info(f"Found matchdays to calculate results: {matchdays}")
+    logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
         matchday_quinielas = [
             quiniela
@@ -277,7 +277,7 @@ def upload_results():
 
         if quiniela["combinacion"]:
             update_matchday_status(matchday, "FINISHED")
-            logger.info(f"Updated matchday {matchday["matchday"]} as finished")
+            logger.info(f"Updated matchday {matchday['matchday']} as finished")
         else:
             update_matchday_status(matchday, "IN_PROGRESS")
 
