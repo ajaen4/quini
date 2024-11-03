@@ -1,4 +1,4 @@
-id;name;home_championship;api_id;code;league_id;logo_url
+loterias_id;name;home_championship;id;code;league_id;logo_url
 alaves;Alavés;LA_LIGA;542;ALA;140;https://media.api-sports.io/football/teams/542.png
 albacete;Albacete;LA_LIGA_2;722;ALB;141;https://media.api-sports.io/football/teams/722.png
 almeria;Almería;LA_LIGA_2;723;ALM;141;https://media.api-sports.io/football/teams/723.png

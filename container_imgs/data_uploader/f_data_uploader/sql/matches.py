@@ -4,7 +4,7 @@ from psycopg2 import sql
 
 from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
-from f_data_uploader.strings import team_name_to_id
+from f_data_uploader.strings import team_name_to_loterias_id
 
 
 def update_matchday_status(matchday: dict, status: str):
@@ -63,33 +63,19 @@ def insert_matchday(matchday: dict):
 def insert_matches(matchday: dict):
     cur = conn.cursor()
 
-    cur.execute(
-        """
-        CREATE TEMPORARY TABLE temp_matches (
-            season VARCHAR(9),
-            matchday INTEGER,
-            match_num INTEGER,
-            home_name VARCHAR(50),
-            away_name VARCHAR(50),
-            kickoff_datetime TIMESTAMP
-        );
-        """
-    )
-    conn.commit()
-
-    matches_team_names = list()
+    values = list()
     for match_num, match in enumerate(matchday["partidos"]):
-
         match_date = datetime.strptime(
             match["fecha"], "%Y/%m/%d %H:%M:%S"
         ).strftime("%Y-%m-%d %H:%M:%S")
-        matches_team_names.append(
+
+        values.append(
             (
                 matchday["temporada"],
-                matchday["jornada"],
+                int(matchday["jornada"]),
                 match_num,
-                match["local"],
-                match["visitante"],
+                match["home_id"],
+                match["away_id"],
                 match_date,
             )
         )
@@ -97,30 +83,11 @@ def insert_matches(matchday: dict):
     cur.executemany(
         sql.SQL(
             """
-            INSERT INTO temp_matches (season, matchday, match_num, home_name, away_name, kickoff_datetime)
-            VALUES (%s, %s, %s, %s, %s, %s);
+            INSERT INTO bavariada.matches (season, matchday, match_num, home_team_id, away_team_id, kickoff_datetime)
+            VALUES (%s, %s, %s, %s, %s, %s)
             """
         ),
-        matches_team_names,
-    )
-    conn.commit()
-
-    cur.execute(
-        sql.SQL(
-            """
-            INSERT INTO bavariada.matches (season, matchday, match_num, home_team_id, away_team_id, kickoff_datetime)
-            SELECT
-                tm.season,
-                tm.matchday,
-                tm.match_num,
-                home_team.id AS home_team_id,
-                away_team.id AS away_team_id,
-                tm.kickoff_datetime
-            FROM temp_matches tm
-            JOIN bavariada.teams home_team ON tm.home_name = home_team.name
-            JOIN bavariada.teams away_team ON tm.away_name = away_team.name
-            """
-        )
+        values,
     )
     conn.commit()
 
@@ -196,14 +163,14 @@ def has_one_spanish_match(matches: list[dict]) -> bool:
     cur = conn.cursor()
     team_ids = set()
     for match in matches:
-        team_ids.add(team_name_to_id(match["local"]))
-        team_ids.add(team_name_to_id(match["visitante"]))
+        team_ids.add(team_name_to_loterias_id(match["local"]))
+        team_ids.add(team_name_to_loterias_id(match["visitante"]))
 
     cur.execute(
         """
-        SELECT id, league_id
+        SELECT loterias_id, league_id
         FROM bavariada.teams
-        WHERE id = ANY(%s)
+        WHERE loterias_id = ANY(%s)
         """,
         (list(team_ids),),
     )
@@ -212,10 +179,10 @@ def has_one_spanish_match(matches: list[dict]) -> bool:
     LA_LIGA_ID = 140
     for match in matches:
         local_league_id = team_championships.get(
-            team_name_to_id(match["local"])
+            team_name_to_loterias_id(match["local"])
         )
         away_league_id = team_championships.get(
-            team_name_to_id(match["visitante"])
+            team_name_to_loterias_id(match["visitante"])
         )
 
         if local_league_id == LA_LIGA_ID and away_league_id == LA_LIGA_ID:
