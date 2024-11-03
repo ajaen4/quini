@@ -20,9 +20,10 @@ from f_data_uploader.sql import (
     update_predictions,
     insert_predictions_stats,
 )
+from f_data_uploader.football_api import add_match_ids
 from f_data_uploader.results import evaluate_results
 from f_data_uploader.logger import logger
-from f_data_uploader.strings import team_name_to_id
+from f_data_uploader.strings import team_name_to_loterias_id
 import f_data_uploader.cfg as cfg
 
 
@@ -33,17 +34,16 @@ def run_data_uploader():
     next_matchday = get_next_matchday()
     logger.info("Finished getting next matchday")
 
-    if next_matchday is not None and not matchday_exists(next_matchday):
-        logger.info("Uploading teams...")
-        upload_teams(next_matchday["partidos"])
-        logger.info("Finished uploading teams")
-
+    if next_matchday is None:
+        logger.info("Matchday not ready, skipping upload")
+    elif matchday_exists(next_matchday):
+        logger.info("Matchday already exists, skipping upload")
+    elif not has_one_spanish_match(next_matchday["partidos"]):
+        logger.info("Matchday is not a spanish quiniela, skipping upload")
+    else:
         logger.info("Uploading matchdays...")
         upload_matchday(next_matchday)
         logger.info("Finished uploading matchdays")
-
-    else:
-        logger.info("Matchday already exists, skipping upload")
 
     if next_matchday is not None:
         logger.info("Fetching predictions statistics...")
@@ -108,12 +108,9 @@ def get_next_matchday() -> dict:
 def upload_matchday(matchday: dict):
     logger.info(f"Next matchday: {matchday['jornada']}")
 
-    if not has_one_spanish_match(matchday["partidos"]):
-        logger.info("Matchday is not a spanish quiniela, skipping upload")
-        return
-
     insert_matchday(matchday)
-    insert_matches(matchday)
+    matchday_match_ids = add_match_ids(matchday)
+    insert_matches(matchday_match_ids)
     logger.info(f"Successfully uploaded matchday {matchday['jornada']}")
 
 
@@ -286,11 +283,11 @@ def upload_teams(matches: list[dict]):
     teams = list()
     for match in matches:
         home_team = (
-            team_name_to_id(match["local"]),
+            team_name_to_loterias_id(match["local"]),
             match["local"],
         )
         away_team = (
-            team_name_to_id(match["visitante"]),
+            team_name_to_loterias_id(match["visitante"]),
             match["visitante"],
         )
 

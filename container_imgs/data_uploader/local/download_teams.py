@@ -9,10 +9,10 @@ from f_data_uploader.aws.ssm import SSM
 
 def download_teams(season: int, league_ids: list[int]):
 
-    ssm_client = SSM(boto3.Session(region_name="eu-west-1"))
+    ssm_client = SSM(boto3.Session(region_name="eu-south-2"))
 
-    headers = json.loads(
-        ssm_client.get_parameter("/api-football/headers", decrypt=True)
+    secrets = json.loads(
+        ssm_client.get_parameter("/bavariada/secrets", decrypt=True)
     )
 
     teams_data = list()
@@ -20,7 +20,7 @@ def download_teams(season: int, league_ids: list[int]):
         params = {"season": season, "league": league_id}
         response = requests.get(
             "https://v3.football.api-sports.io/teams",
-            headers=headers,
+            headers={"x-rapidapi-key": secrets["FOOT_API_TOKEN"]},
             params=params,
         )
         response.raise_for_status()
@@ -33,7 +33,7 @@ def download_teams(season: int, league_ids: list[int]):
                 team["team"]["code"] = "ELD"
 
             team_data = {
-                "api_id": team["team"]["id"],
+                "id": team["team"]["id"],
                 "code": team["team"]["code"],
                 "logo_url": team["team"]["logo"],
                 "league_id": league_id,
@@ -43,7 +43,7 @@ def download_teams(season: int, league_ids: list[int]):
 
     with open(f"teams_{season}.csv", "w", newline="") as file:
         writer = DictWriter(
-            file, fieldnames=["api_id", "code", "league_id", "logo_url"]
+            file, fieldnames=["id", "code", "league_id", "logo_url"]
         )
         writer.writeheader()
         writer.writerows(teams_data)

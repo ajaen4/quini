@@ -17,3 +17,24 @@ def insert_teams(teams: list[tuple]):
     conn.commit()
 
     cur.close()
+
+
+def get_team_id(team_id: str):
+    cur = conn.cursor()
+
+    query = sql.SQL(
+        """
+        SELECT id
+        FROM bavariada.teams
+        WHERE loterias_id = %s
+        """
+    )
+
+    cur.execute(query, (team_id,))
+    conn.commit()
+
+    team_id = cur.fetchone()
+
+    cur.close()
+
+    return team_id[0]

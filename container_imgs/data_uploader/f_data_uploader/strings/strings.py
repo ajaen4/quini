@@ -11,5 +11,5 @@ def clean_text(text: str) -> str:
     return cleaned_text
 
 
-def team_name_to_id(name: str):
+def team_name_to_loterias_id(name: str):
     return clean_text(name).replace(" ", "-").replace(".", "")

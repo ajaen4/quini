@@ -22,14 +22,14 @@ def refresh_teams(file_path: str):
             id,
             name,
             league_id,
-            api_id,
+            loterias_id,
             code,
             logo_url
         )
         VALUES %s
         ON CONFLICT (id)
         DO UPDATE SET
-            api_id = EXCLUDED.api_id,
+            loterias_id = EXCLUDED.loterias_id,
             code = EXCLUDED.code,
             logo_url = EXCLUDED.logo_url,
             league_id = EXCLUDED.league_id
@@ -41,7 +41,7 @@ def refresh_teams(file_path: str):
             team_data["id"],
             team_data["name"],
             team_data["league_id"],
-            team_data["api_id"],
+            team_data["loterias_id"],
             team_data["code"],
             team_data["logo_url"],
         )
