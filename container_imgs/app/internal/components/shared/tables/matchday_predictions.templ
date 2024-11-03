@@ -11,7 +11,7 @@ import (
 
 templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) {
     <div class="overflow-x-auto w-full" x-data="{ showPercentages: false }">
-        <div class="inline-block min-w-full rounded-lg overflow-hidden shadow-lg">
+        <div class="inline-block min-w-full rounded-lg shadow-lg">
             <style>
                 @keyframes blink {
                     0% { background-color: #1F2937; }
@@ -39,7 +39,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
             <table class="min-w-full bg-gray-800 text-sm border-collapse">
                 <thead class="bg-gray-800">
                     <tr>
-                        <th class="sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg">Partidos</th>
+                        <th class="sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[140px]">Partidos</th>
                         for _, pred := range predictions {
                             <th class="py-3 px-1 border-b-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
                                 {pred.UserName}
@@ -47,7 +47,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                         }
                     </tr>
                     <tr>
-                        <th class="border-b border-r border-gray-600">
+                        <th class="sticky left-0 z-10 border-b border-r border-gray-600 bg-gray-800">
                             <button
                                 @click="showPercentages = !showPercentages"
                                 class="my-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -74,37 +74,38 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                     for i, match := range matches {
                         <tr class={templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-800"}>
                             <td class={
-                                "sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600",
+                                "sticky left-0 z-10 px-0.5 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[140px]",
                                 templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                             }>
-                            <div class="flex justify-center">
-                                <div class="flex items-center">
-                                    <img src={ match.HomeLogo } alt={ match.HomeCode } class="h-6 w-6 object-contain"/>
-                                    <span class="text-sm  mr-1">{ match.HomeCode }</span>
+                                <div class="flex justify-center">
+                                    <div class="flex items-center">
+                                        <img src={ match.HomeLogo } alt={ match.HomeCode } class="h-6 w-6 object-contain"/>
+                                        <span class="text-sm mx-1">{ match.HomeCode }</span>
+                                    </div>
+                                    -
+                                    <div class="flex items-center">
+                                        <span class="text-sm mx-1">{ match.AwayCode }</span>
+                                        <img src={ match.AwayLogo } alt={ match.AwayCode } class="h-6 w-6 object-contain"/>
+                                    </div>
                                 </div>
-                                <div class="flex items-center">
-                                    <span class="text-sm  ml-1">{ match.AwayCode }</span>
-                                    <img src={ match.AwayLogo } alt={ match.AwayCode } class="h-6 w-6 object-contain"/>
-                                </div>
-                            </div>
                                 if i != 14 {
-                                    <div x-show="showPercentages" class="py-0">
+                                    <div x-show="showPercentages" class="py-0 flex justify-center">
                                         <div class={
-                                            "inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
+                                            "inline-flex items-center rounded-full px-1 py-0.5 mr-0.5 my-0.5 text-xs font-medium text-white",
                                             percentPredColor(match.HomePercent.Int32, match.DrawPercent.Int32, match.AwayPercent.Int32),
                                         }>
                                             <span class="mr-1">1:</span>
                                             <span class="font-bold">{ fmt.Sprintf("%d%%", match.HomePercent.Int32) }</span>
                                         </div>
                                         <div class={
-                                            "inline-flex items-center rounded-full px-1 py-1 mr-1 my-1 text-xs font-medium text-white",
+                                            "inline-flex items-center rounded-full px-1 py-0.5 mr-0.5 my-0.5 text-xs font-medium text-white",
                                             percentPredColor(match.DrawPercent.Int32, match.HomePercent.Int32, match.AwayPercent.Int32),
                                         }>
                                             <span class="mr-1">X:</span>
                                             <span class="font-bold">{ fmt.Sprintf("%d%%", match.DrawPercent.Int32) }</span>
                                         </div>
                                         <div class={
-                                            "inline-flex items-center rounded-full px-1 py-1 my-1 text-xs font-medium text-white",
+                                            "inline-flex items-center rounded-full px-1 py-0.5 mr-0.5 my-0.5 text-xs font-medium text-white",
                                             percentPredColor(match.AwayPercent.Int32, match.DrawPercent.Int32, match.HomePercent.Int32),
                                         }>
                                             <span class="mr-1">2:</span>
@@ -203,7 +204,9 @@ func shouldBlinkMatch(kickoffTime pgtype.Timestamp, predictions []db.UserPredict
     }
 
     now := time.Now().UTC().Add(1 * time.Hour)
-    if !now.After(kickoffTime.Time) {
+    // This is to take into account delayed matches
+    TwoHAfterKickO := kickoffTime.Time.Add(3 * time.Hour)
+    if !now.After(kickoffTime.Time) || now.After(TwoHAfterKickO) {
         return false
     }
 

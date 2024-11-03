@@ -38,7 +38,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\" x-data=\"{ showPercentages: false }\"><div class=\"inline-block min-w-full rounded-lg overflow-hidden shadow-lg\"><style>\n                @keyframes blink {\n                    0% { background-color: #1F2937; }\n                    50% { background-color: #e9d6ff; }\n                    100% { background-color: #1F2937; }\n                }\n                .blink {\n                    animation: blink 7s linear infinite;\n                }\n                .elige8-indicator {\n                    position: relative;\n                }\n                .elige8-indicator::after {\n                    content: '';\n                    position: absolute;\n                    top: 0;\n                    right: 0;\n                    width: 0;\n                    height: 0;\n                    border-style: solid;\n                    border-width: 0 8px 8px 0;\n                    border-color: transparent #3B82F6 transparent transparent;\n                }\n            </style><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\" x-data=\"{ showPercentages: false }\"><div class=\"inline-block min-w-full rounded-lg shadow-lg\"><style>\n                @keyframes blink {\n                    0% { background-color: #1F2937; }\n                    50% { background-color: #e9d6ff; }\n                    100% { background-color: #1F2937; }\n                }\n                .blink {\n                    animation: blink 7s linear infinite;\n                }\n                .elige8-indicator {\n                    position: relative;\n                }\n                .elige8-indicator::after {\n                    content: '';\n                    position: absolute;\n                    top: 0;\n                    right: 0;\n                    width: 0;\n                    height: 0;\n                    border-style: solid;\n                    border-width: 0 8px 8px 0;\n                    border-color: transparent #3B82F6 transparent transparent;\n                }\n            </style><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[140px]\">Partidos</th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -61,7 +61,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tr><tr><th class=\"border-b border-r border-gray-600\"><button @click=\"showPercentages = !showPercentages\" class=\"my-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600\" x-text=\"showPercentages ? &#39;Esconder %&#39; : &#39;Ver %&#39;\"></button></th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tr><tr><th class=\"sticky left-0 z-10 border-b border-r border-gray-600 bg-gray-800\"><button @click=\"showPercentages = !showPercentages\" class=\"my-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600\" x-text=\"showPercentages ? &#39;Esconder %&#39; : &#39;Ver %&#39;\"></button></th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -170,7 +170,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var11 = []any{
-				"sticky left-0 z-10 py-2 px-2 border-b border-r border-gray-600",
+				"sticky left-0 z-10 px-0.5 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[140px]",
 				templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var11...)
 			if templ_7745c5c3_Err != nil {
@@ -196,7 +196,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeLogo)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 82, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 82, Col: 65}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -209,33 +209,33 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 82, Col: 84}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 82, Col: 88}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\"> <span class=\"text-sm  mr-1\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\"> <span class=\"text-sm mx-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var15 string
 			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 83, Col: 80}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 83, Col: 83}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div><div class=\"flex items-center\"><span class=\"text-sm  ml-1\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div>-<div class=\"flex items-center\"><span class=\"text-sm mx-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var16 string
 			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 86, Col: 80}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 87, Col: 83}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 			if templ_7745c5c3_Err != nil {
@@ -248,7 +248,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			var templ_7745c5c3_Var17 string
 			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayLogo)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 87, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 88, Col: 65}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 			if templ_7745c5c3_Err != nil {
@@ -261,7 +261,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			var templ_7745c5c3_Var18 string
 			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 87, Col: 84}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 88, Col: 88}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 			if templ_7745c5c3_Err != nil {
@@ -272,12 +272,12 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 				return templ_7745c5c3_Err
 			}
 			if i != 14 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-show=\"showPercentages\" class=\"py-0\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-show=\"showPercentages\" class=\"py-0 flex justify-center\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var19 = []any{
-					"inline-flex items-center rounded-full px-1 py-1 mr-1 text-xs font-medium text-white",
+					"inline-flex items-center rounded-full px-1 py-0.5 mr-0.5 my-0.5 text-xs font-medium text-white",
 					percentPredColor(match.HomePercent.Int32, match.DrawPercent.Int32, match.AwayPercent.Int32),
 				}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var19...)
@@ -304,7 +304,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 				var templ_7745c5c3_Var21 string
 				templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d%%", match.HomePercent.Int32))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 97, Col: 114}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 98, Col: 114}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 				if templ_7745c5c3_Err != nil {
@@ -315,7 +315,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var22 = []any{
-					"inline-flex items-center rounded-full px-1 py-1 mr-1 my-1 text-xs font-medium text-white",
+					"inline-flex items-center rounded-full px-1 py-0.5 mr-0.5 my-0.5 text-xs font-medium text-white",
 					percentPredColor(match.DrawPercent.Int32, match.HomePercent.Int32, match.AwayPercent.Int32),
 				}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var22...)
@@ -342,7 +342,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 				var templ_7745c5c3_Var24 string
 				templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d%%", match.DrawPercent.Int32))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 104, Col: 114}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 105, Col: 114}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 				if templ_7745c5c3_Err != nil {
@@ -353,7 +353,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var25 = []any{
-					"inline-flex items-center rounded-full px-1 py-1 my-1 text-xs font-medium text-white",
+					"inline-flex items-center rounded-full px-1 py-0.5 mr-0.5 my-0.5 text-xs font-medium text-white",
 					percentPredColor(match.AwayPercent.Int32, match.DrawPercent.Int32, match.HomePercent.Int32),
 				}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var25...)
@@ -380,7 +380,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 				var templ_7745c5c3_Var27 string
 				templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d%%", match.AwayPercent.Int32))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 111, Col: 114}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 112, Col: 114}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 				if templ_7745c5c3_Err != nil {
@@ -428,7 +428,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 					var templ_7745c5c3_Var30 string
 					templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(pred.Predictions[i][0])
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 123, Col: 63}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 124, Col: 63}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 					if templ_7745c5c3_Err != nil {
@@ -471,7 +471,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 					var templ_7745c5c3_Var33 string
 					templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(pred.Predictions[i][0])
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 132, Col: 59}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 133, Col: 59}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 					if templ_7745c5c3_Err != nil {
@@ -509,7 +509,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 					var templ_7745c5c3_Var36 string
 					templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(pred.Predictions[i][1])
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 139, Col: 59}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/tables/matchday_predictions.templ`, Line: 140, Col: 59}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 					if templ_7745c5c3_Err != nil {
@@ -588,7 +588,9 @@ func shouldBlinkMatch(kickoffTime pgtype.Timestamp, predictions []db.UserPredict
 	}
 
 	now := time.Now().UTC().Add(1 * time.Hour)
-	if !now.After(kickoffTime.Time) {
+	// This is to take into account delayed matches
+	TwoHAfterKickO := kickoffTime.Time.Add(3 * time.Hour)
+	if !now.After(kickoffTime.Time) || now.After(TwoHAfterKickO) {
 		return false
 	}
 
