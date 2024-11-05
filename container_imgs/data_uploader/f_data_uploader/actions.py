@@ -45,7 +45,7 @@ def run_data_uploader():
         upload_matchday(next_matchday)
         logger.info("Finished uploading matchdays")
 
-    if next_matchday is not None:
+    if next_matchday is not None and matchday_exists(next_matchday):
         logger.info("Fetching predictions statistics...")
         upload_predictions_stats(next_matchday)
         logger.info("Finished fetching predictions statistics")
