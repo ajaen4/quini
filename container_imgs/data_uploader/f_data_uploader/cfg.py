@@ -29,7 +29,7 @@ DB_PARAMS = {
 }
 conn: connection = psycopg2.connect(**DB_PARAMS)
 
-QUINIELA_URL = os.environ["QUINIELA_URL"]
+LOTERIAS_URL = os.environ["LOTERIAS_URL"]
 LOTERO_URL = os.environ["LOTERO_URL"]
 LOTERO_TOKEN = secrets["LOTERO_TOKEN"]
 FOOT_API_URL = os.environ["FOOT_API_URL"]

@@ -19,7 +19,7 @@ def reupload_matchday(matchday_date: str):
         "fecha_sorteo": matchday_date,
     }
     response = requests.get(
-        f"{cfg.QUINIELA_URL}/fechav3",
+        f"{cfg.LOTERIAS_URL}/fechav3",
         params=params,
     )
     response.raise_for_status()

@@ -24,7 +24,7 @@ def reevaluate_results(matchday: dict):
     }
 
     response = requests.get(
-        f"{cfg.QUINIELA_URL}/buscadorSorteos", params=params
+        f"{cfg.LOTERIAS_URL}/buscadorSorteos", params=params
     )
     response.raise_for_status()
     quinielas = response.json()

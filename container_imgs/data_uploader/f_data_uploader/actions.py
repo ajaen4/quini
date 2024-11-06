@@ -3,6 +3,7 @@ from datetime import (
     datetime,
     timedelta,
 )
+import pytz
 
 from f_data_uploader.sql import (
     insert_matchday,
@@ -19,11 +20,12 @@ from f_data_uploader.sql import (
     insert_prices,
     update_predictions,
     insert_predictions_stats,
+    get_matches,
 )
-from f_data_uploader.football_api import add_match_ids
+from f_data_uploader.football_api import add_match_ids, get_matches_status
 from f_data_uploader.results import evaluate_results
 from f_data_uploader.logger import logger
-from f_data_uploader.strings import team_name_to_loterias_id
+from f_data_uploader.strings import get_loterias_id
 import f_data_uploader.cfg as cfg
 
 
@@ -76,7 +78,7 @@ def get_next_matchday() -> dict:
     }
 
     response = requests.get(
-        f"{cfg.QUINIELA_URL}/proximosv3",
+        f"{cfg.LOTERIAS_URL}/proximosv3",
         params=params,
     )
     response.raise_for_status()
@@ -93,7 +95,7 @@ def get_next_matchday() -> dict:
         "fecha_sorteo": matchday_date,
     }
     response = requests.get(
-        f"{cfg.QUINIELA_URL}/fechav3",
+        f"{cfg.LOTERIAS_URL}/fechav3",
         params=params,
     )
     response.raise_for_status()
@@ -186,40 +188,19 @@ def upload_predictions():
 
 
 def upload_is_correct():
-    tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y%m%d")
-    params = {
-        "game_id": "LAQU",
-        "fechaInicioInclusiva": "20240901",
-        "fechaFinInclusiva": tomorrow,
-    }
-
-    response = requests.get(
-        f"{cfg.QUINIELA_URL}/buscadorSorteos", params=params
-    )
-    response.raise_for_status()
-    quinielas = response.json()
-
-    matchdays = [*get_matchdays("IN_PROGRESS")]
+    matchdays = [*get_matchdays("IN_PROGRESS", 1)]
     if not matchdays:
         logger.info("No matchdays in progress")
         return
 
     logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
-        matchday_quinielas = [
-            quiniela
-            for quiniela in quinielas
-            if int(quiniela["jornada"]) == matchday["matchday"]
-        ]
+        matches = get_matches(matchday["matchday"])
+        matches_status = get_matches_status(matchday["matchday"], matches)
 
-        if len(matchday_quinielas) == 0:
-            logger.info("No results published yet, skipping is_correct upload")
-            return
-
-        quiniela = matchday_quinielas[0]
         match_results = list()
-        for match_num, match in enumerate(quiniela["partidos"]):
-            if match["signo"] is None:
+        for match_num, status in enumerate(matches_status):
+            if status is None:
                 continue
 
             match_results.append(
@@ -227,7 +208,7 @@ def upload_is_correct():
                     "season": "2024-2025",
                     "matchday": matchday["matchday"],
                     "match_num": match_num,
-                    "result": match["signo"].strip(),
+                    "result": status,
                 }
             )
 
@@ -235,19 +216,6 @@ def upload_is_correct():
 
 
 def upload_results():
-    tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y%m%d")
-    params = {
-        "game_id": "LAQU",
-        "fechaInicioInclusiva": "20240901",
-        "fechaFinInclusiva": tomorrow,
-    }
-
-    response = requests.get(
-        f"{cfg.QUINIELA_URL}/buscadorSorteos", params=params
-    )
-    response.raise_for_status()
-    quinielas = response.json()
-
     matchdays = [*get_matchdays("IN_PROGRESS"), *get_matchdays("NOT_STARTED")]
     if not matchdays:
         logger.info("No matchdays in progress")
@@ -255,39 +223,33 @@ def upload_results():
 
     logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
-        matchday_quinielas = [
-            quiniela
-            for quiniela in quinielas
-            if int(quiniela["jornada"]) == matchday["matchday"]
-        ]
 
-        if len(matchday_quinielas) == 0:
-            logger.info(
-                "No results published yet, skipping results evaluation"
-            )
-            return
+        madrid_tz = pytz.timezone('Europe/Madrid')
+        now = datetime.now(madrid_tz)
+        if matchday["start_datetime"] > now:
+            continue
 
-        quiniela = matchday_quinielas[0]
         matchday_points = get_matchday_points(matchday)
         user_results = evaluate_results(matchday, matchday_points)
         insert_results(user_results)
 
-        if quiniela["combinacion"]:
+        matches = get_matches(matchday["matchday"])
+        matches_status = get_matches_status(matchday["matchday"], matches)
+
+        if not any(x is None for x in matches_status):
             update_matchday_status(matchday, "FINISHED")
             logger.info(f"Updated matchday {matchday['matchday']} as finished")
-        else:
-            update_matchday_status(matchday, "IN_PROGRESS")
 
 
 def upload_teams(matches: list[dict]):
     teams = list()
     for match in matches:
         home_team = (
-            team_name_to_loterias_id(match["local"]),
+            get_loterias_id(match["local"]),
             match["local"],
         )
         away_team = (
-            team_name_to_loterias_id(match["visitante"]),
+            get_loterias_id(match["visitante"]),
             match["visitante"],
         )
 
@@ -310,9 +272,7 @@ def upload_prices():
     response.raise_for_status()
     results = response.json()["boletos"]
 
-    matchdays = [
-        matchday["matchday"] for matchday in get_matchdays("FINISHED")
-    ]
+    matchdays = [get_matchdays("FINISHED", limit=1)[0]["matchday"]]
     prices = list()
     for result in results:
         matchday = int(result["sorteo"]["numJornada"])
@@ -354,7 +314,7 @@ def upload_predictions_stats(matchday: dict):
         "temporada": season,
     }
     response = requests.get(
-        f"{cfg.QUINIELA_URL}/estadisticas",
+        f"{cfg.LOTERIAS_URL}/estadisticas",
         params=params,
     )
     response.raise_for_status()
