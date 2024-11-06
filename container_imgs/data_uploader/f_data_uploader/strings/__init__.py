@@ -1,1 +1,1 @@
-from .strings import team_name_to_loterias_id
+from .strings import get_loterias_id
