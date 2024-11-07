@@ -224,9 +224,9 @@ def upload_results():
     logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
 
-        madrid_tz = pytz.timezone('Europe/Madrid')
+        madrid_tz = pytz.timezone("Europe/Madrid")
         now = datetime.now(madrid_tz)
-        if matchday["start_datetime"] > now:
+        if pytz.UTC.localize(matchday["start_datetime"]) > now:
             continue
 
         matchday_points = get_matchday_points(matchday)
