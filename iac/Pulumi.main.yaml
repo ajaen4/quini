@@ -6,7 +6,7 @@ config:
         dockerfile: container_imgs/data_uploader/Dockerfile
         context: container_imgs/data_uploader/
       build_version: 0.0.30 # data_uploader version
-      cron_expression: "*/5 13-23 * * ? *"
+      cron_expression: "cron(*/5 13-23 * * ? *)"
       env_vars:
       - name: LOTERIAS_URL
         value: https://www.loteriasyapuestas.es/servicios
