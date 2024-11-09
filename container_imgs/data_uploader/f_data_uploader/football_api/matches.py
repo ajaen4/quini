@@ -65,7 +65,7 @@ def get_matches_status(matchday: int, matches: list[str]):
             fixtures_sign.append(None)
             continue
 
-        if fixture["goals"]["home"] is None:
+        if fixture["status"]["short"] != "FT":
             fixtures_sign.append(None)
             continue
 

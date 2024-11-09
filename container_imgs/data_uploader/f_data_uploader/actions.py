@@ -1,9 +1,8 @@
 import requests
 from datetime import (
     datetime,
-    timedelta,
 )
-import pytz
+from zoneinfo import ZoneInfo
 
 from f_data_uploader.sql import (
     insert_matchday,
@@ -101,9 +100,12 @@ def get_next_matchday() -> dict:
     response.raise_for_status()
 
     complete_matchday = response.json()[0]
+    start_datetime = datetime.strptime(
+        next_matchday["cierre"], "%Y-%m-%d %H:%M:%S"
+    ).replace(tzinfo=ZoneInfo("Europe/Madrid"))
     return {
         **complete_matchday,
-        "start_datetime": next_matchday["cierre"],
+        "start_datetime": start_datetime,
     }
 
 
@@ -188,7 +190,7 @@ def upload_predictions():
 
 
 def upload_is_correct():
-    matchdays = [*get_matchdays("IN_PROGRESS", 1)]
+    matchdays = [*get_matchdays("IN_PROGRESS"), *get_matchdays("NOT_STARTED")]
     if not matchdays:
         logger.info("No matchdays in progress")
         return
@@ -223,10 +225,8 @@ def upload_results():
 
     logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
-
-        madrid_tz = pytz.timezone("Europe/Madrid")
-        now = datetime.now(madrid_tz)
-        if pytz.UTC.localize(matchday["start_datetime"]) > now:
+        now = datetime.now(tz=ZoneInfo("UTC"))
+        if matchday["start_datetime"] > now:
             continue
 
         matchday_points = get_matchday_points(matchday)
@@ -236,9 +236,15 @@ def upload_results():
         matches = get_matches(matchday["matchday"])
         matches_status = get_matches_status(matchday["matchday"], matches)
 
-        if not any(x is None for x in matches_status):
+        if matchday["status"] == "IN_PROGRESS" and not any(
+            x is None for x in matches_status
+        ):
             update_matchday_status(matchday, "FINISHED")
             logger.info(f"Updated matchday {matchday['matchday']} as finished")
+        elif matchday["status"] == "NOT_STARTED" and any(
+            x is not None for x in matches_status
+        ):
+            update_matchday_status(matchday, "IN_PROGRESS")
 
 
 def upload_teams(matches: list[dict]):
