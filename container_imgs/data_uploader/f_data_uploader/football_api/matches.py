@@ -57,8 +57,8 @@ def get_matches_status(matchday: int, matches: list[str]):
         fixture = fixtures_score[match["id"]]
 
         # Match postponed and loterias has results
-        if fixture["status"]["short"] == "PST" and quiniela is not None:
-            fixtures_sign.append(quiniela[match["match_num"]].strip())
+        if fixture["status"]["short"] == "PST" and quiniela[match["match_num"]]["signo"]:
+            fixtures_sign.append(quiniela[match["match_num"]]["signo"].strip())
             continue
         # Match postponed but loterias with no results yet
         elif fixture["status"]["short"] == "PST":
