@@ -45,3 +45,9 @@ migrations-status: setup
 
 undo-migration: setup
 	@goose -dir $(MIGRATION_DIR) $(DB_DRIVER) "$(DB_STRING)" down
+
+build-image:
+	docker build -f Dockerfile -t app ../../
+
+run-image:
+	docker run -p 8080:8080 --env-file ../../.env -t app "./main"
