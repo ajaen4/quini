@@ -1,7 +1,6 @@
 package pages
 
 import (
-	"app/internal/components/shared/graphs"
 	"app/internal/components/layout"
 )
 
@@ -9,19 +8,15 @@ templ Home() {
 	@layout.Layout("Bavariada") {
 		<div class="space-y-8">
 			<section>
-				<h2 class="text-2xl font-semibold mb-4">Resultados</h2>
-				@graphs.GraphContainer()
+				<h2 class="text-2xl font-semibold mb-4">Puntos totales</h2>
+				<div hx-get="/components/tables/total-points" hx-trigger="load">
+					<p>Cargando puntos totales...</p>
+				</div>
 			</section>
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Jornada actual</h2>
 				<div hx-get="/components/tables/matchday-predictions" hx-trigger="load">
 					<p>Cargando jornada actual...</p>
-				</div>
-			</section>
-			<section>
-				<h2 class="text-2xl font-semibold mb-4">Puntos totales</h2>
-				<div hx-get="/components/tables/total-points" hx-trigger="load">
-					<p>Cargando puntos totales...</p>
 				</div>
 			</section>
 			<section>

@@ -10,7 +10,6 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"app/internal/components/layout"
-	"app/internal/components/shared/graphs"
 )
 
 func Home() templ.Component {
@@ -46,15 +45,7 @@ func Home() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"space-y-8\"><section><h2 class=\"text-2xl font-semibold mb-4\">Resultados</h2>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = graphs.GraphContainer().Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</section><section><h2 class=\"text-2xl font-semibold mb-4\">Jornada actual</h2><div hx-get=\"/components/tables/matchday-predictions\" hx-trigger=\"load\"><p>Cargando jornada actual...</p></div></section><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos totales</h2><div hx-get=\"/components/tables/total-points\" hx-trigger=\"load\"><p>Cargando puntos totales...</p></div></section><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos por jornada</h2><div hx-get=\"/components/tables/points-per-matchday\" hx-trigger=\"load\"><p>Cargando puntos por jornada...</p></div></section></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"space-y-8\"><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos totales</h2><div hx-get=\"/components/tables/total-points\" hx-trigger=\"load\"><p>Cargando puntos totales...</p></div></section><section><h2 class=\"text-2xl font-semibold mb-4\">Jornada actual</h2><div hx-get=\"/components/tables/matchday-predictions\" hx-trigger=\"load\"><p>Cargando jornada actual...</p></div></section><section><h2 class=\"text-2xl font-semibold mb-4\">Puntos por jornada</h2><div hx-get=\"/components/tables/points-per-matchday\" hx-trigger=\"load\"><p>Cargando puntos por jornada...</p></div></section></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
