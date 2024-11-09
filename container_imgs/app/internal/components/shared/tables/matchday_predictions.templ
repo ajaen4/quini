@@ -203,7 +203,7 @@ func shouldBlinkMatch(kickoffTime pgtype.Timestamp, predictions []db.UserPredict
         return false
     }
 
-    madridLoc, _ := time.LoadLocation("Europe/Madrid")
+    madridLoc, _ := time.LoadLocation("CET")
     now := time.Now().In(madridLoc)
     // This is to take into account delayed matches
     ThreeHAfterKickO := kickoffTime.Time.Add(3 * time.Hour)
