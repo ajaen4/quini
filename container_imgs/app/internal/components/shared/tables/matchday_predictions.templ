@@ -78,14 +78,46 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                 templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                             }>
                                 <div class="flex justify-center">
-                                    <div class="flex items-center">
-                                        <img src={ match.HomeLogo } alt={ match.HomeCode } class="h-6 w-6 object-contain"/>
+                                    <div
+                                        class="flex items-center"
+                                        x-data="{
+                                        retryCount: 0,
+                                        maxRetries: 3
+                                        }"
+                                    >
+                                        <img
+                                            src={ match.HomeLogo }
+                                            alt={ match.HomeCode }
+                                            class="h-6 w-6 object-contain"
+                                            @error="if(retryCount < maxRetries) {
+                                                retryCount++;
+                                                setTimeout(() => {
+                                                    $el.src += '?' + Date.now()
+                                                }, 50 * Math.pow(2, retryCount))
+                                            }"
+                                        />
                                         <span class="text-sm mx-1">{ match.HomeCode }</span>
                                     </div>
                                     -
-                                    <div class="flex items-center">
+                                    <div
+                                        class="flex items-center"
+                                        x-data="{
+                                        retryCount: 0,
+                                        maxRetries: 3
+                                        }"
+                                    >
                                         <span class="text-sm mx-1">{ match.AwayCode }</span>
-                                        <img src={ match.AwayLogo } alt={ match.AwayCode } class="h-6 w-6 object-contain"/>
+                                        <img
+                                            src={ match.AwayLogo }
+                                            alt={ match.AwayCode }
+                                            class="h-6 w-6 object-contain"
+                                            @error="if(retryCount < maxRetries) {
+                                                retryCount++;
+                                                setTimeout(() => {
+                                                    $el.src += '?' + Date.now()
+                                                }, 50 * Math.pow(2, retryCount))
+                                            }"
+                                        />
                                     </div>
                                 </div>
                                 if i != 14 {
