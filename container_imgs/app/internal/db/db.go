@@ -59,15 +59,12 @@ func New() Service {
 		sslmode = "require"
 		sm := aws_lib.NewSSM("")
 		param = sm.GetParam("/bavariada/secrets", true)
-		log.Printf("Parameter: %s", param)
 		db_name = param["DB_NAME"]
 		password = param["DB_PASSWORD"]
 		username = param["DB_USERNAME"]
 		port = param["DB_PORT"]
 		host = param["DB_HOST"]
 	}
-
-	log.Println(db_name, password, username, port, host)
 
 	connStr := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=%s",
@@ -132,9 +129,13 @@ func (db *db) Close() error {
 }
 
 func (db *db) Query(query string, args ...interface{}) (pgx.Rows, error) {
-	return db.pool.Query(context.Background(), query, args...)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	return db.pool.Query(ctx, query, args...)
 }
 
 func (db *db) QueryRow(query string, args ...interface{}) pgx.Row {
-	return db.pool.QueryRow(context.Background(), query, args...)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	return db.pool.QueryRow(ctx, query, args...)
 }

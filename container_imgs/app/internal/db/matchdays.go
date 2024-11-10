@@ -38,6 +38,7 @@ func GetMatchdays() ([]int, error) {
 	if err != nil {
 		return []int{}, err
 	}
+	defer rows.Close()
 
 	lastMatchdays := []int{}
 	for rows.Next() {

@@ -46,6 +46,7 @@ func GetMatches(matchday int32) ([]Match, error) {
 	if err != nil {
 		return []Match{}, err
 	}
+	defer rows.Close()
 
 	matches := []Match{}
 	for rows.Next() {

@@ -33,6 +33,7 @@ func GetUserPoints() ([]UserCumPoints, error) {
 	if err != nil {
 		return []UserCumPoints{}, err
 	}
+	defer rows.Close()
 
 	userPoints := []UserCumPoints{}
 	for rows.Next() {
@@ -74,6 +75,7 @@ func GetTotalResults() ([]UserTotalResults, error) {
 	if err != nil {
 		return []UserTotalResults{}, err
 	}
+	defer rows.Close()
 
 	userResults := []UserTotalResults{}
 	for rows.Next() {
@@ -112,6 +114,7 @@ func GetResultsPerMatchday() ([]UserMatchdayResults, error) {
 	if err != nil {
 		return []UserMatchdayResults{}, err
 	}
+	defer rows.Close()
 
 	userResults := []UserMatchdayResults{}
 	for rows.Next() {
