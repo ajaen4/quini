@@ -189,7 +189,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"flex justify-center\"><div class=\"flex items-center\" x-data=\"{ \n                                        retryCount: 0,\n                                        maxRetries: 3 \n                                        }\"><img src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"flex justify-center\"><div class=\"flex items-center\" x-data=\"{\n                                        retryCount: 0,\n                                        maxRetries: 3\n                                        }\"><img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -215,7 +215,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) { \n                                                retryCount++; \n                                                setTimeout(() =&gt; { \n                                                    $el.src += &#39;?&#39; + Date.now() \n                                                }, 50 * Math.pow(2, retryCount))\n                                            }\"> <span class=\"text-sm mx-1\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) {\n                                                retryCount++;\n                                                setTimeout(() =&gt; {\n                                                    $el.src += &#39;?&#39; + Date.now()\n                                                }, 50 * Math.pow(2, retryCount))\n                                            }\"> <span class=\"text-sm mx-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -228,7 +228,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div>-<div class=\"flex items-center\" x-data=\"{ \n                                        retryCount: 0,\n                                        maxRetries: 3\n                                        }\"><span class=\"text-sm mx-1\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div>-<div class=\"flex items-center\" x-data=\"{\n                                        retryCount: 0,\n                                        maxRetries: 3\n                                        }\"><span class=\"text-sm mx-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -267,7 +267,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) t
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) { \n                                                retryCount++; \n                                                setTimeout(() =&gt; { \n                                                    $el.src += &#39;?&#39; + Date.now() \n                                                }, 50 * Math.pow(2, retryCount))\n                                            }\"></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) {\n                                                retryCount++;\n                                                setTimeout(() =&gt; {\n                                                    $el.src += &#39;?&#39; + Date.now()\n                                                }, 50 * Math.pow(2, retryCount))\n                                            }\"></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
