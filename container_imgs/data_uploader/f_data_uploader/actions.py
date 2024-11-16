@@ -20,8 +20,10 @@ from f_data_uploader.sql import (
     update_predictions,
     insert_predictions_stats,
     get_matches,
+    update_matches,
 )
 from f_data_uploader.football_api import add_match_ids, get_matches_status
+from f_data_uploader.loterias_api import get_quiniela
 from f_data_uploader.results import evaluate_results
 from f_data_uploader.logger import logger
 from f_data_uploader.strings import get_loterias_id
@@ -50,6 +52,10 @@ def run_data_uploader():
         logger.info("Fetching predictions statistics...")
         upload_predictions_stats(next_matchday)
         logger.info("Finished fetching predictions statistics")
+
+    logger.info("Updating matches status...")
+    update_matches_status()
+    logger.info("Updated matches status")
 
     logger.info("Uploading predictions...")
     upload_predictions()
@@ -189,6 +195,14 @@ def upload_predictions():
     insert_predictions(predictions_db)
 
 
+def update_matches_status():
+    matchdays = [*get_matchdays("IN_PROGRESS"), *get_matchdays("NOT_STARTED")]
+    for matchday in matchdays:
+        matches = get_matches(matchday["matchday"])
+        matches_status = get_matches_status(matches)
+        update_matches(matches_status)
+
+
 def upload_is_correct():
     matchdays = [*get_matchdays("IN_PROGRESS"), *get_matchdays("NOT_STARTED")]
     if not matchdays:
@@ -198,23 +212,56 @@ def upload_is_correct():
     logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
         matches = get_matches(matchday["matchday"])
-        matches_status = get_matches_status(matchday["matchday"], matches)
+        quiniela = get_quiniela(matchday["matchday"])
 
+        matches_status = evaluate_matches(quiniela, matches)
         match_results = list()
-        for match_num, status in enumerate(matches_status):
-            if status is None:
-                continue
-
+        for match_status in matches_status:
             match_results.append(
                 {
                     "season": "2024-2025",
                     "matchday": matchday["matchday"],
-                    "match_num": match_num,
-                    "result": status,
+                    "match_num": match_status["match_num"],
+                    "result": match_status["sign"],
                 }
             )
 
         update_predictions(match_results)
+
+
+def evaluate_matches(quiniela: dict, matches: dict):
+    fixtures_sign = list()
+    for match in matches:
+        # Match postponed and loterias has results
+        if match["status"] == "PST" and quiniela[match["match_num"]]["signo"]:
+            fixtures_sign.append(
+                {
+                    "match_num": match["match_num"],
+                    "sign": quiniela[match["match_num"]]["signo"].strip(),
+                }
+            )
+            continue
+        # Match postponed but loterias with no results yet
+        elif match["status"] == "PST":
+            continue
+
+        if match["status"] != "FT":
+            continue
+
+        if match["home_goals"] > match["away_goals"]:
+            fixtures_sign.append(
+                {"match_num": match["match_num"], "sign": "1"}
+            )
+        elif match["home_goals"] == match["away_goals"]:
+            fixtures_sign.append(
+                {"match_num": match["match_num"], "sign": "X"}
+            )
+        else:
+            fixtures_sign.append(
+                {"match_num": match["match_num"], "sign": "2"}
+            )
+
+    return fixtures_sign
 
 
 def upload_results():
@@ -234,15 +281,16 @@ def upload_results():
         insert_results(user_results)
 
         matches = get_matches(matchday["matchday"])
-        matches_status = get_matches_status(matchday["matchday"], matches)
 
         if matchday["status"] == "IN_PROGRESS" and not any(
-            x is None for x in matches_status
+            match["status"] != "FT" and match["status"] != "PST"
+            for match in matches
         ):
             update_matchday_status(matchday, "FINISHED")
             logger.info(f"Updated matchday {matchday['matchday']} as finished")
         elif matchday["status"] == "NOT_STARTED" and any(
-            x is not None for x in matches_status
+            match["status"] != "NS" and match["status"] != "PST"
+            for match in matches
         ):
             update_matchday_status(matchday, "IN_PROGRESS")
 

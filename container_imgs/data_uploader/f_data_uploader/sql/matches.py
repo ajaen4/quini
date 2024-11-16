@@ -1,6 +1,5 @@
 from datetime import datetime
-
-from psycopg2 import sql
+from zoneinfo import ZoneInfo
 
 from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
@@ -14,7 +13,7 @@ def insert_matches(matchday: dict):
     for match_num, match in enumerate(matchday["partidos"]):
         match_date = datetime.strptime(
             match["fecha"], "%Y/%m/%d %H:%M:%S"
-        ).strftime("%Y-%m-%d %H:%M:%S")
+        ).replace(tzinfo=ZoneInfo("Europe/Madrid"))
 
         values.append(
             (
@@ -22,19 +21,66 @@ def insert_matches(matchday: dict):
                 matchday["temporada"],
                 int(matchday["jornada"]),
                 match_num,
+                match_date,
                 match["home_id"],
                 match["away_id"],
-                match_date,
             )
         )
 
     cur.executemany(
-        sql.SQL(
-            """
-            INSERT INTO bavariada.matches (id, season, matchday, match_num, home_team_id, away_team_id, kickoff_datetime)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """
-        ),
+        """
+        INSERT INTO bavariada.matches (
+            id,
+            status,
+            season,
+            matchday,
+            match_num,
+            kickoff_datetime,
+            home_team_id,
+            away_team_id
+        )
+        VALUES (
+            %s,
+            'NS',
+            %s,
+            %s,
+            %s,
+            %s,
+            %s,
+            %s
+        )
+        """,
+        values,
+    )
+    conn.commit()
+
+    cur.close()
+
+
+def update_matches(matches: list):
+    cur = conn.cursor()
+
+    values = list()
+    for match in matches:
+        values.append(
+            (
+                match["status"],
+                match["home_goals"],
+                match["away_goals"],
+                match["id"],
+            )
+        )
+
+    cur.executemany(
+        """
+        UPDATE bavariada.matches
+        SET
+            status = %s,
+            home_goals = %s,
+            away_goals = %s
+        WHERE
+            id = %s
+        """,
         values,
     )
     conn.commit()
@@ -45,14 +91,12 @@ def insert_matches(matchday: dict):
 def get_matches(matchday: int) -> list[dict]:
     cur = conn.cursor()
     cur.execute(
-        sql.SQL(
-            """
-            SELECT *
-            FROM bavariada.matches m
-            WHERE m.matchday = %s
-            ORDER BY m.match_num
-            """
-        ),
+        """
+        SELECT *
+        FROM bavariada.matches m
+        WHERE m.matchday = %s
+        ORDER BY m.match_num
+        """,
         (matchday,),
     )
 
