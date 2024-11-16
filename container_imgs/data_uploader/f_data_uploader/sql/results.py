@@ -1,4 +1,3 @@
-from psycopg2 import sql
 from psycopg2.extras import execute_values
 
 from f_data_uploader.cfg import conn
@@ -8,16 +7,14 @@ from f_data_uploader.logger import logger
 def insert_results(users_results: list[dict]):
     cur = conn.cursor()
 
-    query = sql.SQL(
-        """
+    query = """
         INSERT INTO bavariada.results (user_id, season, matchday, points, debt_euros)
         VALUES %s
         ON CONFLICT (user_id, season, matchday)
         DO UPDATE SET
             points = EXCLUDED.points,
             debt_euros = EXCLUDED.debt_euros
-        """
-    )
+    """
     values = [
         (
             user_result["user_id"],

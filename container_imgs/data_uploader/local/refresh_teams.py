@@ -1,6 +1,5 @@
 from csv import DictReader
 
-from psycopg2 import sql
 from psycopg2.extras import execute_values
 from dotenv import load_dotenv
 
@@ -16,8 +15,7 @@ def refresh_teams(file_path: str):
 
     cur = conn.cursor()
 
-    query = sql.SQL(
-        """
+    query = """
         INSERT INTO bavariada.teams (
             id,
             name,
@@ -33,8 +31,7 @@ def refresh_teams(file_path: str):
             code = EXCLUDED.code,
             logo_url = EXCLUDED.logo_url,
             league_id = EXCLUDED.league_id
-        """
-    )
+    """
 
     values = [
         (
