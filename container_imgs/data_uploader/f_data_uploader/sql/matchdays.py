@@ -1,5 +1,3 @@
-from psycopg2 import sql
-
 from f_data_uploader.cfg import conn
 from f_data_uploader.logger import logger
 
@@ -8,12 +6,10 @@ def insert_matchday(matchday: dict):
     cur = conn.cursor()
 
     cur.execute(
-        sql.SQL(
-            """
+        """
         INSERT INTO bavariada.matchdays (season, matchday, status, start_datetime)
         VALUES (%s, %s, 'NOT_STARTED', %s)
-        """
-        ),
+        """,
         (
             matchday["temporada"],
             matchday["jornada"],
@@ -28,13 +24,11 @@ def insert_matchday(matchday: dict):
 def matchday_exists(matchday: dict) -> bool:
     cur = conn.cursor()
     cur.execute(
-        sql.SQL(
-            """
-            SELECT matchday FROM bavariada.matchdays
-            WHERE matchday = %s
-            AND season = %s
-            """,
-        ),
+        """
+        SELECT matchday FROM bavariada.matchdays
+        WHERE matchday = %s
+        AND season = %s
+        """,
         (
             matchday["jornada"],
             matchday["temporada"],
@@ -62,7 +56,7 @@ def get_matchdays(status: str, limit: int = None) -> list[dict]:
         """
 
     cur.execute(
-        sql.SQL(query),
+        query,
         (status,),
     )
 
@@ -82,15 +76,12 @@ def update_matchday_status(matchday: dict, status: str):
     cur = conn.cursor()
 
     cur.execute(
-        sql.SQL(
-            """
-            UPDATE bavariada.matchdays
-            SET status = %s
-            WHERE season = %s
-            AND matchday = %s
-            """
-        ),
-        (
+        """
+        UPDATE bavariada.matchdays
+        SET status = %s
+        WHERE season = %s
+        AND matchday = %s
+        """(
             status,
             matchday["season"],
             matchday["matchday"],

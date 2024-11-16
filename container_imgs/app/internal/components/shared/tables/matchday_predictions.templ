@@ -13,13 +13,12 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
     <div class="overflow-x-auto w-full" x-data="{ showPercentages: false }">
         <div class="inline-block min-w-full rounded-lg shadow-lg">
             <style>
-                @keyframes blink {
-                    0% { background-color: #1F2937; }
-                    50% { background-color: #e9d6ff; }
-                    100% { background-color: #1F2937; }
+                @keyframes slow-blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
                 }
-                .blink {
-                    animation: blink 7s linear infinite;
+                .status-blink {
+                    animation: slow-blink 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
                 }
                 .elige8-indicator {
                     position: relative;
@@ -75,49 +74,68 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                         <tr class={templ.KV("bg-gray-750", i%2 == 0), templ.KV("bg-gray-800", i%2 != 0), "hover:bg-gray-800"}>
                             <td class={
                                 "sticky left-0 z-10 px-0.5 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[140px]",
-                                templ.KV("blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                             }>
-                                <div class="flex justify-center">
-                                    <div
-                                        class="flex items-center"
-                                        x-data="{
-                                        retryCount: 0,
-                                        maxRetries: 3
-                                        }"
-                                    >
-                                        <img
-                                            src={ match.HomeLogo }
-                                            alt={ match.HomeCode }
-                                            class="h-6 w-6 object-contain"
-                                            @error="if(retryCount < maxRetries) {
-                                                retryCount++;
-                                                setTimeout(() => {
-                                                    $el.src += '?' + Date.now()
-                                                }, 50 * Math.pow(2, retryCount))
-                                            }"
-                                        />
-                                        <span class="text-sm mx-1">{ match.HomeCode }</span>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="flex flex-col justify-center">
+                                        <div class="text-gray-300 whitespace-nowrap">
+                                            { formatMatchDateTime(match.KickoffDatetime.Time) }
+                                        </div>
+                                        <div class="text-gray-400 flex items-center gap-2 mt-1">
+                                            <div class={
+                                                "h-2 w-2 rounded-full",
+                                                templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
+                                                templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
+                                            }></div>
+                                            if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" {
+                                                <div class="bg-gray-700 rounded px-2 py-0.5 text-xs">
+                                                    <span class="font-medium">{ formatGoals(match.HomeGoals) }</span>
+                                                    <span class="mx-1">-</span>
+                                                    <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
-                                    -
-                                    <div
-                                        class="flex items-center"
-                                        x-data="{
-                                        retryCount: 0,
-                                        maxRetries: 3
-                                        }"
-                                    >
-                                        <span class="text-sm mx-1">{ match.AwayCode }</span>
-                                        <img
-                                            src={ match.AwayLogo }
-                                            alt={ match.AwayCode }
-                                            class="h-6 w-6 object-contain"
-                                            @error="if(retryCount < maxRetries) {
-                                                retryCount++;
-                                                setTimeout(() => {
-                                                    $el.src += '?' + Date.now()
-                                                }, 50 * Math.pow(2, retryCount))
+                                    <div>
+                                        <div
+                                            class="flex items-center"
+                                            x-data="{
+                                            retryCount: 0,
+                                            maxRetries: 3
                                             }"
-                                        />
+                                        >
+                                            <img
+                                                src={ match.HomeLogo }
+                                                alt={ match.HomeCode }
+                                                class="h-6 w-6 object-contain"
+                                                @error="if(retryCount < maxRetries) {
+                                                    retryCount++;
+                                                    setTimeout(() => {
+                                                        $el.src += '?' + Date.now()
+                                                    }, 50 * Math.pow(2, retryCount))
+                                                }"
+                                            />
+                                            <span class="text-sm mx-1">{ match.HomeCode }</span>
+                                        </div>
+                                        <div
+                                            class="flex items-center"
+                                            x-data="{
+                                            retryCount: 0,
+                                            maxRetries: 3
+                                            }"
+                                        >
+                                            <img
+                                                src={ match.AwayLogo }
+                                                alt={ match.AwayCode }
+                                                class="h-6 w-6 object-contain"
+                                                @error="if(retryCount < maxRetries) {
+                                                    retryCount++;
+                                                    setTimeout(() => {
+                                                        $el.src += '?' + Date.now()
+                                                    }, 50 * Math.pow(2, retryCount))
+                                                }"
+                                            />
+                                            <span class="text-sm mx-1">{ match.AwayCode }</span>
+                                        </div>
                                     </div>
                                 </div>
                                 if i != 14 {
@@ -229,27 +247,19 @@ func sumCorrect(isCorrect [][]pgtype.Bool, colNum int) int {
     return total
 }
 
-
-func shouldBlinkMatch(kickoffTime pgtype.Timestamp, predictions []db.UserPredictions, matchIndex int) bool {
-    if !kickoffTime.Valid {
+func shouldBlinkMatch(kickoff pgtype.Timestamp, predictions []db.UserPredictions, matchIndex int) bool {
+    if !kickoff.Valid {
         return false
     }
 
+    kickoffTime := kickoff.Time
     madridLoc, _ := time.LoadLocation("Europe/Madrid")
     now := time.Now().In(madridLoc)
-    madridKickoff := time.Date(
-        kickoffTime.Time.Year(),
-        kickoffTime.Time.Month(),
-        kickoffTime.Time.Day(),
-        kickoffTime.Time.Hour(),
-        kickoffTime.Time.Minute(),
-        kickoffTime.Time.Second(),
-        kickoffTime.Time.Nanosecond(),
-        madridLoc,
-    )
+
+
     // This is to take into account delayed matches
-    ThreeHAfterKickO := madridKickoff.Add(3 * time.Hour)
-    if !now.After(madridKickoff) || now.After(ThreeHAfterKickO) {
+    TwoHAfterKickO := kickoffTime.Add(2 * time.Hour)
+    if !now.After(kickoffTime) || kickoffTime.After(TwoHAfterKickO) {
         return false
     }
 
@@ -260,4 +270,27 @@ func shouldBlinkMatch(kickoffTime pgtype.Timestamp, predictions []db.UserPredict
     }
 
     return true
+}
+
+func formatMatchDateTime(datetime time.Time) string {
+    spanishDayNames := map[string]string{
+        "Mon": "Lun",
+        "Tue": "Mar",
+        "Wed": "Mié",
+        "Thu": "Jue",
+        "Fri": "Vie",
+        "Sat": "Sáb",
+        "Sun": "Dom",
+    }
+
+    engDay := datetime.Format("Mon")
+    spanishDay := spanishDayNames[engDay]
+    return spanishDay + " " + datetime.Format("15:04")
+}
+
+func formatGoals(goals pgtype.Int4) string {
+    if goals.Valid {
+    return strconv.Itoa(int(goals.Int32))
+    }
+    return "0"
 }

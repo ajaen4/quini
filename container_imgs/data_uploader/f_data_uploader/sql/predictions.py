@@ -1,4 +1,3 @@
-from psycopg2 import sql
 from psycopg2.extras import execute_values, execute_batch
 
 from f_data_uploader.cfg import conn
@@ -8,20 +7,18 @@ from f_data_uploader.logger import logger
 def get_matchday_points(matchday: dict) -> list[str]:
     cur = conn.cursor()
     cur.execute(
-        sql.SQL(
-            """
-            WITH col_points as (
-                select user_id, season, matchday, col_num, count(*) as points
-                from bavariada.predictions
-                where season = %s and matchday = %s and is_correct = true
-                group by user_id, season, matchday, col_num
-            )
+        """
+        WITH col_points as (
+            select user_id, season, matchday, col_num, count(*) as points
+            from bavariada.predictions
+            where season = %s and matchday = %s and is_correct = true
+            group by user_id, season, matchday, col_num
+        )
 
-            SELECT user_id, season, matchday, max(points) as points
-            FROM col_points
-            GROUP BY user_id, season, matchday;
-            """
-        ),
+        SELECT user_id, season, matchday, max(points) as points
+        FROM col_points
+        GROUP BY user_id, season, matchday;
+        """,
         (
             matchday["season"],
             matchday["matchday"],
@@ -43,16 +40,14 @@ def get_matchday_points(matchday: dict) -> list[str]:
 def insert_predictions(users_predictions: list[dict]):
     cur = conn.cursor()
 
-    query = sql.SQL(
-        """
+    query = """
         INSERT INTO bavariada.predictions (user_id, season, matchday, col_num, match_num, prediction, is_elige8)
         VALUES %s
         ON CONFLICT (user_id, season, matchday, col_num, match_num)
         DO UPDATE SET
             prediction = EXCLUDED.prediction,
             is_elige8 = EXCLUDED.is_elige8
-        """
-    )
+    """
     values = [
         (
             user_predictions["user_id"],
@@ -89,13 +84,11 @@ def insert_predictions(users_predictions: list[dict]):
 def update_predictions(matches: list[dict]):
     cur = conn.cursor()
 
-    query = sql.SQL(
-        """
+    query = """
         UPDATE bavariada.predictions
         SET is_correct = (prediction = %s)
         WHERE season = %s AND matchday = %s AND match_num = %s
-        """
-    )
+    """
     values = [
         (
             match["result"],

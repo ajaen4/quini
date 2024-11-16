@@ -1,4 +1,3 @@
-from psycopg2 import sql
 from psycopg2.extras import execute_values
 
 from f_data_uploader.cfg import conn
@@ -7,8 +6,7 @@ from f_data_uploader.cfg import conn
 def insert_predictions_stats(season_matchday: dict, predictions_stats: dict):
     cur = conn.cursor()
 
-    query = sql.SQL(
-        """
+    query = """
         INSERT INTO bavariada.predictions_stats (
             season,
             matchday,
@@ -23,8 +21,7 @@ def insert_predictions_stats(season_matchday: dict, predictions_stats: dict):
             home_percent = EXCLUDED.home_percent,
             draw_percent = EXCLUDED.draw_percent,
             away_percent = EXCLUDED.away_percent
-        """
-    )
+    """
     values = [
         (
             season_matchday["season"],
