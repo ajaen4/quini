@@ -17,8 +17,9 @@ func main() {
 	}
 
 	server := server.NewServer(port)
+	defer server.Close()
 	log.Printf("Running server on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil {
-		log.Fatal(err)
+		log.Printf("Server forced to shutdown: %v", err)
 	}
 }

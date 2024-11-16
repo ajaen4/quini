@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -32,13 +33,17 @@ type db struct {
 var (
 	env        = os.Getenv("ENV")
 	dbInstance *db
+	once       sync.Once
 )
 
 func New() Service {
-	if dbInstance != nil {
-		return dbInstance
-	}
+	once.Do(func() {
+		dbInstance = initDB()
+	})
+	return dbInstance
+}
 
+func initDB() *db {
 	var sslmode string
 	var param map[string]string
 	var (
@@ -86,7 +91,7 @@ func New() Service {
 		log.Fatalf("Unable to create connection pool: %v", err)
 	}
 
-	dbInstance = &db{
+	return &db{
 		pool:     pool,
 		db_name:  db_name,
 		password: password,
@@ -94,7 +99,6 @@ func New() Service {
 		port:     port,
 		host:     host,
 	}
-	return dbInstance
 }
 
 func (db *db) Health() map[string]string {
@@ -129,13 +133,9 @@ func (db *db) Close() error {
 }
 
 func (db *db) Query(query string, args ...interface{}) (pgx.Rows, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	return db.pool.Query(ctx, query, args...)
+	return db.pool.Query(context.Background(), query, args...)
 }
 
 func (db *db) QueryRow(query string, args ...interface{}) pgx.Row {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	return db.pool.QueryRow(ctx, query, args...)
+	return db.pool.QueryRow(context.Background(), query, args...)
 }
