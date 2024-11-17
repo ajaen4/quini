@@ -6,6 +6,7 @@ import (
 	"app/internal/components/shared/messages"
 	"app/internal/components/shared/tables"
 	"app/internal/db"
+
 	"net/http"
 	"strconv"
 )
@@ -104,25 +105,40 @@ func resultsPerMatchday(w http.ResponseWriter, r *http.Request) error {
 }
 
 func matchdayPredictions(w http.ResponseWriter, r *http.Request) error {
-	maxMatchday, err := db.GetMatchdayInProg()
+	matchdayInProg, err := db.GetMatchdayInProg()
 	if err != nil {
 		return err
 	}
-	if maxMatchday == 0 {
+	if matchdayInProg == 0 {
 		return Render(w, r, messages.Message("Ninguna jornada en progreso"))
 	}
 
-	matchdayPredictions, err := db.GetUserPredictions(maxMatchday)
+	matchdayPredictions, err := db.GetUserPredictions(matchdayInProg)
 	if err != nil {
 		return err
 	}
 
-	matches, err := db.GetMatches(maxMatchday)
+	users, err := db.GetUsers()
 	if err != nil {
 		return err
 	}
 
-	return Render(w, r, tables.MatchdayPredictions(matches, matchdayPredictions))
+	for userId := range users {
+		if _, ok := matchdayPredictions[userId]; ok {
+			delete(users, userId)
+		}
+	}
+
+	values := []db.UserPredictions{}
+	for _, v := range matchdayPredictions {
+		values = append(values, v)
+	}
+
+	matches, err := db.GetMatches(matchdayInProg)
+	if err != nil {
+		return err
+	}
+	return Render(w, r, tables.MatchdayPredictions(matches, values, users))
 }
 
 func root(w http.ResponseWriter, r *http.Request) error {
