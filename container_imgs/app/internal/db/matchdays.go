@@ -11,11 +11,11 @@ func GetMatchdayInProg() (int32, error) {
 
 	var maxMatchday pgtype.Int4
 	err := db.QueryRow(
-		`SELECT MAX(matchday) as max_matchday
+		`SELECT MIN(matchday) as max_matchday
 		FROM bavariada.matchdays
 		WHERE season = '2024-2025'
 		AND status = 'IN_PROGRESS'
-		OR (status = 'NOT_STARTED' AND start_datetime < (CURRENT_TIMESTAMP + INTERVAL '14 hours'));`,
+		OR status = 'NOT_STARTED';`,
 	).Scan(&maxMatchday)
 	if err != nil {
 		return 0, err

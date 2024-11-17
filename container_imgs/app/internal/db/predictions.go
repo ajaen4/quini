@@ -13,7 +13,7 @@ type UserPredictions struct {
 	IsElige8    [][]pgtype.Bool `json:"is_elige8"`
 }
 
-func GetUserPredictions(maxMatchday int32) ([]UserPredictions, error) {
+func GetUserPredictions(matchday int32) (map[string]UserPredictions, error) {
 	db := New()
 
 	rows, err := db.Query(
@@ -30,6 +30,7 @@ func GetUserPredictions(maxMatchday int32) ([]UserPredictions, error) {
 				GROUP BY user_id, match_num
 			)
 			SELECT
+				users.id as user_id,
 				users.raw_user_meta_data->>'display_name' AS display_name,
 				array_agg(predictions_per_user_match.predictions ORDER BY predictions_per_user_match.match_num) as predictions,
 				array_agg(predictions_per_user_match.is_correct ORDER BY predictions_per_user_match.match_num) as is_correct,
@@ -37,27 +38,29 @@ func GetUserPredictions(maxMatchday int32) ([]UserPredictions, error) {
 			FROM predictions_per_user_match
 			LEFT JOIN auth.users users ON predictions_per_user_match.user_id = users.id
 			GROUP BY users.id, users.raw_user_meta_data->>'display_name';`,
-			maxMatchday,
+			matchday,
 		),
 	)
 	if err != nil {
-		return []UserPredictions{}, err
+		return map[string]UserPredictions{}, err
 	}
 	defer rows.Close()
 
-	usersPredictions := []UserPredictions{}
+	usersPredictions := map[string]UserPredictions{}
 	for rows.Next() {
 		userPredictions := UserPredictions{}
+		var userId string
 		err = rows.Scan(
+			&userId,
 			&userPredictions.UserName,
 			&userPredictions.Predictions,
 			&userPredictions.IsCorrect,
 			&userPredictions.IsElige8,
 		)
 		if err != nil {
-			return []UserPredictions{}, err
+			return map[string]UserPredictions{}, err
 		}
-		usersPredictions = append(usersPredictions, userPredictions)
+		usersPredictions[userId] = userPredictions
 	}
 
 	return usersPredictions, nil

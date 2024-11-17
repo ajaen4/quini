@@ -9,9 +9,11 @@ import (
 type Match struct {
 	Status          string           `json:"status"`
 	HomeCode        string           `json:"home_code"`
+	HomeName        string           `json:"home_name"`
 	HomeLogo        string           `json:"home_logo_url"`
 	HomeGoals       pgtype.Int4      `json:"home_goals"`
 	AwayCode        string           `json:"away_code"`
+	AwayName        string           `json:"away_name"`
 	AwayLogo        string           `json:"away_logo_url"`
 	AwayGoals       pgtype.Int4      `json:"away_goals"`
 	KickoffDatetime pgtype.Timestamp `json:"kickoff_datetime"`
@@ -28,9 +30,11 @@ func GetMatches(matchday int32) ([]Match, error) {
 			`SELECT
 				status,
 				home.code as home_code,
+				home.name as home_name,
 				home.logo_url as home_logo_url,
 				home_goals,
 				away.code as away_code,
+				away.name as away_name,
 				away.logo_url as away_logo_url,
 				away_goals,
 				kickoff_datetime,
@@ -60,9 +64,11 @@ func GetMatches(matchday int32) ([]Match, error) {
 		err = rows.Scan(
 			&match.Status,
 			&match.HomeCode,
+			&match.HomeName,
 			&match.HomeLogo,
 			&match.HomeGoals,
 			&match.AwayCode,
+			&match.AwayName,
 			&match.AwayLogo,
 			&match.AwayGoals,
 			&match.KickoffDatetime,
