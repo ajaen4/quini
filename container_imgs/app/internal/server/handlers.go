@@ -24,6 +24,7 @@ type Series struct {
 
 func graphContents(w http.ResponseWriter, r *http.Request) error {
 	userPoints, err := db.GetUserPoints()
+
 	if err != nil {
 		return err
 	}
