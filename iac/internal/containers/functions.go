@@ -13,7 +13,7 @@ import (
 
 func NewFunctions(cfg *input.Input) {
 	for funcName, funcCfg := range cfg.FunctionsCfg {
-		NewFunction(cfg.Ctx, funcName, funcCfg)
+		NewFunction(cfg.Ctx, cfg.Env, funcName, funcCfg)
 	}
 }
 
@@ -23,10 +23,10 @@ type function struct {
 	cfg  *input.FunctionCfg
 }
 
-func NewFunction(ctx *pulumi.Context, name string, funcCfg *input.FunctionCfg) {
+func NewFunction(ctx *pulumi.Context, env string, name string, funcCfg *input.FunctionCfg) {
 	function := &function{
 		ctx:  ctx,
-		name: name,
+		name: fmt.Sprintf("%s-%s", name, env),
 		cfg:  funcCfg,
 	}
 	function.deploy()

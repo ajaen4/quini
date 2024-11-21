@@ -7,6 +7,7 @@ import (
 
 type Input struct {
 	Ctx          *pulumi.Context
+	Env          string
 	FunctionsCfg map[string]*FunctionCfg
 }
 
@@ -31,6 +32,7 @@ func Load(ctx *pulumi.Context) *Input {
 
 	return &Input{
 		Ctx:          ctx,
+		Env:          cfg.Require("env"),
 		FunctionsCfg: funcsCfg,
 	}
 }

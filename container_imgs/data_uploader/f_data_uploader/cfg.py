@@ -6,12 +6,13 @@ import boto3
 
 from f_data_uploader.aws.ssm import SSM
 
+env = os.environ["ENV"]
 
 session = boto3.Session()
 ssm_client = SSM(session)
 
 secrets = json.loads(
-    ssm_client.get_parameter("/bavariada/secrets", decrypt=True)
+    ssm_client.get_parameter(f"/bavariada/secrets/{env}", decrypt=True)
 )
 
 DB_HOST = secrets["DB_HOST"]

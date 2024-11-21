@@ -6,8 +6,8 @@ on:
       - main
 jobs:
 
-  preview:
-    name: Preview
+  preview-dev:
+    name: Preview dev
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +25,34 @@ jobs:
         with:
           work-dir: ./iac/
           command: preview
-          stack-name: ${{ github.base_ref }}
+          stack-name: dev
+          comment-on-pr: true
+          comment-on-summary: true
+          color: never
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
+  preview-prod:
+    name: Preview prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.21.x"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - uses: pulumi/actions@v4
+        with:
+          work-dir: ./iac/
+          command: preview
+          stack-name: prod
           comment-on-pr: true
           comment-on-summary: true
           color: never

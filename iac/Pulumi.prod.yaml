@@ -1,5 +1,6 @@
 config:
   aws:region: eu-south-2
+  env: prod
   functions:
     data_uploader:
       image:
@@ -8,6 +9,8 @@ config:
       build_version: 0.0.33 # data_uploader version
       cron_expression: "cron(*/5 11-23 * * ? *)"
       env_vars:
+      - name: ENV
+        value: prod
       - name: LOTERIAS_URL
         value: https://www.loteriasyapuestas.es/servicios
       - name: LOTERO_URL

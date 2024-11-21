@@ -8,11 +8,10 @@ from f_data_uploader.aws.ssm import SSM
 
 
 def download_teams(season: int, league_ids: list[int]):
-
     ssm_client = SSM(boto3.Session(region_name="eu-south-2"))
 
     secrets = json.loads(
-        ssm_client.get_parameter("/bavariada/secrets", decrypt=True)
+        ssm_client.get_parameter("/bavariada/secrets/dev", decrypt=True)
     )
 
     teams_data = list()
