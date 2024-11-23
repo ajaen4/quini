@@ -107,7 +107,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                 templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
                                                 templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                             }></div>
-                                            if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" {
+                                            if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
                                                 <div class="bg-gray-700 rounded px-2 py-0.5 text-xs whitespace-nowrap inline-flex items-center">
                                                     <span class="font-medium">{ formatGoals(match.HomeGoals) }</span>
                                                     <span class="mx-1">-</span>
@@ -300,6 +300,12 @@ func shouldBlinkMatch(kickoff pgtype.Timestamp, predictions []db.UserPredictions
 }
 
 func formatMatchDateTime(datetime time.Time) string {
+    madridLoc, err := time.LoadLocation("Europe/Madrid")
+    if err != nil {
+        return "Error loading timezone"
+    }
+
+    madridTime := datetime.In(madridLoc)
     spanishDayNames := map[string]string{
         "Mon": "Lun",
         "Tue": "Mar",
@@ -310,9 +316,9 @@ func formatMatchDateTime(datetime time.Time) string {
         "Sun": "Dom",
     }
 
-    engDay := datetime.Format("Mon")
+    engDay := madridTime.Format("Mon")
     spanishDay := spanishDayNames[engDay]
-    return spanishDay + " " + datetime.Format("15:04")
+    return spanishDay + " " + madridTime.Format("15:04")
 }
 
 func formatGoals(goals pgtype.Int4) string {

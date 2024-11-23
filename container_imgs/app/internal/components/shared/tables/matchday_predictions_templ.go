@@ -286,7 +286,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" {
+			if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-gray-700 rounded px-2 py-0.5 text-xs whitespace-nowrap inline-flex items-center\"><span class=\"font-medium\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -762,6 +762,12 @@ func shouldBlinkMatch(kickoff pgtype.Timestamp, predictions []db.UserPredictions
 }
 
 func formatMatchDateTime(datetime time.Time) string {
+	madridLoc, err := time.LoadLocation("Europe/Madrid")
+	if err != nil {
+		return "Error loading timezone"
+	}
+
+	madridTime := datetime.In(madridLoc)
 	spanishDayNames := map[string]string{
 		"Mon": "Lun",
 		"Tue": "Mar",
@@ -772,9 +778,9 @@ func formatMatchDateTime(datetime time.Time) string {
 		"Sun": "Dom",
 	}
 
-	engDay := datetime.Format("Mon")
+	engDay := madridTime.Format("Mon")
 	spanishDay := spanishDayNames[engDay]
-	return spanishDay + " " + datetime.Format("15:04")
+	return spanishDay + " " + madridTime.Format("15:04")
 }
 
 func formatGoals(goals pgtype.Int4) string {
