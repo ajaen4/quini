@@ -287,7 +287,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 				return templ_7745c5c3_Err
 			}
 			if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-gray-700 rounded px-2 py-0.5 text-xs\"><span class=\"font-medium\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-gray-700 rounded px-2 py-0.5 text-xs whitespace-nowrap inline-flex items-center\"><span class=\"font-medium\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
