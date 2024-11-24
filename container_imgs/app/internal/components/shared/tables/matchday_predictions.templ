@@ -125,7 +125,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                 templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                             }></div>
                                             if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
-                                                <div class="bg-gray-700 rounded px-0.5 py-0.5 text-xs whitespace-nowrap inline-flex items-center">
+                                                <div class="bg-gray-700 rounded px-1 py-1 text-xs whitespace-nowrap inline-flex items-center">
                                                     <span class="font-medium">{ formatGoals(match.HomeGoals) }</span>
                                                     <span class="mx-1">-</span>
                                                     <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
