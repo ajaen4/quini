@@ -37,8 +37,7 @@ func GetUserPredictions(matchday int32) (map[string]UserPredictions, error) {
 				array_agg(predictions_per_user_match.is_elige8 ORDER BY predictions_per_user_match.match_num) as is_elige8
 			FROM predictions_per_user_match
 			LEFT JOIN auth.users users ON predictions_per_user_match.user_id = users.id
-			GROUP BY users.id, users.raw_user_meta_data->>'display_name'
-			ORDER BY users.id;`,
+			GROUP BY users.id, users.raw_user_meta_data->>'display_name';`,
 			matchday,
 		),
 	)
