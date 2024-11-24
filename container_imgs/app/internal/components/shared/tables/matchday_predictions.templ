@@ -118,17 +118,20 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                         <div class="text-gray-300 whitespace-nowrap">
                                             { formatMatchDateTime(match.KickoffDatetime.Time) }
                                         </div>
-                                        <div class="text-gray-400 flex items-center gap-2 mt-1">
+                                        <div class="text-gray-400 flex items-center gap-1">
                                             <div class={
                                                 "h-2 w-2 rounded-full",
                                                 templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
                                                 templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                             }></div>
                                             if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
-                                                <div class="bg-gray-700 rounded px-2 py-0.5 text-xs whitespace-nowrap inline-flex items-center">
+                                                <div class="bg-gray-700 rounded px-0.5 py-0.5 text-xs whitespace-nowrap inline-flex items-center">
                                                     <span class="font-medium">{ formatGoals(match.HomeGoals) }</span>
                                                     <span class="mx-1">-</span>
                                                     <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
+                                                </div>
+                                                <div class="border-gray-600">
+                                                    <span class="font-medium text-sm">{ formatMatchStatus(match.Status) }</span>
                                                 </div>
                                             }
                                         </div>
@@ -386,4 +389,21 @@ func formatGoals(goals pgtype.Int4) string {
         return strconv.Itoa(int(goals.Int32))
     }
     return "0"
+}
+
+func formatMatchStatus(status string) string {
+    switch status {
+    case "1H":
+        return "1ª"
+    case "HT":
+        return "DES"
+    case "2H":
+        return "2ª"
+    case "ET":
+        return "PRO"
+    case "FT":
+        return ""
+    default:
+        return status
+    }
 }
