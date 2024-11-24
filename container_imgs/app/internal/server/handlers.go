@@ -6,6 +6,7 @@ import (
 	"app/internal/components/shared/messages"
 	"app/internal/components/shared/tables"
 	"app/internal/db"
+	"sort"
 
 	"net/http"
 	"strconv"
@@ -133,6 +134,10 @@ func matchdayPredictions(w http.ResponseWriter, r *http.Request) error {
 	for _, v := range matchdayPredictions {
 		values = append(values, v)
 	}
+
+	sort.Slice(values, func(i, j int) bool {
+		return values[i].UserName < values[j].UserName
+	})
 
 	matches, err := db.GetMatches(matchdayInProg)
 	if err != nil {

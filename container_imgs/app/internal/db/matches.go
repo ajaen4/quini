@@ -8,6 +8,7 @@ import (
 
 type Match struct {
 	Status          string           `json:"status"`
+	MatchNum        int              `json:"match_num"`
 	HomeCode        string           `json:"home_code"`
 	HomeName        string           `json:"home_name"`
 	HomeLogo        string           `json:"home_logo_url"`
@@ -29,6 +30,7 @@ func GetMatches(matchday int32) ([]Match, error) {
 		fmt.Sprintf(
 			`SELECT
 				status,
+				matches.match_num,
 				home.code as home_code,
 				home.name as home_name,
 				home.logo_url as home_logo_url,
@@ -63,6 +65,7 @@ func GetMatches(matchday int32) ([]Match, error) {
 		match := Match{}
 		err = rows.Scan(
 			&match.Status,
+			&match.MatchNum,
 			&match.HomeCode,
 			&match.HomeName,
 			&match.HomeLogo,
