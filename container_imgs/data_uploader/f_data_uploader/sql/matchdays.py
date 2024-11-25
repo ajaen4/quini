@@ -81,7 +81,8 @@ def update_matchday_status(matchday: dict, status: str):
         SET status = %s
         WHERE season = %s
         AND matchday = %s
-        """(
+        """,
+        (
             status,
             matchday["season"],
             matchday["matchday"],
