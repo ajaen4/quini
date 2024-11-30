@@ -17,8 +17,3 @@ config:
         value: https://web.tulotero.es/tuloteroweb/rest/users/boletos/me
       - name: FOOT_API_URL
         value: https://v3.football.api-sports.io
-  images:
-    quini:
-      dockerfile: container_imgs/data_uploader/Dockerfile
-      context: container_imgs/data_uploader/
-      build_version: 0.0.1 # quini version
