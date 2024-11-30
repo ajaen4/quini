@@ -1,8 +1,8 @@
 package containers
 
 import (
-	"bavariada-iac/internal/input"
 	"fmt"
+	"iac-app/internal/input"
 	"log"
 
 	"github.com/pulumi/pulumi-aws/sdk/v6/go/aws/cloudwatch"
@@ -13,20 +13,22 @@ import (
 
 func NewFunctions(cfg *input.Input) {
 	for funcName, funcCfg := range cfg.FunctionsCfg {
-		NewFunction(cfg.Ctx, funcName, funcCfg)
+		NewFunction(cfg.Ctx, funcName, cfg.Env, funcCfg)
 	}
 }
 
 type function struct {
 	ctx  *pulumi.Context
 	name string
+	env  string
 	cfg  *input.FunctionCfg
 }
 
-func NewFunction(ctx *pulumi.Context, name string, funcCfg *input.FunctionCfg) {
+func NewFunction(ctx *pulumi.Context, name string, env string, funcCfg *input.FunctionCfg) {
 	function := &function{
 		ctx:  ctx,
 		name: name,
+		env:  env,
 		cfg:  funcCfg,
 	}
 	function.deploy()
@@ -38,10 +40,12 @@ func (function *function) deploy() {
 }
 
 func (function *function) createRole() *iam.Role {
+	roleName := fmt.Sprintf("%s-role-%s", function.name, function.env)
 	role, err := iam.NewRole(
 		function.ctx,
-		fmt.Sprintf("%s-role", function.name),
+		roleName,
 		&iam.RoleArgs{
+			Name: pulumi.String(roleName),
 			AssumeRolePolicy: pulumi.String(`{
             "Version": "2012-10-17",
             "Statement": [{
@@ -61,7 +65,7 @@ func (function *function) createRole() *iam.Role {
 
 	_, err = iam.NewRolePolicyAttachment(
 		function.ctx,
-		fmt.Sprintf("%s-policy", function.name),
+		fmt.Sprintf("%s-policy-%s", function.name, function.env),
 		&iam.RolePolicyAttachmentArgs{
 			Role: role.Name,
 			PolicyArn: pulumi.String(
@@ -74,7 +78,7 @@ func (function *function) createRole() *iam.Role {
 
 	ecrPolicy, err := iam.NewPolicy(
 		function.ctx,
-		fmt.Sprintf("%s-ecr-policy", function.name),
+		fmt.Sprintf("%s-ecr-policy-%s", function.name, function.env),
 		&iam.PolicyArgs{
 			Description: pulumi.String("IAM policy for Lambda to access ECR"),
 			Policy: pulumi.String(`{
@@ -99,7 +103,7 @@ func (function *function) createRole() *iam.Role {
 
 	_, err = iam.NewRolePolicyAttachment(
 		function.ctx,
-		fmt.Sprintf("%s-ecr-policy-attch", function.name),
+		fmt.Sprintf("%s-ecr-policy-attch-%s", function.name, function.env),
 		&iam.RolePolicyAttachmentArgs{
 			Role:      role.Name,
 			PolicyArn: ecrPolicy.Arn,
@@ -112,20 +116,28 @@ func (function *function) createRole() *iam.Role {
 }
 
 func (function *function) createFunction(role *iam.Role) {
-	repo := NewRepository(function.ctx, function.name)
+	quiniSeed, err := pulumi.NewStackReference(function.ctx, "ajaen4/quini-seed/main", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	repoUrl := quiniSeed.GetStringOutput(pulumi.Sprintf("%s-repo-url", function.name))
+	registryId := quiniSeed.GetStringOutput(pulumi.Sprintf("%s-repo-registry-id", function.name))
 	image := NewImage(
 		function.ctx,
 		function.name,
 		function.cfg.ImgCfg,
-		repo.EcrRepository,
+		repoUrl,
+		registryId,
 	)
 	imageUrl := image.PushImage(function.cfg.BuildVersion)
 
+	funcName := fmt.Sprintf("%s-function-%s", function.name, function.env)
 	lambdaFunction, err := lambda.NewFunction(
 		function.ctx,
-		fmt.Sprintf("%s-function", function.name),
+		funcName,
 		&lambda.FunctionArgs{
-			Name:        pulumi.String(function.name),
+			Name:        pulumi.String(funcName),
 			Role:        role.Arn,
 			ImageUri:    imageUrl,
 			PackageType: pulumi.String("Image"),
@@ -141,11 +153,12 @@ func (function *function) createFunction(role *iam.Role) {
 	}
 
 	if function.cfg.CronExpression != "" {
+		eventRuleName := fmt.Sprintf("%s-cron-rule-%s", function.name, function.env)
 		rule, err := cloudwatch.NewEventRule(
 			function.ctx,
-			fmt.Sprintf("%s-cron-rule", function.name),
+			eventRuleName,
 			&cloudwatch.EventRuleArgs{
-				Name:               pulumi.Sprintf("%s-cron-rule", function.name),
+				Name:               pulumi.String(eventRuleName),
 				Description:        pulumi.Sprintf("Cron trigger for %s-", function.name),
 				ScheduleExpression: pulumi.String(function.cfg.CronExpression),
 			})
@@ -155,7 +168,7 @@ func (function *function) createFunction(role *iam.Role) {
 
 		_, err = lambda.NewPermission(
 			function.ctx,
-			fmt.Sprintf("%s-cron-invoke", function.name),
+			fmt.Sprintf("%s-cron-invoke-%s", function.name, function.env),
 			&lambda.PermissionArgs{
 				Action:    pulumi.String("lambda:InvokeFunction"),
 				Function:  lambdaFunction.Name,
@@ -168,7 +181,7 @@ func (function *function) createFunction(role *iam.Role) {
 
 		_, err = cloudwatch.NewEventTarget(
 			function.ctx,
-			fmt.Sprintf("%s-cron-target", function.name),
+			fmt.Sprintf("%s-cron-target-%s", function.name, function.env),
 			&cloudwatch.EventTargetArgs{
 				Rule: rule.Name,
 				Arn:  lambdaFunction.Arn,

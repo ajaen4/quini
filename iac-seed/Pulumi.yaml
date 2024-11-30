@@ -1,5 +1,5 @@
-name: bavariada
+name: quini-seed
 runtime: go
 description: API to be able to consume tags on cities
 globalTags:
-  project_name: "bavariada"
+  project_name: "quini-seed"

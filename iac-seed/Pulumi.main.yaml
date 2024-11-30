@@ -1,0 +1,5 @@
+config:
+  aws:region: eu-south-2
+  repos:
+    - data_uploader
+    - quini

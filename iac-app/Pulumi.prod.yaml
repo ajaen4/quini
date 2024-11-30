@@ -1,13 +1,16 @@
 config:
   aws:region: eu-south-2
+  env: prod
   functions:
     data_uploader:
       image:
         dockerfile: container_imgs/data_uploader/Dockerfile
         context: container_imgs/data_uploader/
-      build_version: 0.0.35 # data_uploader version
+      build_version: 0.0.34 # data_uploader version
       cron_expression: "cron(*/1 11-23 * * ? *)"
       env_vars:
+      - name: ENV
+        value: prod
       - name: LOTERIAS_URL
         value: https://www.loteriasyapuestas.es/servicios
       - name: LOTERO_URL

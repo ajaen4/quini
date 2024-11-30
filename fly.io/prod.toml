@@ -1,0 +1,26 @@
+app = 'bavariada'
+primary_region = 'mad'
+
+[build]
+  image = 'registry.fly.io/bavariada-dev:0.0.1'
+
+[env]
+  ENV = 'prod'
+  APP_PORT = '8080'
+  LOTERIAS_URL = 'https://www.loteriasyapuestas.es/servicios/buscadorSorteos'
+  AWS_ROLE_ARN = 'arn:aws:iam::744516196303:role/fly-io'
+  AWS_REGION = 'eu-south-2'
+
+[processes]
+  app = './main'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'

@@ -7,12 +7,11 @@ import boto3
 from f_data_uploader.aws.ssm import SSM
 
 
-def download_teams(season: int, league_ids: list[int]):
-
+def download_teams(env: str, season: int, league_ids: list[int]):
     ssm_client = SSM(boto3.Session(region_name="eu-south-2"))
 
     secrets = json.loads(
-        ssm_client.get_parameter("/bavariada/secrets", decrypt=True)
+        ssm_client.get_parameter(f"/bavariada/secrets/{env}", decrypt=True)
     )
 
     teams_data = list()
@@ -50,4 +49,4 @@ def download_teams(season: int, league_ids: list[int]):
 
 
 if __name__ == "__main__":
-    download_teams(2024, [140, 141])
+    download_teams("dev", 2024, [140, 141])
