@@ -47,6 +47,7 @@ def get_matches_status(matches: list[str]):
             "status": fixture["fixture"]["status"]["short"],
             "home_goals": fixture["goals"]["home"],
             "away_goals": fixture["goals"]["away"],
+            "minutes": fixture["fixture"]["status"]["elapsed"],
         }
         for fixture in data["response"]
     ]
