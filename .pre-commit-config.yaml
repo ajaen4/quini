@@ -11,18 +11,18 @@ repos:
       - id: trailing-whitespace
         exclude: |
           (?x)(
-            container_imgs/data_uploader/\.bumpversion\.cfg|
+            container_imgs/.*/\.bumpversion\.cfg|
             container_imgs/app/internal/static/.*
           )
       - id: end-of-file-fixer
         exclude: |
           (?x)(
-            container_imgs/data_uploader/\.bumpversion\.cfg|
+            container_imgs/.*/\.bumpversion\.cfg|
             container_imgs/app/internal/static/.*
           )
       - id: check-yaml
         exclude: |
           (?x)(
-            container_imgs/data_uploader/\.bumpversion\.cfg|
+            container_imgs/.*/\.bumpversion\.cfg|
             container_imgs/app/internal/static/.*
           )
