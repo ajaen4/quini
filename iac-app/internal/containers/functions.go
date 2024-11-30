@@ -132,7 +132,7 @@ func (function *function) createFunction(role *iam.Role) {
 	)
 	imageUrl := image.PushImage(function.cfg.BuildVersion)
 
-	funcName := fmt.Sprintf("%s-function-%s", function.name, function.env)
+	funcName := fmt.Sprintf("%s-%s", function.name, function.env)
 	lambdaFunction, err := lambda.NewFunction(
 		function.ctx,
 		funcName,
