@@ -202,3 +202,4 @@ container_imgs/app/internal/static/css/tailwind.css
 container_imgs/app/internal/**/*.txt
 
 teams_2024.csv
+migrate_supabase.sh
