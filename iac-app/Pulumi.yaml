@@ -1,0 +1,5 @@
+name: quini-app
+runtime: go
+description: API to be able to consume tags on cities
+globalTags:
+  project_name: "quini-app"

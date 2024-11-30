@@ -1,8 +1,8 @@
 package containers
 
 import (
-	"bavariada-iac/internal/input"
 	"fmt"
+	"iac-app/internal/input"
 	"log"
 
 	"aws_lib/aws_lib"
@@ -13,30 +13,32 @@ import (
 )
 
 type Image struct {
-	name        string
-	repository  *ecr.Repository
-	ctx         *pulumi.Context
-	imgCfg      input.ImgCfg
-	ImgResource *dockerbuild.Image
+	name          string
+	repositoryUrl pulumi.StringOutput
+	registryId    pulumi.StringOutput
+	ctx           *pulumi.Context
+	imgCfg        input.ImgCfg
+	ImgResource   *dockerbuild.Image
 }
 
-func NewImage(ctx *pulumi.Context, name string, imgCfg input.ImgCfg, repository *ecr.Repository) *Image {
+func NewImage(ctx *pulumi.Context, name string, imgCfg input.ImgCfg, repositoryUrl pulumi.StringOutput, registryId pulumi.StringOutput) *Image {
 	return &Image{
-		name:       name,
-		repository: repository,
-		ctx:        ctx,
-		imgCfg:     imgCfg,
+		name:          name,
+		repositoryUrl: repositoryUrl,
+		registryId:    registryId,
+		ctx:           ctx,
+		imgCfg:        imgCfg,
 	}
 }
 
 func (img *Image) PushImage(version string) pulumi.StringInput {
 	authToken := img.authenticate()
 
-	imageURI := img.repository.RepositoryUrl.ApplyT(func(repositoryUrl string) string {
+	imageURI := img.repositoryUrl.ApplyT(func(repositoryUrl string) string {
 		return fmt.Sprintf("%s:%s", repositoryUrl, version)
 	}).(pulumi.StringInput)
 
-	push := img.repository.RepositoryUrl.ApplyT(func(repositoryUrl string) bool {
+	push := img.repositoryUrl.ApplyT(func(repositoryUrl string) bool {
 		ecr := aws_lib.NewECR(input.GetRegion())
 		push := !ecr.IsImageInECR(repositoryUrl, version)
 		return push
@@ -58,7 +60,7 @@ func (img *Image) PushImage(version string) pulumi.StringInput {
 			},
 			Registries: dockerbuild.RegistryArray{
 				&dockerbuild.RegistryArgs{
-					Address:  img.repository.RepositoryUrl,
+					Address:  img.repositoryUrl,
 					Password: authToken.Password(),
 					Username: authToken.UserName(),
 				},
@@ -75,10 +77,11 @@ func (img *Image) PushImage(version string) pulumi.StringInput {
 }
 
 func (img *Image) authenticate() ecr.GetAuthorizationTokenResultOutput {
+
 	return ecr.GetAuthorizationTokenOutput(
 		img.ctx,
 		ecr.GetAuthorizationTokenOutputArgs{
-			RegistryId: img.repository.RegistryId,
+			RegistryId: img.registryId,
 		},
 		nil,
 	)

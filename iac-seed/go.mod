@@ -1,4 +1,4 @@
-module bavariada-iac
+module iac-seed
 
 go 1.22.1
 

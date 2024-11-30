@@ -6,8 +6,8 @@ import (
 )
 
 type Input struct {
-	Ctx          *pulumi.Context
-	FunctionsCfg map[string]*FunctionCfg
+	Ctx   *pulumi.Context
+	Repos []string
 }
 
 type AWSCfg struct {
@@ -19,19 +19,16 @@ var awsCfg AWSCfg
 func Load(ctx *pulumi.Context) *Input {
 	cfg := config.New(ctx, "")
 
-	var funcsCfg map[string]*FunctionCfg
-	if err := cfg.TryObject("functions", &funcsCfg); err != nil {
-		funcsCfg = map[string]*FunctionCfg{}
-	}
-
+	var repos []string
+	cfg.RequireObject("repos", &repos)
 	aws := config.New(ctx, "aws")
 	awsCfg = AWSCfg{
 		Region: aws.Require("region"),
 	}
 
 	return &Input{
-		Ctx:          ctx,
-		FunctionsCfg: funcsCfg,
+		Ctx:   ctx,
+		Repos: repos,
 	}
 }
 

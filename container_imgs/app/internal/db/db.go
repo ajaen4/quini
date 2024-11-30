@@ -63,7 +63,7 @@ func initDB() *db {
 	} else {
 		sslmode = "require"
 		sm := aws_lib.NewSSM("")
-		param = sm.GetParam("/bavariada/secrets", true)
+		param = sm.GetParam(fmt.Sprintf("/quini/secrets/%s", env), true)
 		db_name = param["DB_NAME"]
 		password = param["DB_PASSWORD"]
 		username = param["DB_USERNAME"]

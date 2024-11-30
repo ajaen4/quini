@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bavariada-iac/internal/containers"
-	"bavariada-iac/internal/input"
+	"iac-app/internal/containers"
+	"iac-app/internal/input"
 
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -12,6 +12,7 @@ func main() {
 		cfg := input.Load(ctx)
 
 		containers.NewFunctions(cfg)
+		containers.NewImages(cfg)
 
 		return nil
 	})

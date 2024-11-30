@@ -9,3 +9,9 @@ type ImgCfg struct {
 	Dockerfile string `json:"dockerfile"`
 	Context    string `json:"context"`
 }
+
+type SoleImgCfg struct {
+	Dockerfile   string `json:"dockerfile"`
+	Context      string `json:"context"`
+	BuildVersion string `json:"build_version"`
+}
