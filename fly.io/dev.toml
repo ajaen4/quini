@@ -2,7 +2,8 @@ app = 'bavariada-dev'
 primary_region = 'mad'
 
 [build]
-  image = 'registry.fly.io/bavariada-dev:0.0.2'
+  dockerfile = "../container_imgs/app/Dockerfile"
+  context = "."
 
 [env]
   ENV = 'dev'
