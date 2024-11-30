@@ -124,14 +124,14 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                 templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
                                                 templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                             }></div>
-                                            if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
+                                            if true {
                                                 <div class="bg-gray-700 rounded px-1 py-1 text-xs whitespace-nowrap inline-flex items-center">
                                                     <span class="font-medium">{ formatGoals(match.HomeGoals) }</span>
                                                     <span class="mx-1">-</span>
                                                     <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
                                                 </div>
                                                 <div class="border-gray-600">
-                                                    <span class="font-medium text-sm">{ formatMatchStatus(match.Status) }</span>
+                                                    <span class="font-medium text-sm">{ formatMins(match.Minutes) }</span>
                                                 </div>
                                             }
                                         </div>
@@ -391,19 +391,12 @@ func formatGoals(goals pgtype.Int4) string {
     return "0"
 }
 
-func formatMatchStatus(status string) string {
-    switch status {
-    case "1H":
-        return "1ª"
-    case "HT":
-        return "⏸️"
-    case "2H":
-        return "2ª"
-    case "ET":
-        return "PRO"
-    case "FT":
-        return ""
-    default:
-        return status
+func formatMins(mins pgtype.Int4) string {
+    var valMins int
+    if mins.Valid {
+        valMins = int(mins.Int32)
+    } else {
+        valMins = 0
     }
+    return fmt.Sprintf("%s'", strconv.Itoa(valMins))
 }

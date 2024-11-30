@@ -67,6 +67,7 @@ def update_matches(matches: list):
                 match["status"],
                 match["home_goals"],
                 match["away_goals"],
+                match["minutes"],
                 match["id"],
             )
         )
@@ -77,7 +78,8 @@ def update_matches(matches: list):
         SET
             status = %s,
             home_goals = %s,
-            away_goals = %s
+            away_goals = %s,
+            minutes=%s
         WHERE
             id = %s
         """,

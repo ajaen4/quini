@@ -18,6 +18,7 @@ type Match struct {
 	AwayLogo        string           `json:"away_logo_url"`
 	AwayGoals       pgtype.Int4      `json:"away_goals"`
 	KickoffDatetime pgtype.Timestamp `json:"kickoff_datetime"`
+	Minutes         pgtype.Int4      `json:"minutes"`
 	HomePercent     pgtype.Int4      `json:"home_percent"`
 	DrawPercent     pgtype.Int4      `json:"draw_percent"`
 	AwayPercent     pgtype.Int4      `json:"away_percent"`
@@ -40,6 +41,7 @@ func GetMatches(matchday int32) ([]Match, error) {
 				away.logo_url as away_logo_url,
 				away_goals,
 				kickoff_datetime,
+				minutes,
 				stats.home_percent,
 				stats.draw_percent,
 				stats.away_percent
@@ -75,6 +77,7 @@ func GetMatches(matchday int32) ([]Match, error) {
 			&match.AwayLogo,
 			&match.AwayGoals,
 			&match.KickoffDatetime,
+			&match.Minutes,
 			&match.HomePercent,
 			&match.DrawPercent,
 			&match.AwayPercent,
