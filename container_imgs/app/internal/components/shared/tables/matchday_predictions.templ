@@ -55,7 +55,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
             <table class="min-w-full bg-gray-800 text-sm border-collapse">
                 <thead class="bg-gray-800">
                     <tr>
-                        <th class="sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[145px] md:w-[250px]">Partidos</th>
+                        <th class="sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[150px] md:w-[250px]">Partidos</th>
                         for _, pred := range predictions {
                             <th class="py-3 px-1 border-b-2 border-r-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
                                 {pred.UserName}
@@ -111,7 +111,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                     for i, match := range matches {
                         <tr>
                             <td class={
-                                "sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[145px] md:w-[250px]",
+                                "sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[150px] md:w-[250px]",
                             }>
                                 <div class="grid grid-cols-2">
                                     <div class="flex flex-col justify-center pl-2">
