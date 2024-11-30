@@ -287,7 +287,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if true {
+			if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-gray-700 rounded px-1 py-1 text-xs whitespace-nowrap inline-flex items-center\"><span class=\"font-medium\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -852,7 +852,7 @@ func formatMins(mins pgtype.Int4) string {
 	if mins.Valid {
 		valMins = int(mins.Int32)
 	} else {
-		valMins = 89
+		valMins = 0
 	}
 	return fmt.Sprintf("%s'", strconv.Itoa(valMins))
 }
