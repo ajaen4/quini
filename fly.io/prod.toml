@@ -2,7 +2,7 @@ app = 'bavariada'
 primary_region = 'mad'
 
 [build]
-  image = 'registry.fly.io/bavariada-dev:deployment-01JDYMRCJA57Z6W095XTH1XZDE'
+  image = 'registry.fly.io/bavariada-dev:deployment-01JDYN26D7N91W6PFCDY2QWHYX'
 
 [env]
   ENV = 'prod'
@@ -10,6 +10,7 @@ primary_region = 'mad'
   LOTERIAS_URL = 'https://www.loteriasyapuestas.es/servicios/buscadorSorteos'
   AWS_ROLE_ARN = 'arn:aws:iam::744516196303:role/fly-io'
   AWS_REGION = 'eu-south-2'
+  POSTHOG_KEY= 'phc_BhTeKzXt9cx2tPcFnlk8U4gg0zJhHDPz9KCP31RhEMb'
 
 [processes]
   app = './main'
