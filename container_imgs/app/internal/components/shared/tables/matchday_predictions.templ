@@ -52,18 +52,18 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                     border-color: transparent #3B82F6 transparent transparent;
                 }
             </style>
-            <table class="min-w-full bg-gray-800 text-sm border-collapse">
+            <table class="min-w-full bg-gray-800 text-sm border-collapse rounded-lg">
                 <thead class="bg-gray-800">
                     <tr>
-                        <th class="sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[150px] md:w-[250px]">Partidos</th>
+                        <th class="sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[145px] md:w-[245px]">Partidos</th>
                         for _, pred := range predictions {
-                            <th class="py-3 px-1 border-b-2 border-r-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
+                            <th class="py-3 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg" colspan="2">
                                 {pred.UserName}
                             </th>
                         }
                         if len(missingUsers) > 0 {
                             for _, userName := range missingUsers {
-                                <th class="py-3 px-1 border-b-2 border-r-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
+                                <th class="py-3 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg" colspan="2">
                                     {userName}
                                 </th>
                             }
@@ -111,16 +111,16 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                     for i, match := range matches {
                         <tr>
                             <td class={
-                                "sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[150px] md:w-[250px]",
+                                "sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[145px] md:w-[245px]",
                             }>
-                                <div class="grid grid-cols-2">
-                                    <div class="flex flex-col justify-center ml-2">
+                                <div class="flex">
+                                    <div class="flex flex-col justify-center ml-2 w-16">
                                         <div class="text-gray-300 whitespace-nowrap">
                                             { formatMatchDateTime(match.KickoffDatetime.Time) }
                                         </div>
                                         <div class="text-gray-400 flex items-center gap-1">
                                             <div class={
-                                                "aspect-square p-1 rounded-full",
+                                                "aspect-square p-1 rounded-full my-1",
                                                 templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
                                                 templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                             }></div>
@@ -131,14 +131,14 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                     <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
                                                 </div>
                                                 <div class="border-gray-600">
-                                                    <span class="font-medium text-sm">{ formatMins(match.Minutes) }</span>
+                                                    <span class="font-medium text-xs">{ formatMins(match.Minutes) }</span>
                                                 </div>
                                             }
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="pl-2 md:pl-6">
                                         <div
-                                            class="flex items-center mb-1 pl-1"
+                                            class="flex items-center mb-1"
                                             x-data="{
                                             retryCount: 0,
                                             maxRetries: 3
@@ -157,11 +157,11 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                             />
                                             <span class="text-sm ml-1">
                                                 <span class="md:hidden">{ match.HomeCode }</span>
-                                                <span class="hidden md:inline">{ match.HomeName }</span>
+                                                <span class="hidden md:inline whitespace-nowrap pr-1">{ match.HomeName }</span>
                                             </span>
                                         </div>
                                         <div
-                                            class="flex items-center mb-1 pl-1"
+                                            class="flex items-center mb-1"
                                             x-data="{
                                             retryCount: 0,
                                             maxRetries: 3
@@ -215,7 +215,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                 if i == len(matches) - 1 {
                                     // Last row for each user
                                     <td class={
-                                        "py-2 border-r-2 border-gray-600 text-center",
+                                        "py-2 border-r-2 border-gray-600 text-center border-b",
                                         isCorrectClass(pred.IsCorrect[i][0], match, pred.Predictions[i][0])
                                     } colspan="2">
                                         {pred.Predictions[i][0]}
