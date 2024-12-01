@@ -55,7 +55,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
             <table class="min-w-full bg-gray-800 text-sm border-collapse">
                 <thead class="bg-gray-800">
                     <tr>
-                        <th class="sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[150px] md:w-[250px]">Partidos</th>
+                        <th class="sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[150px] md:w-[250px]">Partidos</th>
                         for _, pred := range predictions {
                             <th class="py-3 px-1 border-b-2 border-r-2 border-gray-600 text-center rounded-tr-lg" colspan="2">
                                 {pred.UserName}
@@ -114,13 +114,13 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                 "sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[150px] md:w-[250px]",
                             }>
                                 <div class="grid grid-cols-2">
-                                    <div class="flex flex-col justify-center pl-2">
+                                    <div class="flex flex-col justify-center ml-2">
                                         <div class="text-gray-300 whitespace-nowrap">
                                             { formatMatchDateTime(match.KickoffDatetime.Time) }
                                         </div>
                                         <div class="text-gray-400 flex items-center gap-1">
                                             <div class={
-                                                "h-2 w-2 rounded-full",
+                                                "aspect-square p-1 rounded-full",
                                                 templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
                                                 templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
                                             }></div>
@@ -138,7 +138,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                     </div>
                                     <div>
                                         <div
-                                            class="flex items-center pb-1 pl-2"
+                                            class="flex items-center mb-1 pl-1"
                                             x-data="{
                                             retryCount: 0,
                                             maxRetries: 3
@@ -155,13 +155,13 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                     }, 50 * Math.pow(2, retryCount))
                                                 }"
                                             />
-                                            <span class="text-sm mx-1">
+                                            <span class="text-sm ml-1">
                                                 <span class="md:hidden">{ match.HomeCode }</span>
                                                 <span class="hidden md:inline">{ match.HomeName }</span>
                                             </span>
                                         </div>
                                         <div
-                                            class="flex items-center pl-2"
+                                            class="flex items-center mb-1 pl-1"
                                             x-data="{
                                             retryCount: 0,
                                             maxRetries: 3
@@ -178,7 +178,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                     }, 50 * Math.pow(2, retryCount))
                                                 }"
                                             />
-                                            <span class="text-sm mx-1">
+                                            <span class="text-sm ml-1">
                                                 <span class="md:hidden">{ match.AwayCode }</span>
                                                 <span class="hidden md:inline">{ match.AwayName }</span>
                                             </span>

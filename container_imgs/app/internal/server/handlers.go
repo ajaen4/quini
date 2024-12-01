@@ -6,6 +6,7 @@ import (
 	"app/internal/components/shared/messages"
 	"app/internal/components/shared/tables"
 	"app/internal/db"
+	"os"
 	"sort"
 
 	"net/http"
@@ -147,5 +148,5 @@ func matchdayPredictions(w http.ResponseWriter, r *http.Request) error {
 }
 
 func root(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, pages.Home())
+	return Render(w, r, pages.Home(os.Getenv("POSTHOG_KEY")))
 }

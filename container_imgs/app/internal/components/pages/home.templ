@@ -4,8 +4,8 @@ import (
 	"app/internal/components/layout"
 )
 
-templ Home() {
-	@layout.Layout("Bavariada") {
+templ Home(postHogKey string) {
+	@layout.Layout("Bavariada", postHogKey) {
 		<div class="space-y-8">
 			<section>
 				<h2 class="text-2xl font-semibold mb-4">Puntos totales</h2>

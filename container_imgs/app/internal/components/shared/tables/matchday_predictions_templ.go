@@ -39,7 +39,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\" x-data=\"{ showPercentages: false }\"><div class=\"inline-block min-w-full rounded-lg shadow-lg\"><style>\n                @keyframes slow-blink {\n                    0%, 100% { opacity: 1; }\n                    50% { opacity: 0.5; }\n                }\n                @keyframes score-blink-green {\n                    0%, 100% { background-color: rgb(21 128 61); }\n                    50% { background-color: rgb(34 197 94); }\n                }\n                @keyframes score-blink-red {\n                    0%, 100% { background-color: rgb(185 28 28); }\n                    50% { background-color: rgb(239 68 68); }\n                }\n                .score-blink-green {\n                    background-color: rgb(21 128 61);\n                    animation: score-blink-green 4s ease-in-out infinite;\n                }\n                .score-blink-red {\n                    background-color: rgb(185 28 28);\n                    animation: score-blink-red 4s ease-in-out infinite;\n                }\n                .status-blink {\n                    animation: slow-blink 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n                }\n                .elige8-indicator {\n                    position: relative;\n                }\n                .elige8-indicator::after {\n                    content: '';\n                    position: absolute;\n                    top: 0;\n                    right: 0;\n                    width: 0;\n                    height: 0;\n                    border-style: solid;\n                    border-width: 0 8px 8px 0;\n                    border-color: transparent #3B82F6 transparent transparent;\n                }\n            </style><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 px-4 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[150px] md:w-[250px]\">Partidos</th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-x-auto w-full\" x-data=\"{ showPercentages: false }\"><div class=\"inline-block min-w-full rounded-lg shadow-lg\"><style>\n                @keyframes slow-blink {\n                    0%, 100% { opacity: 1; }\n                    50% { opacity: 0.5; }\n                }\n                @keyframes score-blink-green {\n                    0%, 100% { background-color: rgb(21 128 61); }\n                    50% { background-color: rgb(34 197 94); }\n                }\n                @keyframes score-blink-red {\n                    0%, 100% { background-color: rgb(185 28 28); }\n                    50% { background-color: rgb(239 68 68); }\n                }\n                .score-blink-green {\n                    background-color: rgb(21 128 61);\n                    animation: score-blink-green 4s ease-in-out infinite;\n                }\n                .score-blink-red {\n                    background-color: rgb(185 28 28);\n                    animation: score-blink-red 4s ease-in-out infinite;\n                }\n                .status-blink {\n                    animation: slow-blink 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n                }\n                .elige8-indicator {\n                    position: relative;\n                }\n                .elige8-indicator::after {\n                    content: '';\n                    position: absolute;\n                    top: 0;\n                    right: 0;\n                    width: 0;\n                    height: 0;\n                    border-style: solid;\n                    border-width: 0 8px 8px 0;\n                    border-color: transparent #3B82F6 transparent transparent;\n                }\n            </style><table class=\"min-w-full bg-gray-800 text-sm border-collapse\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[150px] md:w-[250px]\">Partidos</th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -245,7 +245,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"grid grid-cols-2\"><div class=\"flex flex-col justify-center pl-2\"><div class=\"text-gray-300 whitespace-nowrap\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"grid grid-cols-2\"><div class=\"flex flex-col justify-center ml-2\"><div class=\"text-gray-300 whitespace-nowrap\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -263,7 +263,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var17 = []any{
-				"h-2 w-2 rounded-full",
+				"aspect-square p-1 rounded-full",
 				templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
 				templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var17...)
@@ -332,7 +332,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div><div class=\"flex items-center pb-1 pl-2\" x-data=\"{\n                                            retryCount: 0,\n                                            maxRetries: 3\n                                            }\"><img src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div><div class=\"flex items-center mb-1 pl-1\" x-data=\"{\n                                            retryCount: 0,\n                                            maxRetries: 3\n                                            }\"><img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -358,7 +358,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) {\n                                                    retryCount++;\n                                                    setTimeout(() =&gt; {\n                                                        $el.src += &#39;?&#39; + Date.now()\n                                                    }, 50 * Math.pow(2, retryCount))\n                                                }\"> <span class=\"text-sm mx-1\"><span class=\"md:hidden\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) {\n                                                    retryCount++;\n                                                    setTimeout(() =&gt; {\n                                                        $el.src += &#39;?&#39; + Date.now()\n                                                    }, 50 * Math.pow(2, retryCount))\n                                                }\"> <span class=\"text-sm ml-1\"><span class=\"md:hidden\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -384,7 +384,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></span></div><div class=\"flex items-center pl-2\" x-data=\"{\n                                            retryCount: 0,\n                                            maxRetries: 3\n                                            }\"><img src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></span></div><div class=\"flex items-center mb-1 pl-1\" x-data=\"{\n                                            retryCount: 0,\n                                            maxRetries: 3\n                                            }\"><img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -410,7 +410,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) {\n                                                    retryCount++;\n                                                    setTimeout(() =&gt; {\n                                                        $el.src += &#39;?&#39; + Date.now()\n                                                    }, 50 * Math.pow(2, retryCount))\n                                                }\"> <span class=\"text-sm mx-1\"><span class=\"md:hidden\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-6 w-6 object-contain\" @error=\"if(retryCount &lt; maxRetries) {\n                                                    retryCount++;\n                                                    setTimeout(() =&gt; {\n                                                        $el.src += &#39;?&#39; + Date.now()\n                                                    }, 50 * Math.pow(2, retryCount))\n                                                }\"> <span class=\"text-sm ml-1\"><span class=\"md:hidden\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
