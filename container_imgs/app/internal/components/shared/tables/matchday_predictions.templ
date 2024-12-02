@@ -55,7 +55,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
             <table class="min-w-full bg-gray-800 text-sm border-collapse rounded-lg">
                 <thead class="bg-gray-800">
                     <tr>
-                        <th class="sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[145px] md:w-[245px]">Partidos</th>
+                        <th class="sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg min-w-[148px] md:w-[245px]">Partidos</th>
                         for _, pred := range predictions {
                             <th class="py-3 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg" colspan="2">
                                 {pred.UserName}
@@ -111,18 +111,17 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                     for i, match := range matches {
                         <tr>
                             <td class={
-                                "sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[145px] md:w-[245px]",
+                                "sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[148px] md:w-[245px]",
                             }>
                                 <div class="flex">
                                     <div class="flex flex-col justify-center ml-2 w-16">
                                         <div class="text-gray-300 whitespace-nowrap">
                                             { formatMatchDateTime(match.KickoffDatetime.Time) }
                                         </div>
-                                        <div class="text-gray-400 flex items-center gap-1">
+                                        <div class="text-gray-400 flex items-center gap-1 mt-1">
                                             <div class={
                                                 "aspect-square p-1 rounded-full my-1",
-                                                templ.KV("bg-green-500 status-blink", shouldBlinkMatch(match.KickoffDatetime, predictions, i)),
-                                                templ.KV("bg-gray-500", !shouldBlinkMatch(match.KickoffDatetime, predictions, i))
+                                                circleClasses(match, predictions, i)
                                             }></div>
                                             if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
                                                 <div class="bg-gray-700 rounded px-1 py-1 text-xs whitespace-nowrap inline-flex items-center">
@@ -130,13 +129,15 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                     <span class="mx-1">-</span>
                                                     <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
                                                 </div>
+                                            }
+                                            if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" {
                                                 <div class="border-gray-600">
-                                                    <span class="font-medium text-xs">{ formatMins(match.Minutes) }</span>
+                                                    <span class="font-medium text-xs">{ formatMins(match) }</span>
                                                 </div>
                                             }
                                         </div>
                                     </div>
-                                    <div class="pl-2 md:pl-6">
+                                    <div class="pl-3 md:pl-6">
                                         <div
                                             class="flex items-center mb-1"
                                             x-data="{
@@ -337,29 +338,31 @@ func sumCorrect(isCorrect [][]pgtype.Bool, colNum int) int {
     return total
 }
 
-func shouldBlinkMatch(kickoff pgtype.Timestamp, predictions []db.UserPredictions, matchIndex int) bool {
+func circleClasses(match db.Match, predictions []db.UserPredictions, matchIndex int) string {
+    kickoff := match.KickoffDatetime
     if !kickoff.Valid {
-        return false
+        return "bg-gray-500"
     }
 
     kickoffTime := kickoff.Time
     madridLoc, _ := time.LoadLocation("Europe/Madrid")
     now := time.Now().In(madridLoc)
 
-
-    // This is to take into account delayed matches
-    TwoHAfterKickO := kickoffTime.Add(2 * time.Hour)
-    if !now.After(kickoffTime) || kickoffTime.After(TwoHAfterKickO) {
-        return false
+    if kickoffTime.After(now) {
+        return "bg-gray-500"
     }
 
     for _, pred := range predictions {
         if pred.IsCorrect[matchIndex][0].Valid{
-            return false
+            return "bg-red-500"
         }
     }
 
-    return true
+    if match.Status != "LIVE" {
+        return "bg-gray-500"
+    }
+
+    return "bg-green-500 status-blink"
 }
 
 func formatMatchDateTime(datetime time.Time) string {
@@ -391,8 +394,13 @@ func formatGoals(goals pgtype.Int4) string {
     return "0"
 }
 
-func formatMins(mins pgtype.Int4) string {
+func formatMins(match db.Match) string {
+    if match.Status == "HT" {
+        return "DES"
+    }
+
     var valMins int
+    mins := match.Minutes
     if mins.Valid {
         valMins = int(mins.Int32)
     } else {
