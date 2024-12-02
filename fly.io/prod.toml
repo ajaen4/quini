@@ -2,7 +2,7 @@ app = 'bavariada'
 primary_region = 'mad'
 
 [build]
-  image = 'registry.fly.io/bavariada-dev:deployment-01JE1SGV33CHGX48R8P4EZAK3C'
+  image = 'registry.fly.io/bavariada-dev:deployment-01JE4DHH6M3T2X9005XSZW6MZE'
 
 [env]
   ENV = 'prod'
