@@ -3,9 +3,40 @@ on:
   push:
     branches:
       - main
+
 jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.get_image.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Fly.io
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Login to Fly.io Registry
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: fly auth docker
+      - name: Extract image from dev.toml
+        id: get_image
+        run: |
+          IMAGE=$(grep "image = " fly.io/dev.toml | sed "s/.*image = '\(.*\)'/\1/")
+          if [ -z "$IMAGE" ]; then
+            echo "No image found in dev.toml"
+            exit 1
+          fi
+
+          if docker manifest inspect $IMAGE > /dev/null 2>&1; then
+            echo "Image exists"
+          else
+            docker build -t $IMAGE -f container_imgs/app/Dockerfile .
+            docker push $IMAGE
+          fi
+
   deploy-seed:
     name: Deploy seed
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +63,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
   deploy-envs:
     name: Deploy to ${{ matrix.environment }}
     runs-on: ubuntu-latest
@@ -39,7 +71,6 @@ jobs:
     strategy:
       matrix:
         environment: [dev, prod]
-      max-parallel: 1
     environment: ${{ matrix.environment }}
     steps:
       - uses: actions/checkout@v4
