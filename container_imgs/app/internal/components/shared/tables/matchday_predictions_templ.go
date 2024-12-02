@@ -318,7 +318,7 @@ func MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, m
 					return templ_7745c5c3_Err
 				}
 			}
-			if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" {
+			if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"border-gray-600\"><span class=\"font-medium text-xs\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -815,7 +815,7 @@ func circleClasses(match db.Match, predictions []db.UserPredictions, matchIndex 
 
 	for _, pred := range predictions {
 		if pred.IsCorrect[matchIndex][0].Valid {
-			return "bg-red-500"
+			return "bg-gray-500"
 		}
 	}
 
@@ -858,6 +858,9 @@ func formatGoals(goals pgtype.Int4) string {
 func formatMins(match db.Match) string {
 	if match.Status == "HT" {
 		return "DES"
+	}
+	if match.Status == "FT" {
+		return "FIN"
 	}
 
 	var valMins int

@@ -130,7 +130,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions, 
                                                     <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
                                                 </div>
                                             }
-                                            if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" {
+                                            if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
                                                 <div class="border-gray-600">
                                                     <span class="font-medium text-xs">{ formatMins(match) }</span>
                                                 </div>
@@ -354,7 +354,7 @@ func circleClasses(match db.Match, predictions []db.UserPredictions, matchIndex 
 
     for _, pred := range predictions {
         if pred.IsCorrect[matchIndex][0].Valid{
-            return "bg-red-500"
+            return "bg-gray-500"
         }
     }
 
@@ -397,6 +397,9 @@ func formatGoals(goals pgtype.Int4) string {
 func formatMins(match db.Match) string {
     if match.Status == "HT" {
         return "DES"
+    }
+    if match.Status == "FT" {
+        return "FIN"
     }
 
     var valMins int
