@@ -358,7 +358,7 @@ func circleClasses(match db.Match, predictions []db.UserPredictions, matchIndex 
         }
     }
 
-    if match.Status != "LIVE" {
+    if match.Status != "1H" && match.Status != "HT" && match.Status != "2H" && match.Status == "ET" {
         return "bg-gray-500"
     }
 
