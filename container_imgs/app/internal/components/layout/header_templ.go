@@ -29,7 +29,7 @@ func Header(title string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"bg-blue-600 text-white py-4\"><div class=\"container mx-auto px-4\"><h1 class=\"text-2xl font-bold\">")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -42,7 +42,7 @@ func Header(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><nav class=\"mt-2\"><ul class=\"flex space-x-4\"><li><a href=\"/\" class=\"hover:underline\">Home</a></li><li><a href=\"/about\" class=\"hover:underline\">About</a></li><li><a href=\"/contact\" class=\"hover:underline\">Contact</a></li></ul></nav></div></header>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

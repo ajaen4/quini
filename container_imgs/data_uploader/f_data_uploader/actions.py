@@ -248,7 +248,22 @@ def evaluate_matches(quiniela: dict, matches: dict):
         if match["status"] != "FT":
             continue
 
-        if match["home_goals"] > match["away_goals"]:
+        # Pleno al 15
+        if match["match_num"] == 14:
+            home_goals = (
+                match["home_goals"] if match["home_goals"] < 2 else "M"
+            )
+            away_goals = (
+                match["away_goals"] if match["away_goals"] < 2 else "M"
+            )
+            fixtures_sign.append(
+                {
+                    "match_num": match["match_num"],
+                    "sign": f"{home_goals}-{away_goals}",
+                }
+            )
+        # Rest of matches
+        elif match["home_goals"] > match["away_goals"]:
             fixtures_sign.append(
                 {"match_num": match["match_num"], "sign": "1"}
             )
