@@ -21,14 +21,14 @@ func GetUserPoints() ([]UserCumPoints, error) {
 				bavariada.results
 		)
 		SELECT
-			users.raw_user_meta_data->>'display_name' AS user_name,
-			array_agg(points.cumulative_points::integer ORDER BY points.matchday) AS cumulative_points
+			COALESCE(users.raw_user_meta_data->>'display_name', users.email) AS user_name,
+			array_agg(COALESCE(points.cumulative_points::integer, 0) ORDER BY points.matchday) AS cumulative_points
 		FROM
 			user_points points
 		INNER JOIN
 			auth.users users ON points.user_id = users.id
 		GROUP BY
-			points.user_id, users.raw_user_meta_data->>'display_name';`,
+			points.user_id, COALESCE(users.raw_user_meta_data->>'display_name', users.email);`,
 	)
 	if err != nil {
 		return []UserCumPoints{}, err
@@ -58,17 +58,17 @@ func GetTotalResults() ([]UserTotalResults, error) {
 	db := New()
 	rows, err := db.Query(
 		`SELECT
-			users.raw_user_meta_data->>'display_name' AS user_name,
-			SUM(results.points) as total_points,
-			SUM(results.price_euros) as price_euros,
-			SUM(results.debt_euros) as debt_euros
+			COALESCE(users.raw_user_meta_data->>'display_name', users.email) AS user_name,
+			COALESCE(SUM(results.points), 0) as total_points,
+			COALESCE(SUM(results.price_euros), 0) as price_euros,
+			COALESCE(SUM(results.debt_euros), 0) as debt_euros
 		FROM
 			bavariada.results as results
 		INNER JOIN
 			auth.users users ON results.user_id = users.id
 		GROUP BY
 			results.user_id,
-			users.raw_user_meta_data->>'display_name'
+			COALESCE(users.raw_user_meta_data->>'display_name', users.email)
 		ORDER BY
 			total_points DESC;`,
 	)
@@ -100,7 +100,7 @@ func GetResultsPerMatchday() ([]UserMatchdayResults, error) {
 	db := New()
 	rows, err := db.Query(
 		`SELECT
-			users.raw_user_meta_data->>'display_name' AS user_name,
+			COALESCE(users.raw_user_meta_data->>'display_name', users.email) AS user_name,
 			results.matchday,
 			results.points,
 			results.debt_euros

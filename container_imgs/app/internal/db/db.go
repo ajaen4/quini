@@ -1,7 +1,6 @@
 package db
 
 import (
-	"aws_lib/aws_lib"
 	"context"
 	"fmt"
 	"log"
@@ -45,31 +44,16 @@ func New() Service {
 
 func initDB() *db {
 	var sslmode string
-	var param map[string]string
-	var (
-		db_name,
-		password,
-		username,
-		port,
-		host string
-	)
 
-	if env == "LOCAL" {
-		db_name = os.Getenv("DB_NAME")
-		password = os.Getenv("DB_PASSWORD")
-		username = os.Getenv("DB_USERNAME")
-		port = os.Getenv("DB_PORT")
-		host = os.Getenv("DB_HOST")
-	} else {
+	if env != "LOCAL" {
 		sslmode = "require"
-		sm := aws_lib.NewSSM("")
-		param = sm.GetParam(fmt.Sprintf("/quini/secrets/%s", env), true)
-		db_name = param["DB_NAME"]
-		password = param["DB_PASSWORD"]
-		username = param["DB_USERNAME"]
-		port = param["DB_PORT"]
-		host = param["DB_HOST"]
 	}
+
+	db_name := os.Getenv("DB_NAME")
+	password := os.Getenv("DB_PASSWORD")
+	username := os.Getenv("DB_USERNAME")
+	port := os.Getenv("DB_PORT")
+	host := os.Getenv("DB_HOST")
 
 	connStr := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=%s",

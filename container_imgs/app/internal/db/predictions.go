@@ -31,13 +31,13 @@ func GetUserPredictions(matchday int32) (map[string]UserPredictions, error) {
 			)
 			SELECT
 				users.id as user_id,
-				users.raw_user_meta_data->>'display_name' AS display_name,
+				COALESCE(COALESCE(users.raw_user_meta_data->>'display_name', users.email), users.email) AS display_name,
 				array_agg(predictions_per_user_match.predictions ORDER BY predictions_per_user_match.match_num) as predictions,
 				array_agg(predictions_per_user_match.is_correct ORDER BY predictions_per_user_match.match_num) as is_correct,
 				array_agg(predictions_per_user_match.is_elige8 ORDER BY predictions_per_user_match.match_num) as is_elige8
 			FROM predictions_per_user_match
 			LEFT JOIN auth.users users ON predictions_per_user_match.user_id = users.id
-			GROUP BY users.id, users.raw_user_meta_data->>'display_name';`,
+			GROUP BY users.id, COALESCE(COALESCE(users.raw_user_meta_data->>'display_name', users.email), users.email);`,
 			matchday,
 		),
 	)

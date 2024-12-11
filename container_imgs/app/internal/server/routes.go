@@ -1,34 +1,39 @@
 package server
 
 import (
-	"app/internal"
-	"app/internal/api_errors"
 	"log"
 	"net/http"
 
-	"github.com/a-h/templ"
+	"app/internal"
+	"app/internal/api_errors"
+	"app/internal/responses"
+
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
-func (api *Api) RegisterRoutes() *chi.Mux {
-	r := chi.NewRouter()
+func (server *Server) RegisterRoutes() {
+	server.router.Post("/auth/google", NewHandler(server.HandleGoogleAuth))
+	server.router.Get("/auth/logout", NewHandler(server.HandleLogout))
+	server.router.HandleFunc("/login", NewHandler(server.Login))
+	server.router.Handle("/static/*", http.FileServer(http.FS(internal.StaticFiles)))
 
-	r.Use(middleware.Heartbeat("/ping"))
-	r.Use(middleware.Logger)
+	server.router.Group(func(r chi.Router) {
+		r.Use(server.AuthAPIMiddleware)
 
-	r.Handle("/static/*", http.FileServer(http.FS(internal.StaticFiles)))
+		r.Get("/points/cumulative", NewHandler(server.GraphContents))
 
-	r.HandleFunc("/", NewHandler(root))
-	r.HandleFunc("/points/cumulative", NewHandler(graphContents))
+		r.Get("/components/tables/total-points", NewHandler(server.TotalResults))
+		r.Get("/components/badges/total-debt", NewHandler(server.TotalDebt))
+		r.Get("/components/badges/total-price", NewHandler(server.TotalPrice))
+		r.Get("/components/tables/points-per-matchday", NewHandler(server.ResultsPerMatchday))
+		r.Get("/components/tables/matchday-predictions", NewHandler(server.MatchdayPredictions))
+	})
 
-	r.HandleFunc("/components/tables/total-points", NewHandler(totalResults))
-	r.HandleFunc("/components/badges/total-debt", NewHandler(totalDebt))
-	r.HandleFunc("/components/badges/total-price", NewHandler(totalPrice))
-	r.HandleFunc("/components/tables/points-per-matchday", NewHandler(resultsPerMatchday))
-	r.Handle("/components/tables/matchday-predictions", NewHandler(matchdayPredictions))
+	server.router.Group(func(r chi.Router) {
+		r.Use(server.AuthPageMiddleware)
 
-	return r
+		r.Get("/", NewHandler(server.Root))
+	})
 }
 
 type CustomHandler func(w http.ResponseWriter, request *http.Request) error
@@ -41,9 +46,9 @@ func NewHandler(customHandler CustomHandler) http.HandlerFunc {
 		if err != nil {
 			log.Printf("Error: %s", err.Error())
 			if clientErr, ok := err.(*api_errors.ClientErr); ok {
-				respondWithJSON(w, clientErr.HttpCode, clientErr)
+				responses.RespondWithJSON(w, clientErr.HttpCode, clientErr)
 			} else {
-				respondWithJSON(w, http.StatusInternalServerError,
+				responses.RespondWithJSON(w, http.StatusInternalServerError,
 					api_errors.InternalErr{
 						HttpCode: http.StatusInternalServerError,
 						Message:  "internal server error",
@@ -52,8 +57,4 @@ func NewHandler(customHandler CustomHandler) http.HandlerFunc {
 			}
 		}
 	}
-}
-
-func Render(w http.ResponseWriter, r *http.Request, comp templ.Component) error {
-	return comp.Render(r.Context(), w)
 }
