@@ -4,7 +4,7 @@ func GetUsers() (map[string]string, error) {
 	db := New()
 
 	rows, err := db.Query(
-		`SELECT id, users.raw_user_meta_data->>'display_name'
+		`SELECT id, COALESCE(users.raw_user_meta_data->>'display_name', users.email)
 		FROM auth.users;`,
 	)
 	if err != nil {
