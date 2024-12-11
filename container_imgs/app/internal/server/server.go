@@ -1,8 +1,10 @@
 package server
 
 import (
+	"aws_lib/aws_lib"
 	"encoding/gob"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -26,8 +28,19 @@ func NewServer(port int) *Server {
 	// This is required because gorilla/sessions uses gob to serialize session data.
 	gob.Register(time.Time{})
 
-	key := []byte(os.Getenv("SESSION_KEY"))
 	env := os.Getenv("ENV")
+
+	if env != "LOCAL" {
+		sm := aws_lib.NewSSM("")
+		param := sm.GetParam(fmt.Sprintf("/quini/secrets/%s", env), true)
+		for varName, varValue := range param {
+			if err := os.Setenv(varName, varValue); err != nil {
+				log.Fatal("failed to set environment variable %s: %w", varName, err)
+			}
+		}
+	}
+
+	key := []byte(os.Getenv("SESSION_KEY"))
 	isSecure := env != "LOCAL"
 
 	store := sessions.NewCookieStore(key)
