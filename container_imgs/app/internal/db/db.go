@@ -1,6 +1,7 @@
 package db
 
 import (
+	"aws_lib/aws_lib"
 	"context"
 	"fmt"
 	"log"
@@ -47,6 +48,13 @@ func initDB() *db {
 
 	if env != "LOCAL" {
 		sslmode = "require"
+		sm := aws_lib.NewSSM("")
+		param := sm.GetParam(fmt.Sprintf("/quini/secrets/%s", env), true)
+		for varName, varValue := range param {
+			if err := os.Setenv(varName, varValue); err != nil {
+				log.Fatal("failed to set environment variable %s: %w", varName, err)
+			}
+		}
 	}
 
 	db_name := os.Getenv("DB_NAME")
