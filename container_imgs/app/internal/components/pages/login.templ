@@ -2,7 +2,7 @@ package pages
 
 import "app/internal/components/layout"
 
-templ Login(postHogKey string) {
+templ Login(postHogKey, googleClientId string) {
     @layout.Layout("Login", postHogKey) {
         <div class="min-h-[80vh] flex items-center justify-center">
             <script>
@@ -30,7 +30,7 @@ templ Login(postHogKey string) {
                 <div class="flex justify-center">
                     <div
                         id="g_id_onload"
-                        data-client_id="425055580043-j0dv98j15jn91s5ea5p19cts2am6d0ss.apps.googleusercontent.com"
+                        data-client_id={googleClientId}
                         data-context="signin"
                         data-ux_mode="popup"
                         data-callback="handleSignInWithGoogle"
