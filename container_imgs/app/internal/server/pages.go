@@ -12,5 +12,5 @@ func (s *Server) Root(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (s *Server) Login(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, pages.Login(os.Getenv("POSTHOG_KEY")))
+	return Render(w, r, pages.Login(os.Getenv("POSTHOG_KEY"), os.Getenv("GOOGLE_CLIENT_ID")))
 }
