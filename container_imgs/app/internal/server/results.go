@@ -65,9 +65,11 @@ func (s *Server) MatchdayPredictions(w http.ResponseWriter, r *http.Request) err
 		return err
 	}
 
-	for userId := range users {
-		if _, ok := matchdayPredictions[userId]; ok {
-			delete(users, userId)
+	for userId, userName := range users {
+		if _, ok := matchdayPredictions[userId]; !ok {
+			matchdayPredictions[userId] = db.UserPredictions{
+				UserName: userName,
+			}
 		}
 	}
 
@@ -84,5 +86,6 @@ func (s *Server) MatchdayPredictions(w http.ResponseWriter, r *http.Request) err
 	if err != nil {
 		return err
 	}
-	return Render(w, r, tables.MatchdayPredictions(matches, values, users))
+
+	return Render(w, r, tables.MatchdayPredictions(matches, values))
 }
