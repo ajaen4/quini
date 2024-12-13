@@ -153,7 +153,7 @@ def upload_predictions():
         if lotero_user_id:
             user_id = get_user_id(lotero_user_id)
         else:
-            user_id = "3722aea7-3c82-416e-8996-90e6b3334cd2"
+            user_id = "39ecabed-4917-4774-bc64-f9219dec455a"
 
         combinaciones = prediction["apuesta"]["combinaciones"]
         match_15 = (
