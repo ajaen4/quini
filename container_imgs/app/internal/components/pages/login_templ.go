@@ -43,14 +43,14 @@ func Login(postHogKey, googleClientId string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-[80vh] flex items-center justify-center\"><script>\n                window.handleSignInWithGoogle = async function(response) {\n                    try {\n                        const res = await fetch('/auth/google', {\n                            method: 'POST',\n                            headers: { 'Content-Type': 'application/json' },\n                            body: JSON.stringify({ credential: response.credential })\n                        });\n\n                        if (res.ok) {\n                            window.location.href = '/'\n                        } else {\n                            console.error('Auth failed')\n                        }\n                    } catch (err) {\n                        console.error('Auth error:', err)\n                    }\n                }\n            </script><div class=\"bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md\"><h1 class=\"text-3xl font-bold text-center mb-8\">Quini</h1><div class=\"flex justify-center\"><div id=\"g_id_onload\" data-client_id=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-[80vh] flex items-center justify-center\"><script>\n                window.handleSignInWithGoogle = async function(response) {\n                    try {\n                        const res = await fetch('/auth/google', {\n                            method: 'POST',\n                            headers: { 'Content-Type': 'application/json' },\n                            body: JSON.stringify({ credential: response.credential })\n                        });\n\n                        if (res.ok) {\n                            window.location.href = '/'\n                        } else {\n                            console.error('Auth failed')\n                        }\n                    } catch (err) {\n                        console.error('Auth error:', err)\n                    }\n                }\n            </script><div class=\"bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md\"><div class=\"flex justify-center mb-8\"><img src=\"static/images/favicon.svg\" alt=\"Logo\" class=\"w-10 h-10\" loading=\"eager\"><h1 class=\"text-3xl font-bold text-center mt-1 ml-2\">Quini</h1></div><div class=\"flex justify-center\"><div id=\"g_id_onload\" data-client_id=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(googleClientId)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/pages/login.templ`, Line: 33, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/pages/login.templ`, Line: 39, Col: 54}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
