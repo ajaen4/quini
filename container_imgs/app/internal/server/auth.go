@@ -2,13 +2,17 @@ package server
 
 import (
 	"app/internal/api_errors"
+	"app/internal/db"
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -21,6 +25,10 @@ type TokenResponse struct {
 
 type GoogleTokenRequest struct {
 	Credential string `json:"credential"`
+}
+
+type User struct {
+	ID string `json:"id"`
 }
 
 func (s *Server) HandleGoogleAuth(w http.ResponseWriter, r *http.Request) error {
@@ -94,6 +102,21 @@ func (s *Server) AuthPageMiddleware(next http.Handler) http.Handler {
 			accessToken = tokenResp.AccessToken
 		}
 
+		userID, err := parseUserIDFromToken(accessToken)
+		if err != nil {
+			return err
+		}
+
+		isAuth, err := db.IsAuthUser(userID)
+		if err != nil {
+			return err
+		}
+		if !isAuth {
+			log.Print("User not authorized for private beta")
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return nil
+		}
+
 		ctx := context.WithValue(r.Context(), "token", accessToken)
 		next.ServeHTTP(w, r.WithContext(ctx))
 		return nil
@@ -139,10 +162,51 @@ func (s *Server) AuthAPIMiddleware(next http.Handler) http.Handler {
 			accessToken = tokenResp.AccessToken
 		}
 
+		userID, err := parseUserIDFromToken(accessToken)
+		if err != nil {
+			return err
+		}
+
+		isAuth, err := db.IsAuthUser(userID)
+		if err != nil {
+			return err
+		}
+		if !isAuth {
+			return &api_errors.ClientErr{
+				HttpCode: http.StatusUnauthorized,
+				Message:  "User not authorized for private beta",
+			}
+		}
+
 		ctx := context.WithValue(r.Context(), "token", accessToken)
+		ctx = context.WithValue(ctx, "userId", userID)
+
 		next.ServeHTTP(w, r.WithContext(ctx))
 		return nil
 	})
+}
+
+type JWTClaims struct {
+	Sub string `json:"sub"`
+}
+
+func parseUserIDFromToken(tokenString string) (string, error) {
+	parts := strings.Split(tokenString, ".")
+	if len(parts) != 3 {
+		return "", fmt.Errorf("invalid token format")
+	}
+
+	payload, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return "", err
+	}
+
+	var claims JWTClaims
+	if err := json.Unmarshal(payload, &claims); err != nil {
+		return "", err
+	}
+
+	return claims.Sub, nil
 }
 
 func (s *Server) exchangeGoogleToken(idToken string) (*TokenResponse, error) {

@@ -10,7 +10,6 @@ primary_region = 'mad'
   LOTERIAS_URL = 'https://www.loteriasyapuestas.es/servicios/buscadorSorteos'
   AWS_ROLE_ARN = 'arn:aws:iam::744516196303:role/fly-io'
   AWS_REGION = 'eu-south-2'
-  POSTHOG_KEY = 'phc_yf3R6KsyFaJYXSCl8omG9VUqD1RLinQuTdlSd9EqTSI'
 
 [processes]
   app = './main'
