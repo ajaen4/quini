@@ -28,3 +28,24 @@ func GetUsers() (map[string]string, error) {
 
 	return users, nil
 }
+
+func IsAuthUser(id string) (bool, error) {
+	db := New()
+
+	var numUsers int
+	err := db.QueryRow(
+		`SELECT count(*)
+			FROM auth.users
+			WHERE id = $1 AND raw_user_meta_data->>'is_auth_user' = 'true'`,
+		id,
+	).Scan(&numUsers)
+	if err != nil {
+		return false, err
+	}
+
+	if numUsers == 1 {
+		return true, nil
+	}
+
+	return false, nil
+}
