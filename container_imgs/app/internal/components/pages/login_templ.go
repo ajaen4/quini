@@ -43,7 +43,7 @@ func Login(postHogKey, googleClientId string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-[80vh] flex items-center justify-center\"><script>\n                window.handleSignInWithGoogle = async function(response) {\n                    try {\n                        const res = await fetch('/auth/google', {\n                            method: 'POST',\n                            headers: { 'Content-Type': 'application/json' },\n                            body: JSON.stringify({ credential: response.credential })\n                        });\n\n                        if (res.ok) {\n                            window.location.href = '/'\n                        } else {\n                            console.error('Auth failed')\n                        }\n                    } catch (err) {\n                        console.error('Auth error:', err)\n                    }\n                }\n            </script><div class=\"bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md\"><h1 class=\"text-3xl font-bold text-center mb-8\">Welcome to Quini</h1><div class=\"flex justify-center\"><div id=\"g_id_onload\" data-client_id=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-[80vh] flex items-center justify-center\"><script>\n                window.handleSignInWithGoogle = async function(response) {\n                    try {\n                        const res = await fetch('/auth/google', {\n                            method: 'POST',\n                            headers: { 'Content-Type': 'application/json' },\n                            body: JSON.stringify({ credential: response.credential })\n                        });\n\n                        if (res.ok) {\n                            window.location.href = '/'\n                        } else {\n                            console.error('Auth failed')\n                        }\n                    } catch (err) {\n                        console.error('Auth error:', err)\n                    }\n                }\n            </script><div class=\"bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md\"><h1 class=\"text-3xl font-bold text-center mb-8\">Quini</h1><div class=\"flex justify-center\"><div id=\"g_id_onload\" data-client_id=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -62,7 +62,7 @@ func Login(postHogKey, googleClientId string) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = layout.Layout("Login", postHogKey).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout.Layout("Login", postHogKey, false).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
