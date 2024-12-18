@@ -123,16 +123,17 @@ func (function *function) createFunction(role *iam.Role) {
 
 	repoUrl := quiniSeed.GetStringOutput(pulumi.Sprintf("%s-repo-url", function.name))
 	registryId := quiniSeed.GetStringOutput(pulumi.Sprintf("%s-repo-registry-id", function.name))
+	funcName := fmt.Sprintf("%s-%s", function.name, function.env)
+
 	image := NewImage(
 		function.ctx,
-		function.name,
+		funcName,
 		function.cfg.ImgCfg,
 		repoUrl,
 		registryId,
 	)
 	imageUrl := image.PushImage(function.cfg.BuildVersion)
 
-	funcName := fmt.Sprintf("%s-%s", function.name, function.env)
 	lambdaFunction, err := lambda.NewFunction(
 		function.ctx,
 		funcName,
