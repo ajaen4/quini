@@ -35,7 +35,7 @@ func (img *Image) PushImage(version string) pulumi.StringInput {
 	authToken := img.authenticate()
 
 	imageURI := img.repositoryUrl.ApplyT(func(repositoryUrl string) string {
-		return fmt.Sprintf("%s:%s", repositoryUrl, version)
+		return fmt.Sprintf("%s:%s-%s", repositoryUrl, img.name, version)
 	}).(pulumi.StringInput)
 
 	push := img.repositoryUrl.ApplyT(func(repositoryUrl string) bool {
