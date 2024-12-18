@@ -158,6 +158,8 @@ def upload_predictions():
 
         if lotero_user_id:
             user_id = get_user_id(lotero_user_id)
+        elif cfg.ENV == "dev":
+            user_id = "0105b9e3-fb43-48de-89ae-2497ee2507c3"
         else:
             user_id = "39ecabed-4917-4774-bc64-f9219dec455a"
 
