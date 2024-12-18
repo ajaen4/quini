@@ -34,13 +34,14 @@ func NewImage(ctx *pulumi.Context, name string, imgCfg input.ImgCfg, repositoryU
 func (img *Image) PushImage(version string) pulumi.StringInput {
 	authToken := img.authenticate()
 
+	imageTag := fmt.Sprintf("%s-%s", img.name, version)
 	imageURI := img.repositoryUrl.ApplyT(func(repositoryUrl string) string {
-		return fmt.Sprintf("%s:%s-%s", repositoryUrl, img.name, version)
+		return fmt.Sprintf("%s:%s", repositoryUrl, imageTag)
 	}).(pulumi.StringInput)
 
 	push := img.repositoryUrl.ApplyT(func(repositoryUrl string) bool {
 		ecr := aws_lib.NewECR(input.GetRegion())
-		push := !ecr.IsImageInECR(repositoryUrl, version)
+		push := !ecr.IsImageInECR(repositoryUrl, imageTag)
 		return push
 	}).(pulumi.BoolInput)
 
