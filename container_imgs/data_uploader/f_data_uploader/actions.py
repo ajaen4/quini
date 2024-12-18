@@ -2,6 +2,7 @@ import requests
 from datetime import (
     datetime,
 )
+import random
 from zoneinfo import ZoneInfo
 
 from f_data_uploader.sql import (
@@ -33,25 +34,28 @@ import f_data_uploader.cfg as cfg
 def run_data_uploader():
     logger.info("Running data uploader...")
 
-    logger.info("Getting next matchday...")
-    next_matchday = get_next_matchday()
-    logger.info("Finished getting next matchday")
+    random_num = random.randint(0, 10)
 
-    if next_matchday is None:
-        logger.info("Matchday not ready, skipping upload")
-    elif matchday_exists(next_matchday):
-        logger.info("Matchday already exists, skipping upload")
-    elif not has_one_spanish_match(next_matchday["partidos"]):
-        logger.info("Matchday is not a spanish quiniela, skipping upload")
-    else:
-        logger.info("Uploading matchdays...")
-        upload_matchday(next_matchday)
-        logger.info("Finished uploading matchdays")
+    if random_num == 0:
+        logger.info("Getting next matchday...")
+        next_matchday = get_next_matchday()
+        logger.info("Finished getting next matchday")
 
-    if next_matchday is not None and matchday_exists(next_matchday):
-        logger.info("Fetching predictions statistics...")
-        upload_predictions_stats(next_matchday)
-        logger.info("Finished fetching predictions statistics")
+        if next_matchday is None:
+            logger.info("Matchday not ready, skipping upload")
+        elif matchday_exists(next_matchday):
+            logger.info("Matchday already exists, skipping upload")
+        elif not has_one_spanish_match(next_matchday["partidos"]):
+            logger.info("Matchday is not a spanish quiniela, skipping upload")
+        else:
+            logger.info("Uploading matchdays...")
+            upload_matchday(next_matchday)
+            logger.info("Finished uploading matchdays")
+
+        if next_matchday is not None and matchday_exists(next_matchday):
+            logger.info("Fetching predictions statistics...")
+            upload_predictions_stats(next_matchday)
+            logger.info("Finished fetching predictions statistics")
 
     logger.info("Updating matches status...")
     update_matches_status()
@@ -85,6 +89,7 @@ def get_next_matchday() -> dict:
     response = requests.get(
         f"{cfg.LOTERIAS_URL}/proximosv3",
         params=params,
+        headers=cfg.LOTERO_HEADERS,
     )
     response.raise_for_status()
     next_matchday = response.json()[0]
@@ -102,6 +107,7 @@ def get_next_matchday() -> dict:
     response = requests.get(
         f"{cfg.LOTERIAS_URL}/fechav3",
         params=params,
+        headers=cfg.LOTERO_HEADERS,
     )
     response.raise_for_status()
 
@@ -212,9 +218,8 @@ def upload_is_correct():
     logger.info(f"Found matchdays: {matchdays}")
     for matchday in matchdays:
         matches = get_matches(matchday["matchday"])
-        quiniela = get_quiniela(matchday["matchday"])
 
-        matches_status = evaluate_matches(quiniela, matches)
+        matches_status = evaluate_matches(matchday["matchday"], matches)
         match_results = list()
         for match_status in matches_status:
             match_results.append(
@@ -229,17 +234,21 @@ def upload_is_correct():
         update_predictions(match_results)
 
 
-def evaluate_matches(quiniela: dict, matches: dict):
+def evaluate_matches(matchday: int, matches: dict):
     fixtures_sign = list()
+    quiniela = None
     for match in matches:
         # Match postponed and loterias has results
-        if match["status"] == "PST" and quiniela[match["match_num"]]["signo"]:
-            fixtures_sign.append(
-                {
-                    "match_num": match["match_num"],
-                    "sign": quiniela[match["match_num"]]["signo"].strip(),
-                }
-            )
+        if match["status"] == "PST":
+            if not quiniela:
+                quiniela = get_quiniela(matchday)
+            if quiniela[match["match_num"]]["signo"]:
+                fixtures_sign.append(
+                    {
+                        "match_num": match["match_num"],
+                        "sign": quiniela[match["match_num"]]["signo"].strip(),
+                    }
+                )
             continue
         # Match postponed but loterias with no results yet
         elif match["status"] == "PST":
@@ -385,6 +394,7 @@ def upload_predictions_stats(matchday: dict):
     response = requests.get(
         f"{cfg.LOTERIAS_URL}/estadisticas",
         params=params,
+        headers=cfg.LOTERO_HEADERS,
     )
     response.raise_for_status()
     statistics = response.json()

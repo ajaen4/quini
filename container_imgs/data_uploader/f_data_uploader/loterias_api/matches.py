@@ -13,7 +13,9 @@ def get_quiniela(matchday: int) -> list:
     }
 
     response = requests.get(
-        f"{cfg.LOTERIAS_URL}/buscadorSorteos", params=params
+        f"{cfg.LOTERIAS_URL}/buscadorSorteos",
+        params=params,
+        headers=cfg.LOTERO_HEADERS,
     )
     response.raise_for_status()
     quinielas = response.json()
