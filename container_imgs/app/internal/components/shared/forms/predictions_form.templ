@@ -1,0 +1,229 @@
+package forms
+
+import (
+    "strconv"
+    "fmt"
+    "app/internal/db"
+    "app/internal/format"
+)
+
+templ PredictionsForm(matchday db.NextMatchday, matches []db.Match) {
+    <div>
+        <div class="mb-6 grid grid-cols-2 md:grid-cols-8 gap-4">
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <div class="text-sm text-gray-400">Jornada</div>
+                <div class="text-xl font-bold">{ strconv.Itoa(int(matchday.Matchday.Int32)) }</div>
+            </div>
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <div class="text-sm text-gray-400">Comienza</div>
+                <div class="text-xl font-bold">{ format.FormatMatchDateTime(matchday.StartTime.Time) }</div>
+            </div>
+        </div>
+        <form
+            hx-post="/forms/predictions"
+            class="overflow-x-auto w-full"
+            x-data="{
+                elige8Count: 0,
+                regularMatches: Array.from({length: 14}, () => ({ col0: null, col1: null })),
+                plenoMatch: { home: null, away: null },
+
+                isValid() {
+                    // Check if exactly 8 elige8 are selected
+                    if (this.elige8Count !== 8) return false;
+
+                    // Check if all regular matches have both columns filled
+                    const allRegularMatchesFilled = this.regularMatches.every(match =>
+                        match.col0 !== null && match.col1 !== null
+                    );
+                    if (!allRegularMatchesFilled) return false;
+
+                    // Check if pleno match is completely filled
+                    if (this.plenoMatch.home === null || this.plenoMatch.away === null) return false;
+
+                    return true;
+                }
+            }"
+        >
+            <table class="min-w-full bg-gray-800 text-sm border-collapse rounded-lg">
+                <thead class="bg-gray-800">
+                    <tr>
+                        <th class="sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg">Partidos</th>
+                        <th class="py-1 px-1 border-b-2 border-r border-gray-600 text-center">Col 1</th>
+                        <th class="py-1 px-1 border-b-2 border-r border-gray-600 text-center">Col 2</th>
+                        <th class="py-1 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg">Elige 8</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    for _, match := range matches {
+                        <tr>
+                            <td class="sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[148px] md:w-[245px]">
+                                <div class="flex">
+                                    <div class="flex flex-col justify-center ml-2 w-16">
+                                        <div class="text-gray-300 whitespace-nowrap">
+                                            { format.FormatMatchDateTime(match.KickoffDatetime.Time) }
+                                        </div>
+                                    </div>
+                                    <div class="pl-3 md:pl-6">
+                                        <div
+                                            class="flex items-center mb-1"
+                                            x-data="{
+                                            retryCount: 0,
+                                            maxRetries: 3
+                                            }"
+                                        >
+                                            <img
+                                                src={ match.HomeLogo }
+                                                alt={ match.HomeCode }
+                                                class="h-6 w-6 object-contain"
+                                                @error="if(retryCount < maxRetries) {
+                                                    retryCount++;
+                                                    setTimeout(() => {
+                                                        $el.src += '?' + Date.now()
+                                                    }, 50 * Math.pow(2, retryCount))
+                                                }"
+                                            />
+                                            <span class="text-sm ml-1">
+                                                <span class="md:hidden">{ match.HomeCode }</span>
+                                                <span class="hidden md:inline whitespace-nowrap pr-1">{ match.HomeName }</span>
+                                            </span>
+                                        </div>
+                                        <div
+                                            class="flex items-center mb-1"
+                                            x-data="{
+                                            retryCount: 0,
+                                            maxRetries: 3
+                                            }"
+                                        >
+                                            <img
+                                                src={ match.AwayLogo }
+                                                alt={ match.AwayCode }
+                                                class="h-6 w-6 object-contain"
+                                                @error="if(retryCount < maxRetries) {
+                                                    retryCount++;
+                                                    setTimeout(() => {
+                                                        $el.src += '?' + Date.now()
+                                                    }, 50 * Math.pow(2, retryCount))
+                                                }"
+                                            />
+                                            <span class="text-sm ml-1">
+                                                <span class="md:hidden">{ match.AwayCode }</span>
+                                                <span class="hidden md:inline">{ match.AwayName }</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            if match.MatchNum == 14 {
+                                <td colspan="2" class="py-2 text-center border-t border-gray-600">
+                                    <div class="flex justify-center items-center gap-2">
+                                        <template x-for="value in ['0', '1', '2', 'M']">
+                                            <label class="relative">
+                                                <input
+                                                    type="radio"
+                                                    name="pleno_home_score"
+                                                    :value="value"
+                                                    class="absolute opacity-0 w-full h-full cursor-pointer"
+                                                    x-model="plenoMatch.home"
+                                                />
+                                                <div
+                                                    class="px-3 py-1 rounded md:text-lg cursor-pointer"
+                                                    :class="plenoMatch.home === value ? 'bg-blue-500' : 'bg-gray-700'"
+                                                    x-text="value"
+                                                >
+                                                </div>
+                                            </label>
+                                        </template>
+                                        <span class="text-white">-</span>
+                                        <div class="flex justify-center gap-2">
+                                        <template x-for="value in ['0', '1', '2', 'M']">
+                                            <label class="relative">
+                                                <input
+                                                    type="radio"
+                                                    name="pleno_away_score"
+                                                    :value="value"
+                                                    class="absolute opacity-0 w-full h-full cursor-pointer"
+                                                    x-model="plenoMatch.away"
+                                                />
+                                                <div
+                                                    class="px-3 py-1 rounded md:text-lg cursor-pointer"
+                                                    :class="plenoMatch.away === value ? 'bg-blue-500' : 'bg-gray-700'"
+                                                    x-text="value"
+                                                >
+                                                </div>
+                                            </label>
+                                        </template>
+                                    </div>
+                                    </div>
+                                </td>
+                            } else {
+                                <td class="py-2 border-r border-gray-600">
+                                    <div class="flex justify-center gap-2">
+                                        <template x-for="value in ['1', 'X', '2']">
+                                            <label class="relative">
+                                                <input
+                                                    type="radio"
+                                                    name={fmt.Sprintf("match_num_%d_col_0", match.MatchNum)}
+                                                    :value="value"
+                                                    class="absolute opacity-0 w-full h-full cursor-pointer"
+                                                    x-model={fmt.Sprintf("regularMatches[%d].col0", match.MatchNum)}
+                                                />
+                                                <div
+                                                    class="px-3 py-1 rounded md:text-lg cursor-pointer"
+                                                    :class={fmt.Sprintf("regularMatches[%d].col0 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum)}
+                                                    x-text="value"
+                                                >
+                                                </div>
+                                            </label>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td class="py-2 border-r border-gray-600">
+                                    <div class="flex justify-center gap-2">
+                                        <template x-for="value in ['1', 'X', '2']">
+                                            <label class="relative">
+                                                <input
+                                                    type="radio"
+                                                    name={fmt.Sprintf("match_num_%d_col_1", match.MatchNum)}
+                                                    :value="value"
+                                                    class="absolute opacity-0 w-full h-full cursor-pointer"
+                                                    x-model={fmt.Sprintf("regularMatches[%d].col1", match.MatchNum)}
+                                                />
+                                                <div
+                                                    class="px-3 py-1 rounded md:text-lg cursor-pointer"
+                                                    :class={fmt.Sprintf("regularMatches[%d].col1 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum)}
+                                                    x-text="value"
+                                                >
+                                                </div>
+                                            </label>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td
+                                    class={"py-2 px-2 text-center border-r border-gray-600", templ.KV("border-b", match.MatchNum == 13)}
+                                    >
+                                    <input
+                                        type="checkbox"
+                                        id="checkbox"
+                                        name={fmt.Sprintf("match_num_%d_elige8", match.MatchNum)}
+                                        @change="$event.target.checked ? elige8Count++ : elige8Count--"
+                                        :disabled="!$el.checked && elige8Count >= 8"
+                                    >
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="mt-4 flex justify-center">
+                <button
+                    type="submit"
+                    class="px-4 py-2 text-white rounded"
+                    :class="isValid() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 cursor-not-allowed'"
+                    :disabled="!isValid()"
+                >
+                    Enviar
+                </button>
+            </div>
+        </form>
+    </div>
+}

@@ -2,9 +2,11 @@ package server
 
 import (
 	"app/internal/components/shared/badges"
+	"app/internal/components/shared/forms"
 	"app/internal/components/shared/messages"
 	"app/internal/components/shared/tables"
 	"app/internal/db"
+	"log"
 
 	"net/http"
 	"sort"
@@ -88,4 +90,29 @@ func (s *Server) MatchdayPredictions(w http.ResponseWriter, r *http.Request) err
 	}
 
 	return Render(w, r, tables.MatchdayPredictions(matches, values))
+}
+
+func (s *Server) NextMatchday(w http.ResponseWriter, r *http.Request) error {
+	nextMatchday, err := db.GetNextMatchday()
+	if err != nil {
+		return err
+	}
+
+	userLastMatchday, err := db.GetUserLastMatchday(r.Context().Value("userId").(string))
+	if err != nil {
+		return err
+	}
+	log.Print(userLastMatchday)
+
+	matchdayNum := nextMatchday.Matchday.Int32
+	// if matchdayNum == 0 || userLastMatchday == matchdayNum {
+	// 	return Render(w, r, messages.Message("Próxima jornada no registrada"))
+	// }
+
+	matches, err := db.GetMatches(matchdayNum)
+	if err != nil {
+		return err
+	}
+
+	return Render(w, r, forms.PredictionsForm(nextMatchday, matches))
 }
