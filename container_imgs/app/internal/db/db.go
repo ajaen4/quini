@@ -78,10 +78,24 @@ func initDB() *db {
 		log.Fatalf("Unable to parse connection string: %v", err)
 	}
 
+	config.MinConns = 1
+	config.ConnConfig.ConnectTimeout = 10 * time.Second
+	config.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+
 	pool, err := pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
 		log.Fatalf("Unable to create connection pool: %v", err)
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	if err := pool.Ping(ctx); err != nil {
+		log.Fatalf("Unable to ping database: %v", err)
+	}
+
+	stats := pool.Stat()
+	log.Printf("Initial pool stats - Total: %d, Acquired: %d, Idle: %d",
+		stats.TotalConns(), stats.AcquiredConns(), stats.IdleConns())
 
 	return &db{
 		pool:     pool,
@@ -125,9 +139,27 @@ func (db *db) Close() error {
 }
 
 func (db *db) Query(query string, args ...interface{}) (pgx.Rows, error) {
-	return db.pool.Query(context.Background(), query, args...)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+	stats := db.pool.Stat()
+	log.Printf(
+		"Pool stats before query - Total: %d, Acquired: %d, Idle: %d",
+		stats.TotalConns(), stats.AcquiredConns(), stats.IdleConns(),
+	)
+
+	defer cancel()
+	return db.pool.Query(ctx, query, args...)
 }
 
 func (db *db) QueryRow(query string, args ...interface{}) pgx.Row {
-	return db.pool.QueryRow(context.Background(), query, args...)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	stats := db.pool.Stat()
+	log.Printf(
+		"Pool stats before query - Total: %d, Acquired: %d, Idle: %d",
+		stats.TotalConns(), stats.AcquiredConns(), stats.IdleConns(),
+	)
+
+	return db.pool.QueryRow(ctx, query, args...)
 }

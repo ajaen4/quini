@@ -17,7 +17,6 @@ func main() {
 
 	server := server.NewServer(port)
 	defer server.Close()
-	if err := server.Start(); err != nil {
-		log.Printf("Server forced to shutdown: %v", err)
-	}
+
+	server.Start()
 }

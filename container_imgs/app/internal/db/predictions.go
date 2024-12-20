@@ -61,3 +61,22 @@ func GetUserPredictions(matchday int32) (map[string]UserPredictions, error) {
 
 	return usersPredictions, nil
 }
+
+func GetUserLastMatchday(userId string) (int32, error) {
+	db := New()
+
+	var lastMatchday pgtype.Int4
+	err := db.QueryRow(
+		`SELECT MAX(matchday)
+		FROM bavariada.predictions
+		WHERE season = '2024-2025'
+		AND user_id = $1`,
+		userId,
+	).Scan(&lastMatchday)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return lastMatchday.Int32, nil
+}
