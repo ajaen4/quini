@@ -8,6 +8,7 @@ import (
     "github.com/jackc/pgx/v5/pgtype"
 
     "app/internal/db"
+    "app/internal/format"
 )
 
 templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) {
@@ -108,7 +109,7 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                 <div class="flex">
                                     <div class="flex flex-col justify-center ml-2 w-16">
                                         <div class="text-gray-300 whitespace-nowrap">
-                                            { formatMatchDateTime(match.KickoffDatetime.Time) }
+                                            { format.FormatMatchDateTime(match.KickoffDatetime.Time) }
                                         </div>
                                         <div class="text-gray-400 flex items-center gap-1 mt-1">
                                             <div class={
@@ -117,14 +118,14 @@ templ MatchdayPredictions(matches []db.Match, predictions []db.UserPredictions) 
                                             }></div>
                                             if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
                                                 <div class="bg-gray-700 rounded px-1 py-1 text-xs whitespace-nowrap inline-flex items-center">
-                                                    <span class="font-medium">{ formatGoals(match.HomeGoals) }</span>
+                                                    <span class="font-medium">{ format.FormatGoals(match.HomeGoals) }</span>
                                                     <span class="mx-1">-</span>
-                                                    <span class="font-medium">{ formatGoals(match.AwayGoals) }</span>
+                                                    <span class="font-medium">{ format.FormatGoals(match.AwayGoals) }</span>
                                                 </div>
                                             }
                                             if match.Status == "1H" || match.Status == "HT" || match.Status == "2H" || match.Status == "ET" || match.Status == "FT" {
                                                 <div class="border-gray-600">
-                                                    <span class="font-medium text-xs">{ formatMins(match) }</span>
+                                                    <span class="font-medium text-xs">{ format.FormatMins(match) }</span>
                                                 </div>
                                             }
                                         </div>
@@ -370,51 +371,4 @@ func circleClasses(match db.Match, matchIndex int) string {
     }
 
     return "bg-green-500 status-blink"
-}
-
-func formatMatchDateTime(datetime time.Time) string {
-    madridLoc, err := time.LoadLocation("Europe/Madrid")
-    if err != nil {
-        return "Error loading timezone"
-    }
-
-    madridTime := datetime.In(madridLoc)
-    spanishDayNames := map[string]string{
-        "Mon": "Lun",
-        "Tue": "Mar",
-        "Wed": "Mié",
-        "Thu": "Jue",
-        "Fri": "Vie",
-        "Sat": "Sáb",
-        "Sun": "Dom",
-    }
-
-    engDay := madridTime.Format("Mon")
-    spanishDay := spanishDayNames[engDay]
-    return spanishDay + " " + madridTime.Format("15:04")
-}
-
-func formatGoals(goals pgtype.Int4) string {
-    if goals.Valid {
-        return strconv.Itoa(int(goals.Int32))
-    }
-    return "0"
-}
-
-func formatMins(match db.Match) string {
-    if match.Status == "HT" {
-        return "DES"
-    }
-    if match.Status == "FT" {
-        return "FIN"
-    }
-
-    var valMins int
-    mins := match.Minutes
-    if mins.Valid {
-        valMins = int(mins.Int32)
-    } else {
-        valMins = 0
-    }
-    return fmt.Sprintf("%s'", strconv.Itoa(valMins))
 }

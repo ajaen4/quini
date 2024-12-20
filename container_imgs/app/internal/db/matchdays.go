@@ -6,6 +6,29 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type NextMatchday struct {
+	Matchday  pgtype.Int4
+	StartTime pgtype.Timestamp
+}
+
+func GetNextMatchday() (NextMatchday, error) {
+	db := New()
+
+	var nextMatchday NextMatchday
+	err := db.QueryRow(
+		`SELECT MIN(matchday), start_datetime
+		FROM bavariada.matchdays
+		WHERE season = '2024-2025'
+		AND status = 'NOT_STARTED'
+		GROUP BY matchday, start_datetime`,
+	).Scan(&nextMatchday.Matchday, &nextMatchday.StartTime)
+	if err != nil {
+		return NextMatchday{}, err
+	}
+
+	return nextMatchday, nil
+}
+
 func GetMatchdayInProg() (int32, error) {
 	db := New()
 

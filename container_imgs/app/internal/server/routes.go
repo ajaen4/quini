@@ -12,10 +12,13 @@ import (
 )
 
 func (server *Server) RegisterRoutes() {
+
+	server.router.Handle("/static/*", http.FileServer(http.FS(internal.StaticFiles)))
+	server.router.Get("/health", NewHandler(server.Health))
+
 	server.router.Post("/auth/google", NewHandler(server.HandleGoogleAuth))
 	server.router.Get("/auth/logout", NewHandler(server.HandleLogout))
-	server.router.HandleFunc("/login", NewHandler(server.Login))
-	server.router.Handle("/static/*", http.FileServer(http.FS(internal.StaticFiles)))
+	server.router.Get("/login", NewHandler(server.Login))
 
 	server.router.Group(func(r chi.Router) {
 		r.Use(server.AuthAPIMiddleware)
@@ -27,6 +30,9 @@ func (server *Server) RegisterRoutes() {
 		r.Get("/components/badges/total-price", NewHandler(server.TotalPrice))
 		r.Get("/components/tables/points-per-matchday", NewHandler(server.ResultsPerMatchday))
 		r.Get("/components/tables/matchday-predictions", NewHandler(server.MatchdayPredictions))
+		r.Get("/components/forms/next-matchday", NewHandler(server.NextMatchday))
+
+		r.Post("/forms/predictions", NewHandler(server.NewPrediction))
 	})
 
 	server.router.Group(func(r chi.Router) {
