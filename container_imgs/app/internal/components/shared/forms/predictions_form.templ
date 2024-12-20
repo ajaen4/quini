@@ -59,7 +59,7 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match) {
                                 <td class="sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[148px] md:w-[245px]">
                                     <div class="flex">
                                         <div class="flex flex-col justify-center ml-2 w-16">
-                                            <div class="text-gray-300 whitespace-nowrap">
+                                            <div class="text-gray-300 whitespace-nowrap text-sm">
                                                 { format.FormatMatchDateTime(match.KickoffDatetime.Time) }
                                             </div>
                                         </div>
@@ -115,7 +115,7 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match) {
                                 </td>
                                 if match.MatchNum == 14 {
                                     <td colspan="3" class="py-2 text-center border-t border-gray-600">
-                                        <div class="flex justify-center items-center gap-2">
+                                        <div class="flex justify-center items-center gap-2 mx-2">
                                             <div class="flex justify-center gap-2">
                                                 <template x-for="value in ['0', '1', '2', 'M']">
                                                     <label class="relative">
