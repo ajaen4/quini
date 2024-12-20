@@ -67,7 +67,7 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match) templ.Compone
 			return templ_7745c5c3_Err
 		}
 		for _, match := range matches {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr><td class=\"sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[148px] md:w-[245px]\"><div class=\"flex\"><div class=\"flex flex-col justify-center ml-2 w-16\"><div class=\"text-gray-300 whitespace-nowrap\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr><td class=\"sticky left-0 z-10 py-1 border-b border-r border-gray-600 bg-gray-800 min-w-[148px] md:w-[245px]\"><div class=\"flex\"><div class=\"flex flex-col justify-center ml-2 w-16\"><div class=\"text-gray-300 whitespace-nowrap text-sm\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -189,7 +189,7 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match) templ.Compone
 				return templ_7745c5c3_Err
 			}
 			if match.MatchNum == 14 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td colspan=\"3\" class=\"py-2 text-center border-t border-gray-600\"><div class=\"flex justify-center items-center gap-2\"><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_home_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.home\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.home === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div><span class=\"text-white\">-</span><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_away_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.away\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.away === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div></div></td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td colspan=\"3\" class=\"py-2 text-center border-t border-gray-600\"><div class=\"flex justify-center items-center gap-2 mx-2\"><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_home_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.home\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.home === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div><span class=\"text-white\">-</span><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_away_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.away\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.away === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div></div></td>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
