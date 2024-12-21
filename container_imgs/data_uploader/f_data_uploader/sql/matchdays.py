@@ -3,85 +3,91 @@ from f_data_uploader.logger import logger
 
 
 def insert_matchday(matchday: dict):
-    with db.get_cursor() as cur:
-        cur.execute(
-            """
-            INSERT INTO bavariada.matchdays (season, matchday, status, start_datetime)
-            VALUES (%s, %s, 'NOT_STARTED', %s)
-            """,
-            (
-                matchday["temporada"],
-                matchday["jornada"],
-                matchday["start_datetime"],
-            ),
-        )
+    cur = db.get_conn().cursor()
+    cur.execute(
+        """
+        INSERT INTO bavariada.matchdays (season, matchday, status, start_datetime)
+        VALUES (%s, %s, 'NOT_STARTED', %s)
+        """,
+        (
+            matchday["temporada"],
+            matchday["jornada"],
+            matchday["start_datetime"],
+        ),
+    )
+    cur.close()
 
 
 def matchday_exists(matchday: dict) -> bool:
-    with db.get_cursor() as cur:
-        cur.execute(
-            """
-            SELECT matchday FROM bavariada.matchdays
-            WHERE matchday = %s
-            AND season = %s
-            """,
-            (
-                matchday["jornada"],
-                matchday["temporada"],
-            ),
-        )
-        exists = cur.fetchone() is not None
+    cur = db.get_conn().cursor()
+    cur.execute(
+        """
+        SELECT matchday FROM bavariada.matchdays
+        WHERE matchday = %s
+        AND season = %s
+        """,
+        (
+            matchday["jornada"],
+            matchday["temporada"],
+        ),
+    )
+    exists = cur.fetchone() is not None
+    cur.close()
 
     return exists
 
 
 def get_matchdays(status: str, limit: int = None) -> list[dict]:
-    with db.get_cursor() as cur:
-        if limit:
-            query = f"""
-            SELECT * FROM bavariada.matchdays
-            WHERE status = %s
-            ORDER BY matchday desc
-            LIMIT {limit}
-            """
-        else:
-            query = """
-            SELECT * FROM bavariada.matchdays
-            WHERE status = %s
-            """
+    cur = db.get_conn().cursor()
 
-        cur.execute(
-            query,
-            (status,),
-        )
+    if limit:
+        query = f"""
+        SELECT * FROM bavariada.matchdays
+        WHERE status = %s
+        ORDER BY matchday desc
+        LIMIT {limit}
+        """
+    else:
+        query = """
+        SELECT * FROM bavariada.matchdays
+        WHERE status = %s
+        """
 
-        columns = [desc[0] for desc in cur.description]
-        rows = cur.fetchall()
+    cur.execute(
+        query,
+        (status,),
+    )
 
-        matchdays = [
-            {columns[i]: value for i, value in enumerate(row)} for row in rows
-        ]
+    columns = [desc[0] for desc in cur.description]
+    rows = cur.fetchall()
+
+    matchdays = [
+        {columns[i]: value for i, value in enumerate(row)} for row in rows
+    ]
+
+    cur.close()
 
     return matchdays
 
 
 def update_matchday_status(matchday: dict, status: str):
-    with db.get_cursor() as cur:
-        cur.execute(
-            """
-            UPDATE bavariada.matchdays
-            SET status = %s
-            WHERE season = %s
-            AND matchday = %s
-            """,
-            (
-                status,
-                matchday["season"],
-                matchday["matchday"],
-            ),
-        )
+    cur = db.get_conn().cursor()
+    cur.execute(
+        """
+        UPDATE bavariada.matchdays
+        SET status = %s
+        WHERE season = %s
+        AND matchday = %s
+        """,
+        (
+            status,
+            matchday["season"],
+            matchday["matchday"],
+        ),
+    )
 
-        affected_rows = cur.rowcount
+    affected_rows = cur.rowcount
+    cur.close()
 
     if affected_rows > 0:
         logger.info(

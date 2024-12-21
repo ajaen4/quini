@@ -13,38 +13,40 @@ def refresh_teams(file_path: str):
         csv_reader = DictReader(file, delimiter=";")
         teams_data = list(csv_reader)
 
-    with db.get_cursor() as cur:
-        query = """
-            INSERT INTO bavariada.teams (
-                id,
-                name,
-                league_id,
-                loterias_id,
-                code,
-                logo_url
-            )
-            VALUES %s
-            ON CONFLICT (id)
-            DO UPDATE SET
-                loterias_id = EXCLUDED.loterias_id,
-                code = EXCLUDED.code,
-                logo_url = EXCLUDED.logo_url,
-                league_id = EXCLUDED.league_id
-        """
+    cur = db.get_conn().cursor()
+    query = """
+        INSERT INTO bavariada.teams (
+            id,
+            name,
+            league_id,
+            loterias_id,
+            code,
+            logo_url
+        )
+        VALUES %s
+        ON CONFLICT (id)
+        DO UPDATE SET
+            loterias_id = EXCLUDED.loterias_id,
+            code = EXCLUDED.code,
+            logo_url = EXCLUDED.logo_url,
+            league_id = EXCLUDED.league_id
+    """
 
-        values = [
-            (
-                team_data["id"],
-                team_data["name"],
-                team_data["league_id"],
-                team_data["loterias_id"],
-                team_data["code"],
-                team_data["logo_url"],
-            )
-            for team_data in teams_data
-        ]
+    values = [
+        (
+            team_data["id"],
+            team_data["name"],
+            team_data["league_id"],
+            team_data["loterias_id"],
+            team_data["code"],
+            team_data["logo_url"],
+        )
+        for team_data in teams_data
+    ]
 
-        execute_values(cur, query, values)
+    execute_values(cur, query, values)
+
+    cur.close()
 
 
 if __name__ == "__main__":
