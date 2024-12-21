@@ -1,35 +1,27 @@
-from f_data_uploader.cfg import conn
+from f_data_uploader.database import db
 
 
 def insert_teams(teams: list[tuple]):
-    cur = conn.cursor()
+    with db.get_cursor() as cur:
+        query = """
+            INSERT INTO bavariada.teams (id, name)
+            VALUES (%s, %s)
+            ON CONFLICT (id) DO NOTHING
+        """
 
-    query = """
-        INSERT INTO bavariada.teams (id, name)
-        VALUES (%s, %s)
-        ON CONFLICT (id) DO NOTHING
-    """
-
-    cur.executemany(query, teams)
-    conn.commit()
-
-    cur.close()
+        cur.executemany(query, teams)
 
 
 def get_team_id(team_id: str):
-    cur = conn.cursor()
+    with db.get_cursor() as cur:
+        query = """
+            SELECT id
+            FROM bavariada.teams
+            WHERE loterias_id = %s
+        """
 
-    query = """
-        SELECT id
-        FROM bavariada.teams
-        WHERE loterias_id = %s
-    """
+        cur.execute(query, (team_id,))
 
-    cur.execute(query, (team_id,))
-    conn.commit()
-
-    team_id = cur.fetchone()
-
-    cur.close()
+        team_id = cur.fetchone()
 
     return team_id[0]

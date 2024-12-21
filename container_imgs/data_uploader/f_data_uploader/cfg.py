@@ -1,7 +1,5 @@
 import os
 import json
-import psycopg2
-from psycopg2.extensions import connection
 import boto3
 
 from f_data_uploader.aws.ssm import SSM
@@ -28,7 +26,6 @@ DB_PARAMS = {
     "host": DB_HOST,
     "port": DB_PORT,
 }
-conn: connection = psycopg2.connect(**DB_PARAMS)
 
 LOTERIAS_URL = os.environ["LOTERIAS_URL"]
 LOTERO_URL = os.environ["LOTERO_URL"]
