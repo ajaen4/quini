@@ -14,7 +14,7 @@ secrets = json.loads(
 )
 
 DB_HOST = secrets["DB_HOST"]
-DB_PORT = secrets["DB_PORT"]
+SERVERLESS_DB_PORT = secrets["SERVERLESS_DB_PORT"]
 DB_NAME = secrets["DB_NAME"]
 DB_USERNAME = secrets["DB_USERNAME"]
 DB_PASSWORD = secrets["DB_PASSWORD"]
@@ -24,7 +24,7 @@ DB_PARAMS = {
     "user": DB_USERNAME,
     "password": DB_PASSWORD,
     "host": DB_HOST,
-    "port": DB_PORT,
+    "port": SERVERLESS_DB_PORT,
 }
 
 LOTERIAS_URL = os.environ["LOTERIAS_URL"]

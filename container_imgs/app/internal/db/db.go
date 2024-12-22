@@ -64,7 +64,7 @@ func initDB() *db {
 	host := os.Getenv("DB_HOST")
 
 	connStr := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		"postgresql://%s:%s@%s:%s/%s?sslmode=%s",
 		username,
 		password,
 		host,
@@ -80,7 +80,6 @@ func initDB() *db {
 
 	config.MinConns = 1
 	config.ConnConfig.ConnectTimeout = 10 * time.Second
-	config.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
 
 	pool, err := pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
