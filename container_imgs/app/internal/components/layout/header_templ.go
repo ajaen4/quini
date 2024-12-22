@@ -55,7 +55,7 @@ func Header(title, postHogKey string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><script type=\"text/javascript\">\n\t\t\t\t(() => {\n\t\t\t\t\tlet scriptElement = document.currentScript;\n\t\t\t\t\tlet parent = scriptElement.closest('div');\n\t\t\t\t\tlet key = parent.getAttribute('data-posthog-key');\n\t\t\t\t\tinitPostHog(key);\n\t\t\t\t})();\n\t\t\t</script></div><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js\"></script><script src=\"https://accounts.google.com/gsi/client\" async></script><script src=\"https://unpkg.com/@supabase/supabase-js@2\"></script></head>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><script type=\"text/javascript\">\n\t\t\t\t(() => {\n\t\t\t\t\tlet scriptElement = document.currentScript;\n\t\t\t\t\tlet parent = scriptElement.closest('div');\n\t\t\t\t\tlet key = parent.getAttribute('data-posthog-key');\n\t\t\t\t\tinitPostHog(key);\n\t\t\t\t})();\n\t\t\t</script></div><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js\"></script><script src=\"https://accounts.google.com/gsi/client\" async></script><script src=\"https://unpkg.com/@supabase/supabase-js@2\"></script><script src=\"https://js.stripe.com/v3/\"></script></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

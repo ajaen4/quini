@@ -1,0 +1,38 @@
+package pages
+
+import (
+	"app/internal/components/layout"
+)
+
+templ Checkout(postHogKey string) {
+	@layout.Layout("Checkout", postHogKey, true) {
+		<!-- Display a payment form -->
+		<div id="checkout">
+			<!-- Checkout will insert the payment form here -->
+		</div>
+		<script>
+			// This is your test secret API key.
+			const stripe = Stripe("pk_test_51QYu2rG7LJ1N13dOUGrNOd2HVuaJj4qFAZOsu5ZW7qGrP3l3smYtiicwWJ16lCGwHo6olI1RyIGrx7OhOfgCAHah00m36jBhwC");
+
+			initialize();
+
+			// Create a Checkout Session
+			async function initialize() {
+			const fetchClientSecret = async () => {
+				const response = await fetch("/checkout/create-session", {
+				method: "POST",
+				});
+				const { clientSecret } = await response.json();
+				return clientSecret;
+			};
+
+			const checkout = await stripe.initEmbeddedCheckout({
+				fetchClientSecret,
+			});
+
+			// Mount Checkout
+			checkout.mount('#checkout');
+			}
+		</script>
+	}
+}
