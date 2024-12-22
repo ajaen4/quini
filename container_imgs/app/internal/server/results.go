@@ -98,7 +98,8 @@ func (s *Server) NextMatchday(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	userLastMatchday, err := db.GetUserLastMatchday(r.Context().Value("userId").(string))
+	userId := r.Context().Value("userId").(string)
+	userLastMatchday, err := db.GetUserLastMatchday(userId)
 	if err != nil {
 		return err
 	}
@@ -114,5 +115,10 @@ func (s *Server) NextMatchday(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return Render(w, r, forms.PredictionsForm(nextMatchday, matches))
+	balance, err := db.GetBalance(userId)
+	if err != nil {
+		return err
+	}
+
+	return Render(w, r, forms.PredictionsForm(nextMatchday, matches, balance))
 }

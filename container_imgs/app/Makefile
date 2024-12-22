@@ -3,7 +3,7 @@
 -include ../../.env
 
 setup:
-	@$(eval DB_STRING=postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME))
+	@$(eval DB_STRING=postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(GOOSE_DB_PORT)/$(DB_NAME))
 
 build-local:
 	@go build -tags local -o ./bin/main cmd/main/main.go

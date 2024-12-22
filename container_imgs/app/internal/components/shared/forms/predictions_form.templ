@@ -7,16 +7,28 @@ import (
     "app/internal/format"
 )
 
-templ PredictionsForm(matchday db.NextMatchday, matches []db.Match) {
+templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float64) {
     <div>
-        <div class="mb-6 grid grid-cols-2 md:grid-cols-8 gap-4">
+        <div class="mb-6 grid grid-cols-3 md:grid-cols-8 gap-4">
             <div class="bg-gray-700 p-4 rounded-lg">
                 <div class="text-sm text-gray-400">Jornada</div>
-                <div class="text-xl font-bold">{ strconv.Itoa(int(matchday.Matchday.Int32)) }</div>
+                <div class="mt-1 text-xl font-bold">{ strconv.Itoa(int(matchday.Matchday.Int32)) }</div>
             </div>
             <div class="bg-gray-700 p-4 rounded-lg">
                 <div class="text-sm text-gray-400">Comienza</div>
-                <div class="text-xl font-bold">{ format.FormatMatchDateTime(matchday.StartTime.Time) }</div>
+                <div class="mt-1 text-xl font-bold">{ format.FormatMatchDateTime(matchday.StartTime.Time) }</div>
+            </div>
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <div class="text-sm text-gray-400">Balance</div>
+                <div class="flex items-center justify-between">
+                    <div class="text-xl font-bold">{ fmt.Sprintf("%.2f", balance) }</div>
+                    <button
+                        type="submit"
+                        class="px-1 py-2 text-white rounded bg-green-500 hover:bg-green-600"
+                    >
+                        Añadir
+                    </button>
+                </div>
             </div>
         </div>
         <form

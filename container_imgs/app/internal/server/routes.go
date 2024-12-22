@@ -19,6 +19,8 @@ func (server *Server) RegisterRoutes() {
 	server.router.Post("/auth/google", NewHandler(server.HandleGoogleAuth))
 	server.router.Get("/auth/logout", NewHandler(server.HandleLogout))
 	server.router.Get("/login", NewHandler(server.Login))
+	server.router.Get("/checkout", NewHandler(server.Checkout))
+	server.router.Get("/checkout/return", NewHandler(server.ReturnCheckout))
 
 	server.router.Group(func(r chi.Router) {
 		r.Use(server.AuthAPIMiddleware)
@@ -33,6 +35,10 @@ func (server *Server) RegisterRoutes() {
 		r.Get("/components/forms/next-matchday", NewHandler(server.NextMatchday))
 
 		r.Post("/forms/predictions", NewHandler(server.NewPrediction))
+
+		r.Post("/checkout/create-session", NewHandler(createCheckoutSession))
+		r.Get("/checkout/session-status", NewHandler(retrieveCheckoutSession))
+
 	})
 
 	server.router.Group(func(r chi.Router) {
