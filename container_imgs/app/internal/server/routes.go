@@ -36,8 +36,8 @@ func (server *Server) RegisterRoutes() {
 
 		r.Post("/forms/predictions", NewHandler(server.NewPrediction))
 
-		r.Post("/checkout/create-session", NewHandler(createCheckoutSession))
-		r.Get("/checkout/session-status", NewHandler(retrieveCheckoutSession))
+		r.Post("/checkout/create-session", NewHandler(server.createCheckoutSession))
+		r.Get("/checkout/session-status", NewHandler(server.retrieveCheckoutSession))
 
 	})
 
