@@ -20,6 +20,7 @@ type Server struct {
 	httpServer     *http.Server
 	router         chi.Router
 	store          *sessions.CookieStore
+	env            string
 	projectURL     string
 	anonKey        string
 	stripePubKey   string
@@ -63,10 +64,11 @@ func NewServer(port int) *Server {
 
 	server := &Server{
 		store:          store,
-		projectURL:     os.Getenv("SUPABASE_URL"),
-		anonKey:        os.Getenv("SUPABASE_KEY"),
 		httpServer:     httpServer,
 		router:         r,
+		env:            env,
+		projectURL:     os.Getenv("SUPABASE_URL"),
+		anonKey:        os.Getenv("SUPABASE_KEY"),
 		stripePubKey:   os.Getenv("STRIPE_PUB_KEY"),
 		stripeSecKey:   os.Getenv("STRIPE_SEC_KEY"),
 		postHogKey:     os.Getenv("POSTHOG_KEY"),

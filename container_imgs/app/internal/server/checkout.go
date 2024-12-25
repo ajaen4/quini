@@ -2,6 +2,7 @@ package server
 
 import (
 	"app/internal/responses"
+	"fmt"
 	"net/http"
 
 	"github.com/stripe/stripe-go/v81"
@@ -11,12 +12,22 @@ import (
 func (s *Server) createCheckoutSession(w http.ResponseWriter, r *http.Request) error {
 	stripe.Key = s.stripeSecKey
 
+	var returnUrls = map[string]string{
+		"LOCAL": "http://localhost:8081",
+		"dev":   "https://dev.quini.io",
+		"prod":  "https://quini.io",
+	}
+
+	returnUrl, ok := returnUrls[s.env]
+	if !ok {
+		return fmt.Errorf("invalid environment: %s", s.env)
+	}
+
 	params := &stripe.CheckoutSessionParams{
 		UIMode:    stripe.String("embedded"),
-		ReturnURL: stripe.String("/checkout/return?session_id={CHECKOUT_SESSION_ID}"),
+		ReturnURL: stripe.String(fmt.Sprintf("%s/checkout/return?session_id={CHECKOUT_SESSION_ID}", returnUrl)),
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			&stripe.CheckoutSessionLineItemParams{
-				// Provide the exact Price ID (for example, pr_1234) of the product you want to sell
 				Price:    stripe.String("price_1QYuWzG7LJ1N13dOcJH7xmsi"),
 				Quantity: stripe.Int64(1),
 			},
