@@ -8,7 +8,9 @@ import (
 )
 
 templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float64) {
-    <div>
+    <div
+        x-data={fmt.Sprintf("{showBalanceWarning: false, balance: %f}", balance)}
+    >
         <div class="mb-6 grid grid-cols-3 md:grid-cols-8 gap-4">
             <div class="bg-gray-700 p-4 rounded-lg">
                 <div class="text-sm text-gray-400">Jornada</div>
@@ -21,10 +23,11 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
             <div class="bg-gray-700 p-4 rounded-lg">
                 <div class="text-sm text-gray-400">Balance</div>
                 <div class="flex items-center justify-between">
-                    <div class="text-xl font-bold">{ fmt.Sprintf("%.2f", balance) }</div>
+                    <div class={"text-xl font-bold", templ.KV("text-red-500", balance <= 0)}>{ fmt.Sprintf("%.2f", balance) }</div>
                     <button
                         type="submit"
                         class="px-1 py-2 text-white rounded bg-green-500 hover:bg-green-600"
+                        onclick="window.location.href='/checkout'"
                     >
                         Añadir
                     </button>
@@ -33,6 +36,8 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
         </div>
         <form
             hx-post="/forms/predictions"
+            hx-target="#popup-container"
+            hx-swap="beforeend"
             x-data="{
                 elige8Count: 0,
                 regularMatches: Array.from({length: 14}, () => ({ col0: null, col1: null })),
@@ -213,10 +218,10 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                                     >
                                         <input
                                             type="checkbox"
-                                            id="checkbox"
                                             name={fmt.Sprintf("match_num_%d_elige8", match.MatchNum)}
                                             @change="$event.target.checked ? elige8Count++ : elige8Count--"
                                             :disabled="!$el.checked && elige8Count >= 8"
+                                            class="w-6 h-6 rounded accent-blue-500 cursor-pointer"
                                         />
                                     </td>
                                 }
@@ -231,10 +236,48 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                     class="px-4 py-2 text-white rounded"
                     :class="isValid() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 cursor-not-allowed'"
                     :disabled="!isValid()"
+                    @click.prevent="if (balance <= 0) { showBalanceWarning = true; } else { $el.closest('form').submit() }"
                 >
                     Enviar
                 </button>
             </div>
         </form>
+        <div id="popup-container"></div>
+        <div
+            x-show="showBalanceWarning"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+            @click.self="showBalanceWarning = false"
+        >
+            <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-red-500">
+                        Saldo insuficiente
+                    </h3>
+                    <button
+                        class="text-gray-400 hover:text-gray-200"
+                        @click="showBalanceWarning = false"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-gray-300 mb-4">Tu saldo actual es insuficiente para realizar predicciones. Por favor, recarga tu saldo para continuar.</p>
+                <div class="mt-6 flex justify-end gap-4">
+                    <button
+                        class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                        @click="showBalanceWarning = false"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                        @click="window.location.href='/checkout'"
+                    >
+                        Recargar saldo
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 }

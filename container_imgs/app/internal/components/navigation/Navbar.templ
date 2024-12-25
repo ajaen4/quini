@@ -3,13 +3,13 @@ package navigation
 templ Navbar() {
     <header class="bg-gray-800 text-white py-2">
         <div class="container mx-auto px-2 flex justify-between items-center">
-            <div class="flex items-center gap-1">
-                <img src="static/images/favicon.svg"
+            <a href="/" class="flex items-center gap-1">
+                <img src="/static/images/favicon.svg"
                     alt="Logo"
                     class="w-8 h-8"
                     loading="eager"/>
                 <h1 class="text-2xl font-bold">Quini</h1>
-            </div>
+            </a>
             <div class="flex space-x-1">
                 <div hx-get="/components/badges/total-debt" hx-trigger="load">
                     <p>...</p>

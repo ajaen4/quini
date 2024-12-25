@@ -4,15 +4,17 @@ import (
 	"app/internal/components/layout"
 )
 
-templ Checkout(postHogKey string) {
+templ Checkout(postHogKey, stripePubKey string) {
 	@layout.Layout("Checkout", postHogKey, true) {
+		<div id="stripe-key" data-publishable-key={ stripePubKey } class="hidden"></div>
 		<!-- Display a payment form -->
 		<div id="checkout">
 			<!-- Checkout will insert the payment form here -->
 		</div>
 		<script>
-			// This is your test secret API key.
-			const stripe = Stripe("pk_test_51QYu2rG7LJ1N13dOUGrNOd2HVuaJj4qFAZOsu5ZW7qGrP3l3smYtiicwWJ16lCGwHo6olI1RyIGrx7OhOfgCAHah00m36jBhwC");
+			const publishableKey = document.getElementById('stripe-key').dataset.publishableKey;
+			console.log(publishableKey);
+			const stripe = Stripe(publishableKey);
 
 			initialize();
 
