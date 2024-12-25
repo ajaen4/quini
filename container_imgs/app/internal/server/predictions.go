@@ -24,12 +24,11 @@ func (s *Server) NewPrediction(w http.ResponseWriter, r *http.Request) error {
 		return errors.New("Error parsing form")
 	}
 
-	log.Printf("%v", r.Form)
 	if isValid, errMess := isValidPreds(r.Form); !isValid {
 		return Render(w, r, messages.PopUp(false, errMess))
 	}
 
-	return Render(w, r, messages.PopUp(true, "Ok"))
+	return Render(w, r, messages.PopUp(true, "Quiniela cargada con éxito!"))
 }
 
 func isValidPreds(preds url.Values) (bool, string) {

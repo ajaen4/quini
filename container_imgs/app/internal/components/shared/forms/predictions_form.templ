@@ -11,22 +11,22 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
     <div
         x-data={fmt.Sprintf("{showBalanceWarning: false, balance: %f}", balance)}
     >
-        <div class="mb-6 grid grid-cols-3 md:grid-cols-8 gap-4">
-            <div class="bg-gray-700 p-4 rounded-lg">
+        <div class="mb-6 grid grid-cols-3 md:grid-cols-10 gap-2">
+            <div class="bg-gray-700 p-2 rounded-lg">
                 <div class="text-sm text-gray-400">Jornada</div>
-                <div class="mt-1 text-xl font-bold">{ strconv.Itoa(int(matchday.Matchday.Int32)) }</div>
+                <div class="mt-1 text-lg md:text-xl font-bold">{ strconv.Itoa(int(matchday.Matchday.Int32)) }</div>
             </div>
-            <div class="bg-gray-700 p-4 rounded-lg">
+            <div class="bg-gray-700 p-2 rounded-lg">
                 <div class="text-sm text-gray-400">Comienza</div>
-                <div class="mt-1 text-xl font-bold">{ format.FormatMatchDateTime(matchday.StartTime.Time) }</div>
+                <div class="mt-1 text-lg md:text-xl font-bold">{ format.FormatMatchDateTime(matchday.StartTime.Time) }</div>
             </div>
-            <div class="bg-gray-700 p-4 rounded-lg">
+            <div class="bg-gray-700 p-2 rounded-lg">
                 <div class="text-sm text-gray-400">Balance</div>
-                <div class="flex items-center justify-between">
-                    <div class={"text-xl font-bold", templ.KV("text-red-500", balance <= 0)}>{ fmt.Sprintf("%.2f", balance) }</div>
+                <div class="flex flex-col md:flex-row justify-between md:items-center">
+                    <div class={"text-lg md:text-xl font-bold", templ.KV("text-red-500", balance <= 0)}>{ fmt.Sprintf("%.2f", balance) }</div>
                     <button
                         type="submit"
-                        class="px-1 py-2 text-white rounded bg-green-500 hover:bg-green-600"
+                        class="px-1 py-1 text-white rounded bg-green-500 hover:bg-green-600"
                         onclick="window.location.href='/checkout'"
                     >
                         Añadir
@@ -65,8 +65,8 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                     <thead class="bg-gray-800">
                         <tr>
                             <th class="sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg">Partidos</th>
-                            <th class="py-1 px-1 border-b-2 border-r border-gray-600 text-center">Col 1</th>
-                            <th class="py-1 px-1 border-b-2 border-r border-gray-600 text-center">Col 2</th>
+                            <th class="py-1 border-b-2 border-r border-gray-600 text-center">Col 1</th>
+                            <th class="py-1 border-b-2 border-r border-gray-600 text-center">Col 2</th>
                             <th class="py-1 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg">Elige8</th>
                         </tr>
                     </thead>
@@ -132,8 +132,8 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                                 </td>
                                 if match.MatchNum == 14 {
                                     <td colspan="3" class="py-2 text-center border-t border-gray-600">
-                                        <div class="flex justify-center items-center gap-2 mx-2">
-                                            <div class="flex justify-center gap-2">
+                                        <div class="flex justify-center items-center mx-1">
+                                            <div class="flex justify-center gap-1 md:gap-2">
                                                 <template x-for="value in ['0', '1', '2', 'M']">
                                                     <label class="relative">
                                                         <input
@@ -144,15 +144,15 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                                                             x-model="plenoMatch.home"
                                                         />
                                                         <div
-                                                            class="px-3 py-1 rounded md:text-lg cursor-pointer"
+                                                            class="px-2 py-1 rounded md:text-lg cursor-pointer"
                                                             :class="plenoMatch.home === value ? 'bg-blue-500' : 'bg-gray-700'"
                                                             x-text="value"
                                                         />
                                                     </label>
                                                 </template>
                                             </div>
-                                            <span class="text-white">-</span>
-                                            <div class="flex justify-center gap-2">
+                                            <span class="text-white mx-1">-</span>
+                                            <div class="flex justify-center gap-1 md:gap-2">
                                                 <template x-for="value in ['0', '1', '2', 'M']">
                                                     <label class="relative">
                                                         <input
@@ -163,7 +163,7 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                                                             x-model="plenoMatch.away"
                                                         />
                                                         <div
-                                                            class="px-3 py-1 rounded md:text-lg cursor-pointer"
+                                                            class="px-2 py-1 rounded md:text-lg cursor-pointer"
                                                             :class="plenoMatch.away === value ? 'bg-blue-500' : 'bg-gray-700'"
                                                             x-text="value"
                                                         />
@@ -174,54 +174,58 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                                     </td>
                                 } else {
                                     <td class="py-2 border-r border-gray-600">
-                                        <div class="flex justify-center gap-2">
-                                            <template x-for="value in ['1', 'X', '2']">
-                                                <label class="relative">
-                                                    <input
-                                                        type="radio"
-                                                        name={fmt.Sprintf("match_num_%d_col_0", match.MatchNum)}
-                                                        :value="value"
-                                                        class="absolute opacity-0 w-full h-full cursor-pointer"
-                                                        x-model={fmt.Sprintf("regularMatches[%d].col0", match.MatchNum)}
-                                                    />
-                                                    <div
-                                                        class="px-3 py-1 rounded md:text-lg cursor-pointer"
-                                                        :class={fmt.Sprintf("regularMatches[%d].col0 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum)}
-                                                        x-text="value"
-                                                    />
-                                                </label>
-                                            </template>
+                                        <div class="flex justify-center items-center">
+                                            <div class="flex justify-center gap-1 md:gap-2">
+                                                <template x-for="value in ['1', 'X', '2']">
+                                                    <label class="relative">
+                                                        <input
+                                                            type="radio"
+                                                            name={fmt.Sprintf("match_num_%d_col_0", match.MatchNum)}
+                                                            :value="value"
+                                                            class="absolute opacity-0 w-full h-full cursor-pointer"
+                                                            x-model={fmt.Sprintf("regularMatches[%d].col0", match.MatchNum)}
+                                                        />
+                                                        <div
+                                                            class="px-2 py-1 rounded md:text-lg cursor-pointer"
+                                                            :class={fmt.Sprintf("regularMatches[%d].col0 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum)}
+                                                            x-text="value"
+                                                        />
+                                                    </label>
+                                                </template>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="py-2 border-r border-gray-600">
-                                        <div class="flex justify-center gap-2">
-                                            <template x-for="value in ['1', 'X', '2']">
-                                                <label class="relative">
-                                                    <input
-                                                        type="radio"
-                                                        name={fmt.Sprintf("match_num_%d_col_1", match.MatchNum)}
-                                                        :value="value"
-                                                        class="absolute opacity-0 w-full h-full cursor-pointer"
-                                                        x-model={fmt.Sprintf("regularMatches[%d].col1", match.MatchNum)}
-                                                    />
-                                                    <div
-                                                        class="px-3 py-1 rounded md:text-lg cursor-pointer"
-                                                        :class={fmt.Sprintf("regularMatches[%d].col1 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum)}
-                                                        x-text="value"
-                                                    />
-                                                </label>
-                                            </template>
+                                        <div class="flex justify-center">
+                                            <div class="flex gap-1 md:gap-2">
+                                                <template x-for="value in ['1', 'X', '2']">
+                                                    <label class="relative">
+                                                        <input
+                                                            type="radio"
+                                                            name={fmt.Sprintf("match_num_%d_col_1", match.MatchNum)}
+                                                            :value="value"
+                                                            class="absolute opacity-0 w-full h-full cursor-pointer"
+                                                            x-model={fmt.Sprintf("regularMatches[%d].col1", match.MatchNum)}
+                                                        />
+                                                        <div
+                                                            class="px-2 py-1 rounded md:text-lg cursor-pointer"
+                                                            :class={fmt.Sprintf("regularMatches[%d].col1 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum)}
+                                                            x-text="value"
+                                                        />
+                                                    </label>
+                                                </template>
+                                            </div>
                                         </div>
                                     </td>
                                     <td
-                                        class={"py-2 px-2 text-center border-r border-gray-600", templ.KV("border-b", match.MatchNum == 13)}
+                                        class={"text-center border-r border-gray-600", templ.KV("border-b", match.MatchNum == 13)}
                                     >
                                         <input
                                             type="checkbox"
                                             name={fmt.Sprintf("match_num_%d_elige8", match.MatchNum)}
                                             @change="$event.target.checked ? elige8Count++ : elige8Count--"
                                             :disabled="!$el.checked && elige8Count >= 8"
-                                            class="w-6 h-6 rounded accent-blue-500 cursor-pointer"
+                                            class="w-5 h-5 rounded accent-blue-500 cursor-pointer"
                                         />
                                     </td>
                                 }
