@@ -80,6 +80,9 @@ func initDB() *db {
 
 	config.MinConns = 1
 	config.ConnConfig.ConnectTimeout = 10 * time.Second
+	if env == "LOCAL" {
+		config.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+	}
 
 	pool, err := pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {

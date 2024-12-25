@@ -29,7 +29,7 @@ func Navbar() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"bg-gray-800 text-white py-2\"><div class=\"container mx-auto px-2 flex justify-between items-center\"><div class=\"flex items-center gap-1\"><img src=\"static/images/favicon.svg\" alt=\"Logo\" class=\"w-8 h-8\" loading=\"eager\"><h1 class=\"text-2xl font-bold\">Quini</h1></div><div class=\"flex space-x-1\"><div hx-get=\"/components/badges/total-debt\" hx-trigger=\"load\"><p>...</p></div><div hx-get=\"/components/badges/total-price\" hx-trigger=\"load\"><p>...</p></div></div></div></header>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"bg-gray-800 text-white py-2\"><div class=\"container mx-auto px-2 flex justify-between items-center\"><a href=\"/\" class=\"flex items-center gap-1\"><img src=\"/static/images/favicon.svg\" alt=\"Logo\" class=\"w-8 h-8\" loading=\"eager\"><h1 class=\"text-2xl font-bold\">Quini</h1></a><div class=\"flex space-x-1\"><div hx-get=\"/components/badges/total-debt\" hx-trigger=\"load\"><p>...</p></div><div hx-get=\"/components/badges/total-price\" hx-trigger=\"load\"><p>...</p></div></div></div></header>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

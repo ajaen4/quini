@@ -1,0 +1,38 @@
+package messages
+
+templ PopUp(success bool, message string) {
+    <div
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        x-data
+        @click.self="$el.remove()"
+    >
+        <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xl font-semibold">
+                    if success {
+                        <span class="text-green-500">¡Éxito!</span>
+                    } else {
+                        <span class="text-red-500">Error</span>
+                    }
+                </h3>
+                <button
+                    class="text-gray-400 hover:text-gray-200"
+                    @click="$el.closest('.fixed').remove()"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <p class="text-gray-300">{ message }</p>
+            <div class="mt-6 flex justify-end">
+                <button
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    @click="$el.closest('.fixed').remove()"
+                >
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+}

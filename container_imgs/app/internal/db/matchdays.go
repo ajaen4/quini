@@ -16,11 +16,14 @@ func GetNextMatchday() (NextMatchday, error) {
 
 	var nextMatchday NextMatchday
 	err := db.QueryRow(
-		`SELECT MAX(matchday), start_datetime
+		`SELECT matchday, start_datetime
 		FROM bavariada.matchdays
-		WHERE season = '2024-2025'
-		AND status = 'IN_PROGRESS'
-		GROUP BY matchday, start_datetime`,
+		WHERE matchday = (
+			SELECT MAX(matchday)
+			FROM bavariada.matchdays
+			WHERE season = '2024-2025'
+			AND status = 'FINISHED'
+		)`,
 	).Scan(&nextMatchday.Matchday, &nextMatchday.StartTime)
 	if err != nil {
 		return NextMatchday{}, err

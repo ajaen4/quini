@@ -12,7 +12,7 @@ import (
 	"app/internal/components/layout"
 )
 
-func Checkout(postHogKey string) templ.Component {
+func Checkout(postHogKey, stripePubKey string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -45,7 +45,20 @@ func Checkout(postHogKey string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!-- Display a payment form --> <div id=\"checkout\"><!-- Checkout will insert the payment form here --></div><script>\n\t\t\t// This is your test secret API key.\n\t\t\tconst stripe = Stripe(\"pk_test_51QYu2rG7LJ1N13dOUGrNOd2HVuaJj4qFAZOsu5ZW7qGrP3l3smYtiicwWJ16lCGwHo6olI1RyIGrx7OhOfgCAHah00m36jBhwC\");\n\n\t\t\tinitialize();\n\n\t\t\t// Create a Checkout Session\n\t\t\tasync function initialize() {\n\t\t\tconst fetchClientSecret = async () => {\n\t\t\t\tconst response = await fetch(\"/checkout/create-session\", {\n\t\t\t\tmethod: \"POST\",\n\t\t\t\t});\n\t\t\t\tconst { clientSecret } = await response.json();\n\t\t\t\treturn clientSecret;\n\t\t\t};\n\n\t\t\tconst checkout = await stripe.initEmbeddedCheckout({\n\t\t\t\tfetchClientSecret,\n\t\t\t});\n\n\t\t\t// Mount Checkout\n\t\t\tcheckout.mount('#checkout');\n\t\t\t}\n\t\t</script>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"stripe-key\" data-publishable-key=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(stripePubKey)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/pages/checkout.templ`, Line: 9, Col: 58}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"hidden\"></div><!-- Display a payment form --> <div id=\"checkout\"><!-- Checkout will insert the payment form here --></div><script>\n\t\t\tconst publishableKey = document.getElementById('stripe-key').dataset.publishableKey;\n\t\t\tconsole.log(publishableKey);\n\t\t\tconst stripe = Stripe(publishableKey);\n\n\t\t\tinitialize();\n\n\t\t\t// Create a Checkout Session\n\t\t\tasync function initialize() {\n\t\t\tconst fetchClientSecret = async () => {\n\t\t\t\tconst response = await fetch(\"/checkout/create-session\", {\n\t\t\t\tmethod: \"POST\",\n\t\t\t\t});\n\t\t\t\tconst { clientSecret } = await response.json();\n\t\t\t\treturn clientSecret;\n\t\t\t};\n\n\t\t\tconst checkout = await stripe.initEmbeddedCheckout({\n\t\t\t\tfetchClientSecret,\n\t\t\t});\n\n\t\t\t// Mount Checkout\n\t\t\tcheckout.mount('#checkout');\n\t\t\t}\n\t\t</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
