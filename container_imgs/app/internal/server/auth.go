@@ -2,12 +2,12 @@ package server
 
 import (
 	"app/internal/api_errors"
+	"app/internal/components/shared/messages"
 	"app/internal/db"
 	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -34,18 +34,27 @@ type User struct {
 func (s *Server) HandleGoogleAuth(w http.ResponseWriter, r *http.Request) error {
 	var req GoogleTokenRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		return &api_errors.ClientErr{
-			HttpCode: http.StatusBadRequest,
-			Message:  "Invalid request",
-		}
+		return Render(w, r, messages.PopUp(false, "Petición incorrecta"))
 	}
 
 	tokenResp, err := s.exchangeGoogleToken(req.Credential)
 	if err != nil {
-		return &api_errors.ClientErr{
-			HttpCode: http.StatusUnauthorized,
-			Message:  "Authentication failed",
-		}
+		return Render(w, r, messages.PopUp(false, "Error de autenticación"))
+	}
+
+	userID, err := parseUserIDFromToken(tokenResp.AccessToken)
+	if err != nil {
+		return err
+	}
+
+	isAuth, err := db.IsAuthUser(userID)
+	if err != nil {
+		return err
+	}
+
+	if !isAuth {
+		log.Print("User not authorized for private beta")
+		return Render(w, r, messages.PopUp(false, "Usuario no autorizado para la beta privada"))
 	}
 
 	session, _ := s.store.Get(r, "auth-session")
@@ -54,7 +63,7 @@ func (s *Server) HandleGoogleAuth(w http.ResponseWriter, r *http.Request) error 
 	session.Values["expires_at"] = time.Now().Add(time.Duration(tokenResp.ExpiresIn) * time.Second)
 
 	if err := session.Save(r, w); err != nil {
-		return errors.New(err.Error())
+		return Render(w, r, messages.PopUp(false, "Error interno, pruebe más tarde"))
 	}
 
 	w.WriteHeader(http.StatusOK)

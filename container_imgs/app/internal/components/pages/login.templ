@@ -14,13 +14,12 @@ templ Login(postHogKey, googleClientId string) {
                             body: JSON.stringify({ credential: response.credential })
                         });
 
-                        if (res.ok) {
-                            window.location.href = '/'
-                        } else {
-                            console.error('Auth failed')
+                        if (!res.ok) {
+                            console.error('Auth failed');
                         }
+                        document.getElementById('popup-container').innerHTML = await res.text();
                     } catch (err) {
-                        console.error('Auth error:', err)
+                        console.error('Auth error:', err);
                     }
                 }
             </script>
@@ -56,6 +55,7 @@ templ Login(postHogKey, googleClientId string) {
                     </div>
                 </div>
             </div>
+            <div id="popup-container"></div>
         </div>
     }
 }
