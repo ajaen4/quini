@@ -49,37 +49,37 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"mb-6 grid grid-cols-3 md:grid-cols-8 gap-4\"><div class=\"bg-gray-700 p-4 rounded-lg\"><div class=\"text-sm text-gray-400\">Jornada</div><div class=\"mt-1 text-xl font-bold\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"mb-6 grid grid-cols-3 md:grid-cols-10 gap-2\"><div class=\"bg-gray-700 p-2 rounded-lg\"><div class=\"text-sm text-gray-400\">Jornada</div><div class=\"mt-1 text-lg md:text-xl font-bold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(int(matchday.Matchday.Int32)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 17, Col: 96}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 17, Col: 107}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"bg-gray-700 p-4 rounded-lg\"><div class=\"text-sm text-gray-400\">Comienza</div><div class=\"mt-1 text-xl font-bold\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"bg-gray-700 p-2 rounded-lg\"><div class=\"text-sm text-gray-400\">Comienza</div><div class=\"mt-1 text-lg md:text-xl font-bold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(format.FormatMatchDateTime(matchday.StartTime.Time))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 21, Col: 105}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 21, Col: 116}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"bg-gray-700 p-4 rounded-lg\"><div class=\"text-sm text-gray-400\">Balance</div><div class=\"flex items-center justify-between\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"bg-gray-700 p-2 rounded-lg\"><div class=\"text-sm text-gray-400\">Balance</div><div class=\"flex flex-col md:flex-row justify-between md:items-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var5 = []any{"text-xl font-bold", templ.KV("text-red-500", balance <= 0)}
+		var templ_7745c5c3_Var5 = []any{"text-lg md:text-xl font-bold", templ.KV("text-red-500", balance <= 0)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var5...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -104,13 +104,13 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.2f", balance))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 26, Col: 123}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 26, Col: 134}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><button type=\"submit\" class=\"px-1 py-2 text-white rounded bg-green-500 hover:bg-green-600\" onclick=\"window.location.href=&#39;/checkout&#39;\">Añadir</button></div></div></div><form hx-post=\"/forms/predictions\" hx-target=\"#popup-container\" hx-swap=\"beforeend\" x-data=\"{\n                elige8Count: 0,\n                regularMatches: Array.from({length: 14}, () =&gt; ({ col0: null, col1: null })),\n                plenoMatch: { home: null, away: null },\n\n                isValid() {\n                    // Check if exactly 8 elige8 are selected\n                    if (this.elige8Count !== 8) return false;\n\n                    // Check if all regular matches have both columns filled\n                    const allRegularMatchesFilled = this.regularMatches.every(match =&gt;\n                        match.col0 !== null &amp;&amp; match.col1 !== null\n                    );\n                    if (!allRegularMatchesFilled) return false;\n\n                    // Check if pleno match is completely filled\n                    if (this.plenoMatch.home === null || this.plenoMatch.away === null) return false;\n\n                    return true;\n                }\n            }\"><div class=\"overflow-x-auto w-full mb-4\"><table class=\"min-w-full bg-gray-800 text-sm border-collapse rounded-lg\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th><th class=\"py-1 px-1 border-b-2 border-r border-gray-600 text-center\">Col 1</th><th class=\"py-1 px-1 border-b-2 border-r border-gray-600 text-center\">Col 2</th><th class=\"py-1 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg\">Elige8</th></tr></thead> <tbody>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><button type=\"submit\" class=\"px-1 py-1 text-white rounded bg-green-500 hover:bg-green-600\" onclick=\"window.location.href=&#39;/checkout&#39;\">Añadir</button></div></div></div><form hx-post=\"/forms/predictions\" hx-target=\"#popup-container\" hx-swap=\"beforeend\" x-data=\"{\n                elige8Count: 0,\n                regularMatches: Array.from({length: 14}, () =&gt; ({ col0: null, col1: null })),\n                plenoMatch: { home: null, away: null },\n\n                isValid() {\n                    // Check if exactly 8 elige8 are selected\n                    if (this.elige8Count !== 8) return false;\n\n                    // Check if all regular matches have both columns filled\n                    const allRegularMatchesFilled = this.regularMatches.every(match =&gt;\n                        match.col0 !== null &amp;&amp; match.col1 !== null\n                    );\n                    if (!allRegularMatchesFilled) return false;\n\n                    // Check if pleno match is completely filled\n                    if (this.plenoMatch.home === null || this.plenoMatch.away === null) return false;\n\n                    return true;\n                }\n            }\"><div class=\"overflow-x-auto w-full mb-4\"><table class=\"min-w-full bg-gray-800 text-sm border-collapse rounded-lg\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th><th class=\"py-1 border-b-2 border-r border-gray-600 text-center\">Col 1</th><th class=\"py-1 border-b-2 border-r border-gray-600 text-center\">Col 2</th><th class=\"py-1 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg\">Elige8</th></tr></thead> <tbody>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -237,19 +237,19 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				return templ_7745c5c3_Err
 			}
 			if match.MatchNum == 14 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td colspan=\"3\" class=\"py-2 text-center border-t border-gray-600\"><div class=\"flex justify-center items-center gap-2 mx-2\"><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_home_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.home\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.home === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div><span class=\"text-white\">-</span><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_away_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.away\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.away === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div></div></td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td colspan=\"3\" class=\"py-2 text-center border-t border-gray-600\"><div class=\"flex justify-center items-center mx-1\"><div class=\"flex justify-center gap-1 md:gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_home_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.home\"><div class=\"px-2 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.home === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div><span class=\"text-white mx-1\">-</span><div class=\"flex justify-center gap-1 md:gap-2\"><template x-for=\"value in [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;M&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"pleno_away_score\" :value=\"value\" class=\"absolute opacity-0 w-full h-full cursor-pointer\" x-model=\"plenoMatch.away\"><div class=\"px-2 py-1 rounded md:text-lg cursor-pointer\" :class=\"plenoMatch.away === value ? &#39;bg-blue-500&#39; : &#39;bg-gray-700&#39;\" x-text=\"value\"></div></label></template></div></div></td>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td class=\"py-2 border-r border-gray-600\"><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;1&#39;, &#39;X&#39;, &#39;2&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<td class=\"py-2 border-r border-gray-600\"><div class=\"flex justify-center items-center\"><div class=\"flex justify-center gap-1 md:gap-2\"><template x-for=\"value in [&#39;1&#39;, &#39;X&#39;, &#39;2&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var17 string
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_col_0", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 182, Col: 111}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 183, Col: 115}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
@@ -262,33 +262,33 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				var templ_7745c5c3_Var18 string
 				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col0", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 185, Col: 119}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 186, Col: 123}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"px-2 py-1 rounded md:text-lg cursor-pointer\" :class=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var19 string
 				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col0 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 189, Col: 160}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 190, Col: 164}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" x-text=\"value\"></div></label></template></div></td><td class=\"py-2 border-r border-gray-600\"><div class=\"flex justify-center gap-2\"><template x-for=\"value in [&#39;1&#39;, &#39;X&#39;, &#39;2&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" x-text=\"value\"></div></label></template></div></div></td><td class=\"py-2 border-r border-gray-600\"><div class=\"flex justify-center\"><div class=\"flex gap-1 md:gap-2\"><template x-for=\"value in [&#39;1&#39;, &#39;X&#39;, &#39;2&#39;]\"><label class=\"relative\"><input type=\"radio\" name=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var20 string
 				templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_col_1", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 202, Col: 111}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 205, Col: 115}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 				if templ_7745c5c3_Err != nil {
@@ -301,30 +301,30 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				var templ_7745c5c3_Var21 string
 				templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col1", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 205, Col: 119}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 208, Col: 123}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"px-3 py-1 rounded md:text-lg cursor-pointer\" :class=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"px-2 py-1 rounded md:text-lg cursor-pointer\" :class=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var22 string
 				templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col1 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 209, Col: 160}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 212, Col: 164}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" x-text=\"value\"></div></label></template></div></td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" x-text=\"value\"></div></label></template></div></div></td>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var23 = []any{"py-2 px-2 text-center border-r border-gray-600", templ.KV("border-b", match.MatchNum == 13)}
+				var templ_7745c5c3_Var23 = []any{"text-center border-r border-gray-600", templ.KV("border-b", match.MatchNum == 13)}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var23...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -349,13 +349,13 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				var templ_7745c5c3_Var25 string
 				templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_elige8", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 221, Col: 100}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 225, Col: 100}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" @change=\"$event.target.checked ? elige8Count++ : elige8Count--\" :disabled=\"!$el.checked &amp;&amp; elige8Count &gt;= 8\" class=\"w-6 h-6 rounded accent-blue-500 cursor-pointer\"></td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" @change=\"$event.target.checked ? elige8Count++ : elige8Count--\" :disabled=\"!$el.checked &amp;&amp; elige8Count &gt;= 8\" class=\"w-5 h-5 rounded accent-blue-500 cursor-pointer\"></td>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
