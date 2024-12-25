@@ -4,21 +4,20 @@ import (
 	"app/internal/components/pages"
 
 	"net/http"
-	"os"
 )
 
 func (s *Server) Root(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, pages.Home(os.Getenv("POSTHOG_KEY")))
+	return Render(w, r, pages.Home(s.postHogKey))
 }
 
 func (s *Server) Login(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, pages.Login(os.Getenv("POSTHOG_KEY"), os.Getenv("GOOGLE_CLIENT_ID")))
+	return Render(w, r, pages.Login(s.postHogKey, s.googleClientId))
 }
 
 func (s *Server) Checkout(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, pages.Checkout(os.Getenv("POSTHOG_KEY"), os.Getenv("STRIPE_PUB_KEY")))
+	return Render(w, r, pages.Checkout(s.postHogKey, s.stripePubKey))
 }
 
 func (s *Server) ReturnCheckout(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, pages.ReturnCheckout(os.Getenv("POSTHOG_KEY")))
+	return Render(w, r, pages.ReturnCheckout(s.postHogKey))
 }
