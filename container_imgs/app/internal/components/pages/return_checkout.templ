@@ -2,43 +2,26 @@ package pages
 
 import (
 	"app/internal/components/layout"
+    "fmt"
 )
 
-templ ReturnCheckout(postHogKey string){
+templ ReturnCheckout(postHogKey, customerEmail string){
     @layout.Layout("Checkout Return", postHogKey, true) {
-        <div>
-            <section id="success" class="hidden">
-                <p>
-                Pago realizado con éxito! Se ha enviado un email de confirmación a <span id="customer-email"></span>.
-
-                Si tienes cualquier duda puedes enviar un email a <a href="mailto:a.jaenrev@gmail.com">a.jaenrev@gmail.com</a>.
-                </p>
-                <div class="flex justify-center">
-                    <button
-                        class="px-1 py-2 text-white rounded bg-blue-500 hover:bg-blue-600"
-                        onclick="window.location.href='/'"
-                    >
-                        Volver
-                    </button>
-                </div>
-            </section>
-
-            <script>
-                initialize();
-                async function initialize() {
-                    const queryString = window.location.search;
-                    const urlParams = new URLSearchParams(queryString);
-                    const sessionId = urlParams.get('session_id');
-                    const response = await fetch(`/checkout/session-status?session_id=${sessionId}`);
-                    const session = await response.json();
-                    if (session.status == 'open') {
-                        window.location.replace('/checkout')
-                    } else if (session.status == 'complete') {
-                        document.getElementById('success').classList.remove('hidden');
-                        document.getElementById('customer-email').textContent = session.customer_email
-                    }
-                }
-            </script>
+        <div class="flex flex-col items-center">
+            <p class="text-center">
+            {fmt.Sprintf("Pago realizado con éxito! Se ha enviado un email de confirmación a %s", customerEmail)}
+            </p>
+            <p class="text-center">
+            Si tienes cualquier duda puedes enviar un email a <a href="mailto:a.jaenrev@gmail.com">a.jaenrev@gmail.com</a>.
+            </p>
+            <div class="flex justify-center mt-2">
+                <button
+                    class="px-1 py-2 text-white rounded bg-blue-500 hover:bg-blue-600"
+                    onclick="window.location.href='/'"
+                >
+                    Volver
+                </button>
+            </div>
         </div>
     }
 }
