@@ -1,6 +1,6 @@
 package messages
 
-templ PopUp(success bool, message string) {
+templ PopUp(success bool, message string, reload bool) {
     <div
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
         x-data
@@ -28,11 +28,19 @@ templ PopUp(success bool, message string) {
             <div class="mt-6 flex justify-end">
                 <button
                     class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    @click="$el.closest('.fixed').remove()"
+                    @click={clickFunc(reload)}
                 >
                     Cerrar
                 </button>
             </div>
         </div>
     </div>
+}
+
+func clickFunc(reload bool) string {
+    if reload {
+        return "$el.closest('.fixed').remove(); window.location.reload()"
+    } else {
+        return "$el.closest('.fixed').remove()"
+    }
 }

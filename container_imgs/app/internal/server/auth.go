@@ -34,12 +34,12 @@ type User struct {
 func (s *Server) HandleGoogleAuth(w http.ResponseWriter, r *http.Request) error {
 	var req GoogleTokenRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		return Render(w, r, messages.PopUp(false, "Petición incorrecta"))
+		return Render(w, r, messages.PopUp(false, "Petición incorrecta", false))
 	}
 
 	tokenResp, err := s.exchangeGoogleToken(req.Credential)
 	if err != nil {
-		return Render(w, r, messages.PopUp(false, "Error de autenticación"))
+		return Render(w, r, messages.PopUp(false, "Error de autenticación", false))
 	}
 
 	userID, err := parseUserIDFromToken(tokenResp.AccessToken)
@@ -54,7 +54,7 @@ func (s *Server) HandleGoogleAuth(w http.ResponseWriter, r *http.Request) error 
 
 	if !isAuth {
 		log.Print("User not authorized for private beta")
-		return Render(w, r, messages.PopUp(false, "Usuario no autorizado para la beta privada"))
+		return Render(w, r, messages.PopUp(false, "Usuario no autorizado para la beta privada", false))
 	}
 
 	session, _ := s.store.Get(r, "auth-session")
@@ -63,7 +63,7 @@ func (s *Server) HandleGoogleAuth(w http.ResponseWriter, r *http.Request) error 
 	session.Values["expires_at"] = time.Now().Add(time.Duration(tokenResp.ExpiresIn) * time.Second)
 
 	if err := session.Save(r, w); err != nil {
-		return Render(w, r, messages.PopUp(false, "Error interno, pruebe más tarde"))
+		return Render(w, r, messages.PopUp(false, "Error interno, pruebe más tarde", false))
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -127,6 +127,7 @@ func (s *Server) AuthPageMiddleware(next http.Handler) http.Handler {
 		}
 
 		ctx := context.WithValue(r.Context(), "token", accessToken)
+		ctx = context.WithValue(ctx, "userId", userID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 		return nil
 	})

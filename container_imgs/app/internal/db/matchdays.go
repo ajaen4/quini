@@ -8,6 +8,7 @@ import (
 
 type NextMatchday struct {
 	Matchday  pgtype.Int4
+	Season    string
 	StartTime pgtype.Timestamp
 }
 
@@ -16,7 +17,7 @@ func GetNextMatchday() (NextMatchday, error) {
 
 	var nextMatchday NextMatchday
 	err := db.QueryRow(
-		`SELECT matchday, start_datetime
+		`SELECT matchday, season, start_datetime
 		FROM bavariada.matchdays
 		WHERE matchday = (
 			SELECT MAX(matchday)
@@ -24,7 +25,7 @@ func GetNextMatchday() (NextMatchday, error) {
 			WHERE season = '2024-2025'
 			AND status = 'FINISHED'
 		)`,
-	).Scan(&nextMatchday.Matchday, &nextMatchday.StartTime)
+	).Scan(&nextMatchday.Matchday, &nextMatchday.Season, &nextMatchday.StartTime)
 	if err != nil {
 		return NextMatchday{}, err
 	}

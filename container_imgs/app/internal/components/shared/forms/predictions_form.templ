@@ -35,9 +35,6 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
             </div>
         </div>
         <form
-            hx-post="/predictions"
-            hx-target="#popup-container"
-            hx-swap="beforeend"
             x-data="{
                 elige8Count: 0,
                 regularMatches: Array.from({length: 14}, () => ({ col0: null, col1: null })),
@@ -59,6 +56,7 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                     return true;
                 }
             }"
+            hx-vals={fmt.Sprintf(`{"matchday": %d, "season": "%s"}`, matchday.Matchday.Int32, matchday.Season)}
         >
             <div class="overflow-x-auto w-full mb-4">
                 <table class="min-w-full bg-gray-800 text-sm border-collapse rounded-lg">
@@ -225,7 +223,7 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
                                             name={fmt.Sprintf("match_num_%d_elige8", match.MatchNum)}
                                             @change="$event.target.checked ? elige8Count++ : elige8Count--"
                                             :disabled="!$el.checked && elige8Count >= 8"
-                                            class="w-5 h-5 rounded accent-blue-500 cursor-pointer"
+                                            class="w-6 h-6 rounded accent-blue-500 cursor-pointer"
                                         />
                                     </td>
                                 }
@@ -236,11 +234,14 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
             </div>
             <div class="flex justify-center">
                 <button
+                    hx-post="/predictions"
+                    hx-target="#popup-container"
+                    hx-swap="beforeend"
                     type="submit"
                     class="px-4 py-2 text-white rounded"
                     :class="isValid() ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 cursor-not-allowed'"
                     :disabled="!isValid()"
-                    @click.prevent="if (balance <= 0) { showBalanceWarning = true; } else { $el.closest('form').submit() }"
+                    @click.prevent="if (balance <= 0) { showBalanceWarning = true; }"
                 >
                     Enviar
                 </button>

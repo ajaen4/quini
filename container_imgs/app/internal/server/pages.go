@@ -2,6 +2,7 @@ package server
 
 import (
 	"app/internal/components/pages"
+	"app/internal/db"
 	"errors"
 	"fmt"
 
@@ -44,6 +45,14 @@ func (s *Server) ReturnCheckout(w http.ResponseWriter, r *http.Request) error {
 		http.Redirect(w, r, "/checkout", http.StatusSeeOther)
 		return nil
 	case "complete":
+		userId := r.Context().Value("userId").(string)
+		amountPaid := session.AmountTotal
+		amountInEuros := float64(amountPaid) / 100.0
+		err := db.UpdateBalance(userId, amountInEuros)
+		if err != nil {
+			return err
+		}
+
 		return Render(w, r, pages.ReturnCheckout(s.postHogKey, session.CustomerDetails.Email))
 	default:
 		return errors.New("Invalid session status")
