@@ -49,17 +49,3 @@ func (s *Server) createCheckoutSession(w http.ResponseWriter, r *http.Request) e
 
 	return nil
 }
-
-func (s *Server) retrieveCheckoutSession(w http.ResponseWriter, r *http.Request) error {
-	session, _ := session.Get(r.URL.Query().Get("session_id"), nil)
-
-	responses.RespondWithJSON(w, http.StatusOK, struct {
-		Status        string `json:"status"`
-		CustomerEmail string `json:"customer_email"`
-	}{
-		Status:        string(session.Status),
-		CustomerEmail: string(session.CustomerDetails.Email),
-	})
-
-	return nil
-}

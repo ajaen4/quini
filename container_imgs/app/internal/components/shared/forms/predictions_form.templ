@@ -35,7 +35,7 @@ templ PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance floa
             </div>
         </div>
         <form
-            hx-post="/forms/predictions"
+            hx-post="/predictions"
             hx-target="#popup-container"
             hx-swap="beforeend"
             x-data="{

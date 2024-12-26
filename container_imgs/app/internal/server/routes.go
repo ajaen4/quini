@@ -34,10 +34,9 @@ func (server *Server) RegisterRoutes() {
 		r.Get("/components/tables/matchday-predictions", NewHandler(server.MatchdayPredictions))
 		r.Get("/components/forms/next-matchday", NewHandler(server.NextMatchday))
 
-		r.Post("/forms/predictions", NewHandler(server.NewPrediction))
+		r.Post("/predictions", NewHandler(server.NewPrediction))
 
 		r.Post("/checkout/create-session", NewHandler(server.createCheckoutSession))
-		r.Get("/checkout/session-status", NewHandler(server.retrieveCheckoutSession))
 
 	})
 

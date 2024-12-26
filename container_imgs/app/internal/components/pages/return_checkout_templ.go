@@ -10,9 +10,10 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"app/internal/components/layout"
+	"fmt"
 )
 
-func ReturnCheckout(postHogKey string) templ.Component {
+func ReturnCheckout(postHogKey, customerEmail string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -45,7 +46,20 @@ func ReturnCheckout(postHogKey string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><section id=\"success\" class=\"hidden\"><p>Pago realizado con éxito! Se ha enviado un email de confirmación a <span id=\"customer-email\"></span>. Si tienes cualquier duda puedes enviar un email a <a href=\"mailto:a.jaenrev@gmail.com\">a.jaenrev@gmail.com</a>.</p><div class=\"flex justify-center\"><button class=\"px-1 py-2 text-white rounded bg-blue-500 hover:bg-blue-600\" onclick=\"window.location.href=&#39;/&#39;\">Volver</button></div></section><script>\n                initialize();\n                async function initialize() {\n                    const queryString = window.location.search;\n                    const urlParams = new URLSearchParams(queryString);\n                    const sessionId = urlParams.get('session_id');\n                    const response = await fetch(`/checkout/session-status?session_id=${sessionId}`);\n                    const session = await response.json();\n                    if (session.status == 'open') {\n                        window.location.replace('/checkout')\n                    } else if (session.status == 'complete') {\n                        document.getElementById('success').classList.remove('hidden');\n                        document.getElementById('customer-email').textContent = session.customer_email\n                    }\n                }\n            </script></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col items-center\"><p class=\"text-center\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Pago realizado con éxito! Se ha enviado un email de confirmación a %s", customerEmail))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/pages/return_checkout.templ`, Line: 12, Col: 114}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p class=\"text-center\">Si tienes cualquier duda puedes enviar un email a <a href=\"mailto:a.jaenrev@gmail.com\">a.jaenrev@gmail.com</a>.</p><div class=\"flex justify-center mt-2\"><button class=\"px-1 py-2 text-white rounded bg-blue-500 hover:bg-blue-600\" onclick=\"window.location.href=&#39;/&#39;\">Volver</button></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
