@@ -1,6 +1,7 @@
 import requests
 from datetime import (
     datetime,
+    timedelta,
 )
 import random
 from zoneinfo import ZoneInfo
@@ -124,10 +125,32 @@ def get_next_matchday() -> dict:
 def upload_matchday(matchday: dict):
     logger.info(f"Next matchday: {matchday['jornada']}")
 
-    insert_matchday(matchday)
-    matchday_match_ids = add_match_ids(matchday)
-    insert_matches(matchday_match_ids)
-    logger.info(f"Successfully uploaded matchday {matchday['jornada']}")
+    one_week_ago = datetime.now() - timedelta(weeks=1)
+    timestamp_ms = int(one_week_ago.timestamp() * 1000)
+    params = {
+        "lastUpdate": timestamp_ms,
+    }
+    headers = {"Authorization": f"Basic {cfg.LOTERO_TOKEN}"}
+    response = requests.get(
+        f"{cfg.LOTERO_URL}/allinfo/v2",
+        params=params,
+        headers=headers,
+    )
+    response.raise_for_status()
+    sorteos = response.json()["proximosSorteos"]
+    games = [
+        game
+        for game in sorteos
+        if game["nombre"] == f"QUINIELA J-{matchday['jornada']}"
+    ]
+
+    if len(games) > 0:
+        insert_matchday(matchday, games[0]["sorteoId"])
+        matchday_match_ids = add_match_ids(matchday)
+        insert_matches(matchday_match_ids)
+        logger.info(f"Successfully uploaded matchday {matchday['jornada']}")
+    else:
+        logger.info("No quiniela found in TuLotero")
 
 
 def upload_predictions():
@@ -136,7 +159,7 @@ def upload_predictions():
     }
     headers = {"Authorization": f"Basic {cfg.LOTERO_TOKEN}"}
     response = requests.get(
-        f"{cfg.LOTERO_URL}/group",
+        f"{cfg.LOTERO_URL}/boletos/me/group",
         params=params,
         headers=headers,
     )
@@ -345,7 +368,7 @@ def upload_prices():
     }
     headers = {"Authorization": f"Basic {cfg.LOTERO_TOKEN}"}
     response = requests.get(
-        f"{cfg.LOTERO_URL}/group",
+        f"{cfg.LOTERO_URL}/boletos/me/group",
         params=params,
         headers=headers,
     )
