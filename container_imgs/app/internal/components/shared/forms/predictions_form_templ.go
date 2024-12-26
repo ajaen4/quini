@@ -110,7 +110,20 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><button type=\"submit\" class=\"px-1 py-1 text-white rounded bg-green-500 hover:bg-green-600\" onclick=\"window.location.href=&#39;/checkout&#39;\">Añadir</button></div></div></div><form hx-post=\"/predictions\" hx-target=\"#popup-container\" hx-swap=\"beforeend\" x-data=\"{\n                elige8Count: 0,\n                regularMatches: Array.from({length: 14}, () =&gt; ({ col0: null, col1: null })),\n                plenoMatch: { home: null, away: null },\n\n                isValid() {\n                    // Check if exactly 8 elige8 are selected\n                    if (this.elige8Count !== 8) return false;\n\n                    // Check if all regular matches have both columns filled\n                    const allRegularMatchesFilled = this.regularMatches.every(match =&gt;\n                        match.col0 !== null &amp;&amp; match.col1 !== null\n                    );\n                    if (!allRegularMatchesFilled) return false;\n\n                    // Check if pleno match is completely filled\n                    if (this.plenoMatch.home === null || this.plenoMatch.away === null) return false;\n\n                    return true;\n                }\n            }\"><div class=\"overflow-x-auto w-full mb-4\"><table class=\"min-w-full bg-gray-800 text-sm border-collapse rounded-lg\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th><th class=\"py-1 border-b-2 border-r border-gray-600 text-center\">Col 1</th><th class=\"py-1 border-b-2 border-r border-gray-600 text-center\">Col 2</th><th class=\"py-1 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg\">Elige8</th></tr></thead> <tbody>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><button type=\"submit\" class=\"px-1 py-1 text-white rounded bg-green-500 hover:bg-green-600\" onclick=\"window.location.href=&#39;/checkout&#39;\">Añadir</button></div></div></div><form x-data=\"{\n                elige8Count: 0,\n                regularMatches: Array.from({length: 14}, () =&gt; ({ col0: null, col1: null })),\n                plenoMatch: { home: null, away: null },\n\n                isValid() {\n                    // Check if exactly 8 elige8 are selected\n                    if (this.elige8Count !== 8) return false;\n\n                    // Check if all regular matches have both columns filled\n                    const allRegularMatchesFilled = this.regularMatches.every(match =&gt;\n                        match.col0 !== null &amp;&amp; match.col1 !== null\n                    );\n                    if (!allRegularMatchesFilled) return false;\n\n                    // Check if pleno match is completely filled\n                    if (this.plenoMatch.home === null || this.plenoMatch.away === null) return false;\n\n                    return true;\n                }\n            }\" hx-vals=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var8 string
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf(`{"matchday": %d, "season": "%s"}`, matchday.Matchday.Int32, matchday.Season))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 59, Col: 110}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"overflow-x-auto w-full mb-4\"><table class=\"min-w-full bg-gray-800 text-sm border-collapse rounded-lg\"><thead class=\"bg-gray-800\"><tr><th class=\"sticky left-0 z-10 bg-gray-800 py-3 border-b-2 border-r-2 border-gray-600 rounded-tl-lg\">Partidos</th><th class=\"py-1 border-b-2 border-r border-gray-600 text-center\">Col 1</th><th class=\"py-1 border-b-2 border-r border-gray-600 text-center\">Col 2</th><th class=\"py-1 px-1 border-b-2 border-r border-gray-600 text-center rounded-tr-lg\">Elige8</th></tr></thead> <tbody>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -119,12 +132,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(format.FormatMatchDateTime(match.KickoffDatetime.Time))
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(format.FormatMatchDateTime(match.KickoffDatetime.Time))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 80, Col: 104}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 78, Col: 104}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -132,12 +145,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var9 string
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeLogo)
+			var templ_7745c5c3_Var10 string
+			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeLogo)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 92, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 90, Col: 72}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -145,12 +158,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var10 string
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeCode)
+			var templ_7745c5c3_Var11 string
+			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 93, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 91, Col: 72}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -158,12 +171,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var11 string
-			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeCode)
+			var templ_7745c5c3_Var12 string
+			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 103, Col: 92}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 101, Col: 92}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -171,12 +184,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var12 string
-			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeName)
+			var templ_7745c5c3_Var13 string
+			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(match.HomeName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 104, Col: 122}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 102, Col: 122}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -184,12 +197,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var13 string
-			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayLogo)
+			var templ_7745c5c3_Var14 string
+			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayLogo)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 115, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 113, Col: 72}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -197,12 +210,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var14 string
-			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayCode)
+			var templ_7745c5c3_Var15 string
+			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 116, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 114, Col: 72}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -210,12 +223,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var15 string
-			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayCode)
+			var templ_7745c5c3_Var16 string
+			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayCode)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 126, Col: 92}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 124, Col: 92}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -223,12 +236,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var16 string
-			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayName)
+			var templ_7745c5c3_Var17 string
+			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(match.AwayName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 127, Col: 99}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 125, Col: 99}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -246,12 +259,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var17 string
-				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_col_0", match.MatchNum))
+				var templ_7745c5c3_Var18 string
+				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_col_0", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 183, Col: 115}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 181, Col: 115}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -259,12 +272,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var18 string
-				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col0", match.MatchNum))
+				var templ_7745c5c3_Var19 string
+				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col0", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 186, Col: 123}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 184, Col: 123}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -272,12 +285,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var19 string
-				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col0 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum))
+				var templ_7745c5c3_Var20 string
+				templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col0 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 190, Col: 164}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 188, Col: 164}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -285,12 +298,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var20 string
-				templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_col_1", match.MatchNum))
+				var templ_7745c5c3_Var21 string
+				templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_col_1", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 205, Col: 115}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 203, Col: 115}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -298,12 +311,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var21 string
-				templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col1", match.MatchNum))
+				var templ_7745c5c3_Var22 string
+				templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col1", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 208, Col: 123}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 206, Col: 123}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -311,12 +324,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var22 string
-				templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col1 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum))
+				var templ_7745c5c3_Var23 string
+				templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("regularMatches[%d].col1 === value ? 'bg-blue-500' : 'bg-gray-700'", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 212, Col: 164}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 210, Col: 164}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -324,8 +337,8 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var23 = []any{"text-center border-r border-gray-600", templ.KV("border-b", match.MatchNum == 13)}
-				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var23...)
+				var templ_7745c5c3_Var24 = []any{"text-center border-r border-gray-600", templ.KV("border-b", match.MatchNum == 13)}
+				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var24...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -333,12 +346,12 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var24 string
-				templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var23).String())
+				var templ_7745c5c3_Var25 string
+				templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var24).String())
 				if templ_7745c5c3_Err != nil {
 					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 1, Col: 0}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -346,16 +359,16 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var25 string
-				templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_elige8", match.MatchNum))
+				var templ_7745c5c3_Var26 string
+				templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("match_num_%d_elige8", match.MatchNum))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 225, Col: 100}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/forms/predictions_form.templ`, Line: 223, Col: 100}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" @change=\"$event.target.checked ? elige8Count++ : elige8Count--\" :disabled=\"!$el.checked &amp;&amp; elige8Count &gt;= 8\" class=\"w-5 h-5 rounded accent-blue-500 cursor-pointer\"></td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" @change=\"$event.target.checked ? elige8Count++ : elige8Count--\" :disabled=\"!$el.checked &amp;&amp; elige8Count &gt;= 8\" class=\"w-6 h-6 rounded accent-blue-500 cursor-pointer\"></td>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -365,7 +378,7 @@ func PredictionsForm(matchday db.NextMatchday, matches []db.Match, balance float
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table></div><div class=\"flex justify-center\"><button type=\"submit\" class=\"px-4 py-2 text-white rounded\" :class=\"isValid() ? &#39;bg-blue-500 hover:bg-blue-600&#39; : &#39;bg-gray-500 cursor-not-allowed&#39;\" :disabled=\"!isValid()\" @click.prevent=\"if (balance &lt;= 0) { showBalanceWarning = true; } else { $el.closest(&#39;form&#39;).submit() }\">Enviar</button></div></form><div id=\"popup-container\"></div><div x-show=\"showBalanceWarning\" class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center\" @click.self=\"showBalanceWarning = false\"><div class=\"bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4\"><div class=\"flex justify-between items-start mb-4\"><h3 class=\"text-xl font-semibold text-red-500\">Saldo insuficiente</h3><button class=\"text-gray-400 hover:text-gray-200\" @click=\"showBalanceWarning = false\"><svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><p class=\"text-gray-300 mb-4\">Tu saldo actual es insuficiente para realizar predicciones. Por favor, recarga tu saldo para continuar.</p><div class=\"mt-6 flex justify-end gap-4\"><button class=\"px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700\" @click=\"showBalanceWarning = false\">Cancelar</button> <button class=\"px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600\" @click=\"window.location.href=&#39;/checkout&#39;\">Recargar saldo</button></div></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table></div><div class=\"flex justify-center\"><button hx-post=\"/predictions\" hx-target=\"#popup-container\" hx-swap=\"beforeend\" type=\"submit\" class=\"px-4 py-2 text-white rounded\" :class=\"isValid() ? &#39;bg-blue-500 hover:bg-blue-600&#39; : &#39;bg-gray-500 cursor-not-allowed&#39;\" :disabled=\"!isValid()\" @click.prevent=\"if (balance &lt;= 0) { showBalanceWarning = true; }\">Enviar</button></div></form><div id=\"popup-container\"></div><div x-show=\"showBalanceWarning\" class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center\" @click.self=\"showBalanceWarning = false\"><div class=\"bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4\"><div class=\"flex justify-between items-start mb-4\"><h3 class=\"text-xl font-semibold text-red-500\">Saldo insuficiente</h3><button class=\"text-gray-400 hover:text-gray-200\" @click=\"showBalanceWarning = false\"><svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><p class=\"text-gray-300 mb-4\">Tu saldo actual es insuficiente para realizar predicciones. Por favor, recarga tu saldo para continuar.</p><div class=\"mt-6 flex justify-end gap-4\"><button class=\"px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700\" @click=\"showBalanceWarning = false\">Cancelar</button> <button class=\"px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600\" @click=\"window.location.href=&#39;/checkout&#39;\">Recargar saldo</button></div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

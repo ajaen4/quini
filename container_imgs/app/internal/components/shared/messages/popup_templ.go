@@ -8,7 +8,7 @@ package messages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func PopUp(success bool, message string) templ.Component {
+func PopUp(success bool, message string, reload bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -57,12 +57,33 @@ func PopUp(success bool, message string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><div class=\"mt-6 flex justify-end\"><button class=\"px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600\" @click=\"$el.closest(&#39;.fixed&#39;).remove()\">Cerrar</button></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><div class=\"mt-6 flex justify-end\"><button class=\"px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600\" @click=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(clickFunc(reload))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/shared/messages/popup.templ`, Line: 31, Col: 45}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Cerrar</button></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return templ_7745c5c3_Err
 	})
+}
+
+func clickFunc(reload bool) string {
+	if reload {
+		return "$el.closest('.fixed').remove(); window.location.reload()"
+	} else {
+		return "$el.closest('.fixed').remove()"
+	}
 }
 
 var _ = templruntime.GeneratedTemplate

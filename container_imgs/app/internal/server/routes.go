@@ -19,8 +19,6 @@ func (server *Server) RegisterRoutes() {
 	server.router.Post("/auth/google", NewHandler(server.HandleGoogleAuth))
 	server.router.Get("/auth/logout", NewHandler(server.HandleLogout))
 	server.router.Get("/login", NewHandler(server.Login))
-	server.router.Get("/checkout", NewHandler(server.Checkout))
-	server.router.Get("/checkout/return", NewHandler(server.ReturnCheckout))
 
 	server.router.Group(func(r chi.Router) {
 		r.Use(server.AuthAPIMiddleware)
@@ -44,6 +42,8 @@ func (server *Server) RegisterRoutes() {
 		r.Use(server.AuthPageMiddleware)
 
 		r.Get("/", NewHandler(server.Root))
+		r.Get("/checkout", NewHandler(server.Checkout))
+		r.Get("/checkout/return", NewHandler(server.ReturnCheckout))
 	})
 }
 

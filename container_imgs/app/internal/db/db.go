@@ -141,7 +141,7 @@ func (db *db) Close() error {
 }
 
 func (db *db) Query(query string, args ...interface{}) (pgx.Rows, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 
 	stats := db.pool.Stat()
 	log.Printf(
@@ -154,7 +154,7 @@ func (db *db) Query(query string, args ...interface{}) (pgx.Rows, error) {
 }
 
 func (db *db) QueryRow(query string, args ...interface{}) pgx.Row {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
 	stats := db.pool.Stat()

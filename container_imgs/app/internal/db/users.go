@@ -50,20 +50,3 @@ func IsAuthUser(id string) (bool, error) {
 
 	return false, nil
 }
-
-func GetBalance(userId string) (float64, error) {
-	db := New()
-
-	var balance float64
-	err := db.QueryRow(
-		`SELECT balance
-		FROM bavariada.account_balance
-		WHERE user_id = $1;`,
-		userId,
-	).Scan(&balance)
-	if err != nil {
-		return 0, err
-	}
-
-	return balance, nil
-}
