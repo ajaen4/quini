@@ -2,17 +2,18 @@ from f_data_uploader.database import db
 from f_data_uploader.logger import logger
 
 
-def insert_matchday(matchday: dict):
+def insert_matchday(matchday: dict, sorteo_id: int):
     cur = db.get_conn().cursor()
     cur.execute(
         """
-        INSERT INTO bavariada.matchdays (season, matchday, status, start_datetime)
-        VALUES (%s, %s, 'NOT_STARTED', %s)
+        INSERT INTO bavariada.matchdays (season, matchday, status, start_datetime, sorteo_id)
+        VALUES (%s, %s, 'NOT_STARTED', %s, %s)
         """,
         (
             matchday["temporada"],
             matchday["jornada"],
             matchday["start_datetime"],
+            sorteo_id,
         ),
     )
     cur.close()
